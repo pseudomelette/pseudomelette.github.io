@@ -1,0 +1,194 @@
+---
+title: 'バトルランク'
+subtitle: 'Battle Ranks'
+slug: '/saga-eb/logic/battle-ranks/'
+---
+
+import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import { InlineMath, BlockMath } from 'react-katex';
+
+import {
+  StyledMathT,
+  StyledTableContainer,
+  StyledTd,
+  StyledTh,
+  StyledTr,
+} from "../../../layouts/saga-eb/layout";
+
+# バトルランク（BR）とは
+<Box>
+  ゲーム内において、用語は登場するものの定義が説明されない内部数値。<br/>
+  以下3種に細分化されます。
+
+  ## 現在バトルランク
+  味方の強さをバトル実績に基づいて数値化したもので、以下の特徴があります。
+  - 敵バトルランク、バトルの敵編成、イベント・バトルの獲得アイテム、バトル勝利以外でのステータス成長に影響する。
+  - 条件を満たすとバトル勝利後に上昇する。
+  - 初期値は1、最大値は200。
+
+  ## 潜在バトルランク
+  味方の強さをステータスに基づいて数値化したもので、以下の特徴があります。
+  - 現在バトルランクの上昇量、敵バトルランクに影響する。
+  - バトルパーティ（戦闘参加メンバー）のステータスによって変動する。
+  - 理論最大値は176.625。
+
+  ## 敵バトルランク
+  敵キャラクターの強さを数値化したもので、以下の特徴があります。
+  - 敵のステータス、ひらめき、バトル勝利でのステータス成長に影響する。
+  - 現在・潜在バトルランク、バトル難易度に基づいて決定される。
+  - 現在バトルランクを下回ることはなく、最大値は250。
+
+  バトルランクに紐づく各種内部値については [データ ＞ バトルランク](/saga-eb/data/battle-ranks) を参照してください。
+</Box>
+
+# 現在バトルランクの上昇条件
+<Box>
+  バトル難易度や戦闘結果によっては現在バトルランクが上昇しない場合があります。<br/>
+  各種条件とバトルランク上昇の関係は下表の通りです。
+
+  <StyledTableContainer align="center" sx={{ marginTop: 3, boxShadow: 3 }}>
+    <Table sx={{ width: `calc(104px * 4)`, tableLayout: 'fixed' }}>
+      <TableHead sx={{ position: 'sticky', top: 0 }}>
+        <TableRow>
+          <StyledTh colSpan={3} align="center">条件</StyledTh>
+          <StyledTh rowSpan={2} align="center">バトルランク<br/>上昇</StyledTh>
+        </TableRow>
+        <TableRow>
+          <StyledTh align="center">バトル難易度</StyledTh>
+          <StyledTh align="center">再挑戦</StyledTh>
+          <StyledTh align="center">戦闘不能者数</StyledTh>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <StyledTr>
+          <StyledTd align="center">楽勝</StyledTd>
+          <StyledTd align="center">\*</StyledTd>
+          <StyledTd align="center">\*</StyledTd>
+          <StyledTd rowSpan={3} align="center">なし</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd rowSpan={3} align="center">普通</StyledTd>
+          <StyledTd align="center">あり</StyledTd>
+          <StyledTd align="center">\*</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd rowSpan={2} align="center">なし</StyledTd>
+          <StyledTd align="center">2名以上</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align="center">2名未満</StyledTd>
+          <StyledTd rowSpan={3} align="center">あり</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align="center">強敵</StyledTd>
+          <StyledTd align="center">\*</StyledTd>
+          <StyledTd align="center">\*</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align="center">最凶</StyledTd>
+          <StyledTd align="center">\*</StyledTd>
+          <StyledTd align="center">\*</StyledTd>
+        </StyledTr>
+      </TableBody>
+    </Table>
+  </StyledTableContainer>
+  <Typography sx={{ paddingTop: 1, marginLeft: 'auto', marginRight: 'auto', width: `calc(104px * 4)`, maxWidth: '100%', textAlign: 'right'}}>
+  \*：条件なし
+  </Typography>
+</Box>
+
+# 現在バトルランクの上昇量
+<Box>
+  特定の条件を満たしていればバトル勝利後に現在バトルランクが上昇します。<br/>
+  バトルランク上昇量は下式で算出されます。
+
+  <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
+    <BlockMath math="\hspace{0.5em}\text{BR上昇量}=\begin{cases}1&(\text{現在BR}\geq\text{潜在BR})\\1+\text{ランク差ボーナス}&(\text{現在BR}<\text{潜在BR})\end{cases}\hspace{0.5em}"/>
+  </StyledMathT>
+
+  バトルランクは基本的に1ずつ上昇しますが、潜在バトルランクが現在バトルランクを上回る場合は上昇量にボーナスが加わります。<br/>
+  ランク差ボーナスは下式で算出されます。
+
+  <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
+    <BlockMath
+      math="\hspace{0.5em}\text{ランク差ボーナス}=\min(\text{ランク差評価値},\hspace{0.5em}\text{潜在BR}-\text{現在BR})\hspace{0.5em}\\[1.3em]
+          \hspace{0.5em}\text{ランク差評価値}=\text{潜在BR}\times \frac{\text{潜在BR}\times 1.5-\text{現在BR}}{\text{潜在BR}\times 10+\text{現在BR}\times 1.5}+1\hspace{0.5em}"
+    />
+  </StyledMathT>
+
+  ランク差評価値とランク差ボーナスの計算結果は小数点以下が切り捨てられます。<br/>
+  潜在バトルランクと現在バトルランクの間に大きな差分があるうちはランク差評価値をそのままボーナスとして上乗せしますが、それによって逆転が起こる場合は差分が埋まる程度のボーナスに修正します。
+</Box>
+
+# 現在バトルランクの上限
+<Box>
+  現在バトルランクには暫定的な上限が存在します。<br/>
+  バトルランク上限を踏まえると、バトルランク上昇量加算後の現在バトルランクは下式で算出されます。
+
+  <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
+    <BlockMath math="\hspace{0.5em}\text{現在BR}_{next}=\min(\text{現在BR}+\text{BR上昇量},\hspace{0.5em}\text{BR上限})\hspace{0.5em}"/>
+  </StyledMathT>
+
+  バトルランク上限は以下のタイミングで更新されます。
+  1. ランク差ボーナス発生状態（現在BR <InlineMath>\lt</InlineMath> 潜在BR）でのバトルランク上昇量加算前
+  1. ワールド（連接領域含む）移動後
+
+  それぞれのタイミングについて、新しいバトルランク上限は下式で算出されます。
+
+  <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
+    <BlockMath
+      math="\hspace{0.5em}\text{BR上限}=\begin{cases}\text{現在BR}+10+\text{ランク差ボーナス}&(\text{1.})\\
+          \text{現在BR}+10&(\text{2.})\end{cases}\hspace{0.5em}"
+    />
+  </StyledMathT>
+
+  バトルランク上限の更新はワールドを移動しなくても可能ですが、潜在バトルランクを上昇させる（味方を成長させる）必要があるため時間がかかります。<br/>
+  また、潜在バトルランクの理論最大値（176.625）は現在バトルランクの最大値（200）を大きく下回るため、バトルランク上限を最大値まで引き上げるにはワールド移動が必須です。
+</Box>
+
+# 潜在バトルランクの算出方法
+<Box>
+  潜在バトルランクは下式で算出されます。
+
+  <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
+    <BlockMath math="\hspace{0.5em}\text{潜在BR}=\sum_{m\in BP} \text{メンバー}m\text{の強さ}\hspace{0.5em}" />
+  </StyledMathT>
+
+  ここで、<InlineMath math="BP" /> はバトルパーティを意味し、サポートメンバーや控えメンバーを含みません。<br/>
+  メンバーの強さは下式で算出されます。
+
+  <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
+    <BlockMath math="\hspace{0.5em}\text{メンバーの強さ}=\text{HP評価値}+\text{能力値評価値}+\text{スキル評価値}\hspace{0.5em}\\[1.3em]
+        \hspace{0.5em}\text{HP評価値}=\frac{(HP-140)\times 18}{1000}\hspace{0.5em}\\[1em]
+        \hspace{0.5em}\text{能力値評価値}=\frac{(\max Stat-20)\times 72}{1000}\hspace{0.5em}\\[1em]
+        \hspace{0.5em}\text{スキル評価値}=\frac{(\max SLv-5)\times 315}{1000}\hspace{0.5em}" />
+  </StyledMathT>
+
+  ここで、<InlineMath math="\max Stat" /> は能力値6種の中で装備補正込みで最も高い値、<InlineMath math="\max SLv" /> は所持スキルのレベルの中で最も高い値を意味します。<br/>
+  潜在バトルランクはバトル準備画面突入時点でのバトルパーティのステータスで算出されるため、バトル準備画面でメンバー・装備変更をしても変動しません。
+</Box>
+
+# 敵バトルランクの算出方法
+<Box sx={{ minHeight: { xs:`calc(100vh - 64px - 8px - 50px - 24px - 80px)`, sm:`calc(100vh - 48px - 8px - 54px - 24px - 80px)` } }} >
+  敵バトルランクはそれぞれの敵について下式で算出されます。
+
+  <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
+    <BlockMath math="\hspace{0.5em}\text{敵BR}=\max(\text{基本BR}+\text{相対BR}+\text{ひらめきレベル},\hspace{0.5em}\text{BR下限})\hspace{0.5em}" />
+  </StyledMathT>
+
+  ここで、相対バトルランクとバトルランク下限はバトルに設定されている内部値で、ひらめきレベルは敵キャラクターに設定されている内部値です。<br/>
+  基本バトルランクは下式で算出されます。
+
+  <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
+    <BlockMath math="\hspace{0.5em}\text{基本BR}=\begin{cases}\text{現在BR}&(\text{楽勝または普通})\\
+        \max(\text{現在BR},\hspace{0.5em}\text{潜在BR}\times 0.8)&(\text{強敵})\\
+        \max(\text{現在BR},\hspace{0.5em}\text{潜在BR})&(\text{最凶})\end{cases}\hspace{0.5em}" />
+  </StyledMathT>
+
+  基本バトルランクの計算結果は小数点以下が切り捨てられます。
+</Box>

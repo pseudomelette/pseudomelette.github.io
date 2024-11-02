@@ -1,5 +1,5 @@
 .os-theme-body {
-  --os-size: 10px;
+  --os-size: 8px;
   --os-padding-perpendicular: 0px;
   --os-padding-axis: 8px;
   --os-track-border-radius: 10px;
@@ -49,8 +49,8 @@
   --os-handle-interactive-area-offset: 0px;
 }
 .os-theme-tocbar {
-  --os-size: 24px;
-  --os-padding-perpendicular: 8px;
+  --os-size: 10px;
+  --os-padding-perpendicular: 1px;
   --os-padding-axis: 10px;
   --os-track-border-radius: 10px;
   --os-track-bg: #0c2436bf;
@@ -72,4 +72,58 @@
   --os-handle-perpendicular-size-hover: 100%;
   --os-handle-perpendicular-size-active: 100%;
   --os-handle-interactive-area-offset: 120px;
+}
+.os-theme-math {
+  --os-size: 4px;
+  --os-padding-perpendicular: 0px;
+  --os-padding-axis: 0px;
+  --os-track-border-radius: 10px;
+  --os-track-bg: #0c2436bf;
+  --os-track-bg-hover: #0c2436bf;
+  --os-track-bg-active: #0c2436bf;
+  --os-track-border: none;
+  --os-track-border-hover: none;
+  --os-track-border-active: none;
+  --os-handle-border-radius: 10px;
+  --os-handle-bg: #4eb89a;
+  --os-handle-bg-hover: #4eb89a;
+  --os-handle-bg-active: #4eb89a;
+  --os-handle-border: none;
+  --os-handle-border-hover: none;
+  --os-handle-border-active: none;
+  --os-handle-min-size: 24px;
+  --os-handle-max-size: none;
+  --os-handle-perpendicular-size: 100%;
+  --os-handle-perpendicular-size-hover: 100%;
+  --os-handle-perpendicular-size-active: 100%;
+  --os-handle-interactive-area-offset: 120px;
+}
+.os-theme-table {
+  --os-size: 8px;
+  --os-padding-perpendicular: 0px;
+  --os-padding-axis: 4px;
+  --os-track-border-radius: 10px;
+  --os-track-bg: #0c2436bf;
+  --os-track-bg-hover: #0c2436bf;
+  --os-track-bg-active: #0c2436bf;
+  --os-track-border: none;
+  --os-track-border-hover: none;
+  --os-track-border-active: none;
+  --os-handle-border-radius: 10px;
+  --os-handle-bg: #4eb89a;
+  --os-handle-bg-hover: #4eb89a;
+  --os-handle-bg-active: #4eb89a;
+  --os-handle-border: none;
+  --os-handle-border-hover: none;
+  --os-handle-border-active: none;
+  --os-handle-min-size: 24px;
+  --os-handle-max-size: none;
+  --os-handle-perpendicular-size: 100%;
+  --os-handle-perpendicular-size-hover: 100%;
+  --os-handle-perpendicular-size-active: 100%;
+  --os-handle-interactive-area-offset: 120px;
+}
+
+.katex {
+  font-size: 1.05em;
 }

@@ -1,0 +1,9 @@
+#tocList a.active {
+  background: linear-gradient(to right, #4eb89a00 4px, #4eb89a 4px, #4eb89a 9px, #4eb89a5f 9px, #4eb89a00 228px);
+}
+#tocList a:hover {
+  background: linear-gradient(to right, #48759400 9px, #487594 40%, #487594 60%, #48759400 228px);
+}
+#tocList a.active:hover {
+  background: linear-gradient(to right, #4eb89a00 4px, #4eb89a 4px, #4eb89a 9px, #4eb89a7f 9px, #487594 60%, #48759400 228px);
+}
