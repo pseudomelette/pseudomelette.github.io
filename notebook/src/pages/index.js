@@ -1,16 +1,16 @@
-import * as React from "react"
+import * as React from 'react'
 
-import Layout from "../components/layout"
-import Seo from "../components/seo"
+import Layout from '../components/layout'
+import Seo from '../components/seo'
 
-import * as styles from "../components/index.module.css"
+import * as styles from '../components/index.module.css'
 
 const links = [
   {
-    text: "SaGa Emerald Beyond",
-    url: "saga-eb",
+    text: 'SaGa Emerald Beyond',
+    url: 'saga-eb',
     description:
-      "サガ エメラルド ビヨンドの調査ノート",
+      'サガ エメラルド ビヨンドの調査ノート',
   },
 ]
 
@@ -44,6 +44,6 @@ const IndexPage = () => (
  *
  * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
  */
-export const Head = () => <Seo title="Home" />
+export const Head = () => <Seo title='Home' />
 
 export default IndexPage

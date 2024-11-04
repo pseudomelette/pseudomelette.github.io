@@ -1,18 +1,18 @@
-<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-  <rect x="60" y="15" width="397" height="482" fill="#f5d575" stroke="#2f2f2f" stroke-width="30" rx="20" ry="20"/>
-  <rect x="80" y="15" width="397" height="482" fill="#f5d575" stroke="#2f2f2f" stroke-width="30" rx="20" ry="20"/>
-  <rect x="100" y="15" width="397" height="482" fill="#f5d575" stroke="#2f2f2f" stroke-width="30" rx="20" ry="20"/>
+<svg width='512' height='512' viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'>
+  <rect x='60' y='15' width='397' height='482' fill='#f5d575' stroke='#2f2f2f' stroke-width='30' rx='20' ry='20'/>
+  <rect x='80' y='15' width='397' height='482' fill='#f5d575' stroke='#2f2f2f' stroke-width='30' rx='20' ry='20'/>
+  <rect x='100' y='15' width='397' height='482' fill='#f5d575' stroke='#2f2f2f' stroke-width='30' rx='20' ry='20'/>
 
-  <circle cx="170" cy="86" r="30" fill="#2f2f2f" />
-  <path d="M 20,71 A 15,15 0 0 0 20,101 L 170,101 170,71" fill="#2f2f2f"/>
-  <circle cx="170" cy="171" r="30" fill="#2f2f2f" />
-  <path d="M 20,156 A 15,15 0 0 0 20,186 L 170,186 170,156" fill="#2f2f2f"/>
-  <circle cx="170" cy="256" r="30" fill="#2f2f2f" />
-  <path d="M 20,241 A 15,15 0 0 0 20,271 L 170,271 170,241" fill="#2f2f2f"/>
-  <circle cx="170" cy="341" r="30" fill="#2f2f2f" />
-  <path d="M 20,326 A 15,15 0 0 0 20,356 L 170,356 170,326" fill="#2f2f2f"/>
-  <circle cx="170" cy="426" r="30" fill="#2f2f2f" />
-  <path d="M 20,411 A 15,15 0 0 0 20,441 L 170,441 170,411" fill="#2f2f2f"/>
+  <circle cx='170' cy='86' r='30' fill='#2f2f2f' />
+  <path d='M 20,71 A 15,15 0 0 0 20,101 L 170,101 170,71' fill='#2f2f2f'/>
+  <circle cx='170' cy='171' r='30' fill='#2f2f2f' />
+  <path d='M 20,156 A 15,15 0 0 0 20,186 L 170,186 170,156' fill='#2f2f2f'/>
+  <circle cx='170' cy='256' r='30' fill='#2f2f2f' />
+  <path d='M 20,241 A 15,15 0 0 0 20,271 L 170,271 170,241' fill='#2f2f2f'/>
+  <circle cx='170' cy='341' r='30' fill='#2f2f2f' />
+  <path d='M 20,326 A 15,15 0 0 0 20,356 L 170,356 170,326' fill='#2f2f2f'/>
+  <circle cx='170' cy='426' r='30' fill='#2f2f2f' />
+  <path d='M 20,411 A 15,15 0 0 0 20,441 L 170,441 170,411' fill='#2f2f2f'/>
 
-  <text x="210" y="375" font-size="320" font-weight="bold" fill="#732313">O</text>
+  <text x='210' y='375' font-size='320' font-weight='bold' fill='#732313'>O</text>
 </svg>

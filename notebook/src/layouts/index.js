@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from 'react'
 
-import SagaEBLayout from './saga-eb/layout'
+import { SagaEBLayout } from './saga-eb/layout'
 
 const layout = ({ children, pageContext }) => {
   if (pageContext.layout === 'saga-eb') {

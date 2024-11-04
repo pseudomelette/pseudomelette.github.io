@@ -4,13 +4,13 @@ subtitle: 'Battle Ranks'
 slug: '/saga-eb/logic/battle-ranks/'
 ---
 
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Typography from '@mui/material/Typography';
-import { InlineMath, BlockMath } from 'react-katex';
+import Box from '@mui/material/Box'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Typography from '@mui/material/Typography'
+import { InlineMath, BlockMath } from 'react-katex'
 
 import {
   StyledMathT,
@@ -18,7 +18,7 @@ import {
   StyledTd,
   StyledTh,
   StyledTr,
-} from "../../../layouts/saga-eb/layout";
+} from '../../../layouts/saga-eb/layout'
 
 # バトルランク（BR）とは
 <Box>
@@ -51,48 +51,48 @@ import {
   バトル難易度や戦闘結果によっては現在バトルランクが上昇しない場合があります。<br/>
   各種条件とバトルランク上昇の関係は下表の通りです。
 
-  <StyledTableContainer align="center" sx={{ marginTop: 3, boxShadow: 3 }}>
+  <StyledTableContainer align='center' sx={{ marginTop: 3, boxShadow: 3 }}>
     <Table sx={{ width: `calc(104px * 4)`, tableLayout: 'fixed' }}>
       <TableHead sx={{ position: 'sticky', top: 0 }}>
         <TableRow>
-          <StyledTh colSpan={3} align="center">条件</StyledTh>
-          <StyledTh rowSpan={2} align="center">バトルランク<br/>上昇</StyledTh>
+          <StyledTh colSpan={3} align='center'>条件</StyledTh>
+          <StyledTh rowSpan={2} align='center'>バトルランク<br/>上昇</StyledTh>
         </TableRow>
         <TableRow>
-          <StyledTh align="center">バトル難易度</StyledTh>
-          <StyledTh align="center">再挑戦</StyledTh>
-          <StyledTh align="center">戦闘不能者数</StyledTh>
+          <StyledTh align='center'>バトル難易度</StyledTh>
+          <StyledTh align='center'>再挑戦</StyledTh>
+          <StyledTh align='center'>戦闘不能者数</StyledTh>
         </TableRow>
       </TableHead>
       <TableBody>
         <StyledTr>
-          <StyledTd align="center">楽勝</StyledTd>
-          <StyledTd align="center">\*</StyledTd>
-          <StyledTd align="center">\*</StyledTd>
-          <StyledTd rowSpan={3} align="center">なし</StyledTd>
+          <StyledTd align='center'>楽勝</StyledTd>
+          <StyledTd align='center'>\*</StyledTd>
+          <StyledTd align='center'>\*</StyledTd>
+          <StyledTd rowSpan={3} align='center'>なし</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd rowSpan={3} align="center">普通</StyledTd>
-          <StyledTd align="center">あり</StyledTd>
-          <StyledTd align="center">\*</StyledTd>
+          <StyledTd rowSpan={3} align='center'>普通</StyledTd>
+          <StyledTd align='center'>あり</StyledTd>
+          <StyledTd align='center'>\*</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd rowSpan={2} align="center">なし</StyledTd>
-          <StyledTd align="center">2名以上</StyledTd>
+          <StyledTd rowSpan={2} align='center'>なし</StyledTd>
+          <StyledTd align='center'>2名以上</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd align="center">2名未満</StyledTd>
-          <StyledTd rowSpan={3} align="center">あり</StyledTd>
+          <StyledTd align='center'>2名未満</StyledTd>
+          <StyledTd rowSpan={3} align='center'>あり</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd align="center">強敵</StyledTd>
-          <StyledTd align="center">\*</StyledTd>
-          <StyledTd align="center">\*</StyledTd>
+          <StyledTd align='center'>強敵</StyledTd>
+          <StyledTd align='center'>\*</StyledTd>
+          <StyledTd align='center'>\*</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd align="center">最凶</StyledTd>
-          <StyledTd align="center">\*</StyledTd>
-          <StyledTd align="center">\*</StyledTd>
+          <StyledTd align='center'>最凶</StyledTd>
+          <StyledTd align='center'>\*</StyledTd>
+          <StyledTd align='center'>\*</StyledTd>
         </StyledTr>
       </TableBody>
     </Table>
@@ -108,7 +108,7 @@ import {
   バトルランク上昇量は下式で算出されます。
 
   <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
-    <BlockMath math="\hspace{0.5em}\text{BR上昇量}=\begin{cases}1&(\text{現在BR}\geq\text{潜在BR})\\1+\text{ランク差ボーナス}&(\text{現在BR}<\text{潜在BR})\end{cases}\hspace{0.5em}"/>
+    <BlockMath math='\hspace{0.5em}\text{BR上昇量}=\begin{cases}1&(\text{現在BR}\geq\text{潜在BR})\\1+\text{ランク差ボーナス}&(\text{現在BR}<\text{潜在BR})\end{cases}\hspace{0.5em}'/>
   </StyledMathT>
 
   バトルランクは基本的に1ずつ上昇しますが、潜在バトルランクが現在バトルランクを上回る場合は上昇量にボーナスが加わります。<br/>
@@ -116,8 +116,8 @@ import {
 
   <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
     <BlockMath
-      math="\hspace{0.5em}\text{ランク差ボーナス}=\min(\text{ランク差評価値},\hspace{0.5em}\text{潜在BR}-\text{現在BR})\hspace{0.5em}\\[1.3em]
-          \hspace{0.5em}\text{ランク差評価値}=\text{潜在BR}\times \frac{\text{潜在BR}\times 1.5-\text{現在BR}}{\text{潜在BR}\times 10+\text{現在BR}\times 1.5}+1\hspace{0.5em}"
+      math='\hspace{0.5em}\text{ランク差ボーナス}=\min(\text{ランク差評価値},\hspace{0.5em}\text{潜在BR}-\text{現在BR})\hspace{0.5em}\\[1.3em]
+          \hspace{0.5em}\text{ランク差評価値}=\text{潜在BR}\times \frac{\text{潜在BR}\times 1.5-\text{現在BR}}{\text{潜在BR}\times 10+\text{現在BR}\times 1.5}+1\hspace{0.5em}'
     />
   </StyledMathT>
 
@@ -131,7 +131,7 @@ import {
   バトルランク上限を踏まえると、バトルランク上昇量加算後の現在バトルランクは下式で算出されます。
 
   <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
-    <BlockMath math="\hspace{0.5em}\text{現在BR}_{next}=\min(\text{現在BR}+\text{BR上昇量},\hspace{0.5em}\text{BR上限})\hspace{0.5em}"/>
+    <BlockMath math='\hspace{0.5em}\text{現在BR}_{next}=\min(\text{現在BR}+\text{BR上昇量},\hspace{0.5em}\text{BR上限})\hspace{0.5em}'/>
   </StyledMathT>
 
   バトルランク上限は以下のタイミングで更新されます。
@@ -142,8 +142,8 @@ import {
 
   <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
     <BlockMath
-      math="\hspace{0.5em}\text{BR上限}=\begin{cases}\text{現在BR}+10+\text{ランク差ボーナス}&(\text{1.})\\
-          \text{現在BR}+10&(\text{2.})\end{cases}\hspace{0.5em}"
+      math='\hspace{0.5em}\text{BR上限}=\begin{cases}\text{現在BR}+10+\text{ランク差ボーナス}&(\text{1.})\\
+          \text{現在BR}+10&(\text{2.})\end{cases}\hspace{0.5em}'
     />
   </StyledMathT>
 
@@ -156,20 +156,20 @@ import {
   潜在バトルランクは下式で算出されます。
 
   <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
-    <BlockMath math="\hspace{0.5em}\text{潜在BR}=\sum_{m\in BP} \text{メンバー}m\text{の強さ}\hspace{0.5em}" />
+    <BlockMath math='\hspace{0.5em}\text{潜在BR}=\sum_{m\in BP} \text{メンバー}m\text{の強さ}\hspace{0.5em}' />
   </StyledMathT>
 
-  ここで、<InlineMath math="BP" /> はバトルパーティを意味し、サポートメンバーや控えメンバーを含みません。<br/>
+  ここで、<InlineMath math='BP' /> はバトルパーティを意味し、サポートメンバーや控えメンバーを含みません。<br/>
   メンバーの強さは下式で算出されます。
 
   <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
-    <BlockMath math="\hspace{0.5em}\text{メンバーの強さ}=\text{HP評価値}+\text{能力値評価値}+\text{スキル評価値}\hspace{0.5em}\\[1.3em]
+    <BlockMath math='\hspace{0.5em}\text{メンバーの強さ}=\text{HP評価値}+\text{能力値評価値}+\text{スキル評価値}\hspace{0.5em}\\[1.3em]
         \hspace{0.5em}\text{HP評価値}=\frac{(HP-140)\times 18}{1000}\hspace{0.5em}\\[1em]
         \hspace{0.5em}\text{能力値評価値}=\frac{(\max Stat-20)\times 72}{1000}\hspace{0.5em}\\[1em]
-        \hspace{0.5em}\text{スキル評価値}=\frac{(\max SLv-5)\times 315}{1000}\hspace{0.5em}" />
+        \hspace{0.5em}\text{スキル評価値}=\frac{(\max SLv-5)\times 315}{1000}\hspace{0.5em}' />
   </StyledMathT>
 
-  ここで、<InlineMath math="\max Stat" /> は能力値6種の中で装備補正込みで最も高い値、<InlineMath math="\max SLv" /> は所持スキルのレベルの中で最も高い値を意味します。<br/>
+  ここで、<InlineMath math='\max Stat' /> は能力値6種の中で装備補正込みで最も高い値、<InlineMath math='\max SLv' /> は所持スキルのレベルの中で最も高い値を意味します。<br/>
   潜在バトルランクはバトル準備画面突入時点でのバトルパーティのステータスで算出されるため、バトル準備画面でメンバー・装備変更をしても変動しません。
 </Box>
 
@@ -178,16 +178,16 @@ import {
   敵バトルランクはそれぞれの敵について下式で算出されます。
 
   <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
-    <BlockMath math="\hspace{0.5em}\text{敵BR}=\max(\text{基本BR}+\text{相対BR}+\text{ひらめきレベル},\hspace{0.5em}\text{BR下限})\hspace{0.5em}" />
+    <BlockMath math='\hspace{0.5em}\text{敵BR}=\max(\text{基本BR}+\text{相対BR}+\text{ひらめきレベル},\hspace{0.5em}\text{BR下限})\hspace{0.5em}' />
   </StyledMathT>
 
   ここで、相対バトルランクとバトルランク下限はバトルに設定されている内部値で、ひらめきレベルは敵キャラクターに設定されている内部値です。<br/>
   基本バトルランクは下式で算出されます。
 
   <StyledMathT sx={{ marginTop: 3, marginBottom: 3, boxShadow: 3 }}>
-    <BlockMath math="\hspace{0.5em}\text{基本BR}=\begin{cases}\text{現在BR}&(\text{楽勝または普通})\\
+    <BlockMath math='\hspace{0.5em}\text{基本BR}=\begin{cases}\text{現在BR}&(\text{楽勝または普通})\\
         \max(\text{現在BR},\hspace{0.5em}\text{潜在BR}\times 0.8)&(\text{強敵})\\
-        \max(\text{現在BR},\hspace{0.5em}\text{潜在BR})&(\text{最凶})\end{cases}\hspace{0.5em}" />
+        \max(\text{現在BR},\hspace{0.5em}\text{潜在BR})&(\text{最凶})\end{cases}\hspace{0.5em}' />
   </StyledMathT>
 
   基本バトルランクの計算結果は小数点以下が切り捨てられます。

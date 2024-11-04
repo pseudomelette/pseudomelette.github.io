@@ -1,22 +1,22 @@
-import * as React from "react"
-import { graphql, Link, useStaticQuery } from "gatsby"
+import * as React from 'react'
+import { graphql, Link, useStaticQuery } from 'gatsby'
 
-import { useMediaQuery } from '@mui/material';
-import Box from '@mui/material/Box';
-import Collapse from '@mui/material/Collapse';
-import Drawer from '@mui/material/Drawer';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import { styled, useTheme } from '@mui/material/styles';
-import { OverlayScrollbars } from 'overlayscrollbars';
+import { useMediaQuery } from '@mui/material'
+import Box from '@mui/material/Box'
+import Collapse from '@mui/material/Collapse'
+import Drawer from '@mui/material/Drawer'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemText from '@mui/material/ListItemText'
+import MenuIcon from '@mui/icons-material/Menu'
+import { styled, useTheme } from '@mui/material/styles'
+import { OverlayScrollbars } from 'overlayscrollbars'
 
-import 'overlayscrollbars/overlayscrollbars.css';
+import 'overlayscrollbars/overlayscrollbars.css'
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   position: 'fixed',
@@ -31,7 +31,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     marginTop: 26,
   }
-}));
+}))
 
 const StyledDrawer = styled(Drawer)(({ theme }) => ({
   width: 256,
@@ -41,7 +41,7 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
     boxSizing: 'border-box',
     background: '#163148',
   },
-}));
+}))
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   marginTop: 2,
@@ -52,7 +52,7 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   '&:hover': {
     background: 'linear-gradient(to right, #3964803f 0%, #396480 15%, #396480 20%, #39648000 97%)',
   },
-}));
+}))
 
 const StyledListItemParent = styled(ListItem)(({ theme }) => ({
   marginTop: 16,
@@ -66,7 +66,7 @@ const StyledListItemParent = styled(ListItem)(({ theme }) => ({
   '&:hover': {
     background: 'linear-gradient(to right, #36889b3f 0%, #36889b 15%, #36889b 20%, #36889b00 97%)',
   },
-}));
+}))
 
 const ActiveStyles = {
   height: '45px',
@@ -77,29 +77,38 @@ const ActiveStyles = {
   borderBottom: '2px solid',
   borderImageSlice: 1,
   borderImageSource: 'linear-gradient(to right, #98fde53f 0%, #98fde5 15%, #98fde5 20%, #98fde500 95%)',
-};
+}
+
+const stateActions = Object.freeze({
+  toggleLogic: 'toggleLogic',
+  toggleData: 'toggleData',
+})
 
 const Context = React.createContext()
 
 export const ContextProvider = ({ children }) => {
-  const [logicOpen, setLogicOpen] = React.useState(true);
-  const [dataOpen, setDataOpen] = React.useState(true);
-
-  const contextValue = {
-    logicOpen,
-    setLogicOpen,
-    dataOpen,
-    setDataOpen,
+  const initState = {
+    logicOpen: true,
+    dataOpen: true,
   }
 
-  return (
-    <Context.Provider value={contextValue}>
-      {children}
-    </Context.Provider>
-  );
-};
+  const reducer = (state, action) => {
+    switch (action) {
+      case stateActions.toggleLogic:
+        return { ...state, logicOpen: !state.logicOpen }
+      case stateActions.toggleData:
+        return { ...state, dataOpen: !state.dataOpen }
+      default:
+        return state
+    }
+  }
 
-function Sidebar() {
+  const [state, dispach] = React.useReducer(reducer, initState)
+
+  return <Context.Provider value={{ state, dispach }}>{children}</Context.Provider>
+}
+
+export const Sidebar = () => {
   const data = useStaticQuery(graphql`
     query {
       allMdx (sort: {frontmatter: {slug: ASC}}) {
@@ -111,53 +120,41 @@ function Sidebar() {
         }
       }
     }
-  `);
-  const nodes = data.allMdx.nodes;
+  `)
+  const nodes = data.allMdx.nodes
 
-  const { logicOpen, dataOpen, setLogicOpen, setDataOpen } = React.useContext(Context);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
+  const { state, dispach } = React.useContext(Context)
+  const [mobileOpen, setMobileOpen] = React.useState(false)
+
+  const initOverlayScrollbars = () => {
+    OverlayScrollbars(document.querySelector('ul[id=navList]'), {
+      scrollbars: {
+        theme: 'os-theme-dark os-theme-sidebar',
+        autoHide: 'leave',
+        autoHideDelay: 100,
+        clickScroll: true,
+      },
+    })
+  }
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-    if (mobileOpen === false) {
-      OverlayScrollbars(document.querySelector('ul[id=navList]'), {
-        scrollbars: {
-          theme: 'os-theme-dark os-theme-sidebar',
-          autoHide: 'leave',
-          autoHideDelay: 100,
-          clickScroll: true,
-        },
-      });
-    }
-  };
-
-  const handleClickLogic = () => {
-    setLogicOpen(!logicOpen);
-  };
-
-  const handleClickData = () => {
-    setDataOpen(!dataOpen);
-  };
+    setMobileOpen(!mobileOpen)
+  }
 
   React.useEffect(() => {
-    if (isMobile === false) {
-      OverlayScrollbars(document.querySelector('ul[id=navList]'), {
-        scrollbars: {
-          theme: 'os-theme-dark os-theme-sidebar',
-          autoHide: 'leave',
-          autoHideDelay: 100,
-          clickScroll: true,
-        },
-      });
-      setMobileOpen(false);
+    if (!isMobile) {
+      initOverlayScrollbars()
+      setMobileOpen(false)
+    } else if (mobileOpen) {
+      initOverlayScrollbars()
     }
-  }, [isMobile]);
+  }, [isMobile, mobileOpen])
 
-  const topNode = nodes.find((node) => node.frontmatter.slug === '/saga-eb/');
-  const logicNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/logic/'));
-  const dataNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/data/'));
+  const topNode = nodes.find((node) => node.frontmatter.slug === '/saga-eb/')
+  const logicNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/logic/'))
+  const dataNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/data/'))
 
   const drawer = (
     <List id='navList' sx={{ paddingTop: 2, paddingBottom: 2, marginTop: 6 }}>
@@ -167,13 +164,13 @@ function Sidebar() {
         </ListItemButton>
       </StyledListItem>
       <StyledListItemParent component={Box} activeStyle={ActiveStyles} disablePadding>
-        <ListItemButton onClick={handleClickLogic}>
+        <ListItemButton onClick={() => dispach(stateActions.toggleLogic)}>
           <ListItemText primary={'ロジック'} />
-          {logicOpen ? <ExpandLess /> : <ExpandMore />}
+          {state.logicOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
       </StyledListItemParent>
       <List disablePadding>
-        <Collapse in={logicOpen} timeout="auto" unmountOnExit>
+        <Collapse in={state.logicOpen} timeout='auto' unmountOnExit>
           {logicNodes.map((node, index) => (
             <StyledListItem component={Link} to={node.frontmatter.slug} activeStyle={ActiveStyles} key={index} disablePadding>
               <ListItemButton>
@@ -184,13 +181,13 @@ function Sidebar() {
         </Collapse>
       </List>
       <StyledListItemParent component={Link} activeStyle={ActiveStyles} disablePadding>
-        <ListItemButton onClick={handleClickData}>
+        <ListItemButton onClick={() => dispach(stateActions.toggleData)}>
           <ListItemText primary={'データ'} />
-          {dataOpen ? <ExpandLess /> : <ExpandMore />}
+          {state.dataOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItemButton>
       </StyledListItemParent>
       <List disablePadding>
-        <Collapse in={dataOpen} timeout="auto" unmountOnExit>
+        <Collapse in={state.dataOpen} timeout='auto' unmountOnExit>
           {dataNodes.map((node, index) => (
             <StyledListItem component={Link} to={node.frontmatter.slug} activeStyle={ActiveStyles} key={index} disablePadding>
               <ListItemButton>
@@ -201,7 +198,7 @@ function Sidebar() {
         </Collapse>
       </List>
     </List>
-  );
+  )
 
   return (
     <>
@@ -218,7 +215,5 @@ function Sidebar() {
         {drawer}
       </StyledDrawer>
     </>
-  );
+  )
 }
-
-export default Sidebar

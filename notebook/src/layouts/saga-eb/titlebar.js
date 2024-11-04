@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from 'react'
 
-import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box'
+import { styled } from '@mui/material/styles'
+import Toolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   background: `
@@ -26,9 +26,9 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
       repeating-linear-gradient(#44757ebf 0px, #44757ebf 50%, #44757e3f 50%, #44757e3f 100%)
     `,
   },
-}));
+}))
 
-function Titlebar() {
+export const Titlebar = () => {
   return (
     <StyledToolbar
       variant='dense'
@@ -50,15 +50,13 @@ function Titlebar() {
             justifyContent: 'center',
           }}
       >
-        <Typography variant="h5" component="div" sx={{ paddingLeft: 1, paddingRight: 1, width: 'fit-content', textAlign: 'center', wordBreak: 'keep-all' }}>
+        <Typography variant='h5' component='div' sx={{ paddingLeft: 1, paddingRight: 1, width: 'fit-content', textAlign: 'center', wordBreak: 'keep-all' }}>
           サガ エメラルド ビヨンド
         </Typography>
-        <Typography variant="h5" component="div" sx={{ paddingLeft: 1, paddingRight: 1, width: 'fit-content', textAlign: 'center', wordBreak: 'keep-all' }}>
+        <Typography variant='h5' component='div' sx={{ paddingLeft: 1, paddingRight: 1, width: 'fit-content', textAlign: 'center', wordBreak: 'keep-all' }}>
           システム解説
         </Typography>
       </Box>
     </StyledToolbar>
-  );
+  )
 }
-
-export default Titlebar
