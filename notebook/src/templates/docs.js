@@ -3,19 +3,21 @@ import { graphql } from 'gatsby'
 
 import { SagaEbTemplate, SagaEbHead } from '../layouts/saga-eb/main'
 
-export const PageTemplate = ({ data, children }) => {
-  switch (data.mdx.frontmatter.slug.split('/')[1]) {
+export const PageTemplate = ({ data, children, pageContext }) => {
+  switch (pageContext.layout) {
     case 'saga-eb':
-    default:
       return <SagaEbTemplate data={data}>{children}</SagaEbTemplate>
+    default:
+      return <>{children}</>
   }
 }
 
-export const Head = ({ data }) => {
-  switch (data.mdx.frontmatter.slug.split('/')[1]) {
+export const Head = ({ data, pageContext }) => {
+  switch (pageContext.layout) {
     case 'saga-eb':
-    default:
       return <SagaEbHead data={data} />
+    default:
+      return <></>
   }
 }
 

@@ -1,62 +1,62 @@
 import * as React from 'react'
 
 import Box from '@mui/material/Box'
-import { styled } from '@mui/material/styles'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-
-const StyledToolbar = styled(Toolbar)(({ theme }) => ({
-  background: `
-    linear-gradient(135deg, #4eb89adf 32px, #4eb89a5f 96px, #ffffff 50%, #ffffff5f calc(100% - 96px), #ffffff 100%),
-    repeating-linear-gradient(#2d8f3d5f, #2d8f3d9f 50%),
-    repeating-linear-gradient(45deg, #3f87a600, #3f87a6 40px),
-    repeating-linear-gradient(135deg, #4eb89a00, #4eb89a 40px),
-    repeating-linear-gradient(135deg, #16314800 0px, #16314800 24px, #163148df 24px, #163148bf 40px, #16314800 56px),
-    repeating-linear-gradient(45deg, #2b4a66df 0px, #2b4a66bf 16px, #2b4a6600 56px),
-    repeating-linear-gradient(#44757ebf 0px, #44757ebf 50%, #44757e3f 50%, #44757e3f 100%)
-  `,
-  [theme.breakpoints.down('sm')]: {
-    background: `
-      linear-gradient(135deg, #4eb89a5f 32px, #ffffffdf 40%, #ffffff7f calc(100% - 64px), #ffffff 100%),
-      repeating-linear-gradient(#2d8f3d5f, #2d8f3d9f 50%),
-      repeating-linear-gradient(45deg, #3f87a600, #3f87a6 40px),
-      repeating-linear-gradient(135deg, #4eb89a00, #4eb89a 40px),
-      repeating-linear-gradient(135deg, #16314800 0px, #16314800 24px, #163148df 24px, #163148bf 40px, #16314800 56px),
-      repeating-linear-gradient(45deg, #2b4a66df 0px, #2b4a66bf 16px, #2b4a6600 56px),
-      repeating-linear-gradient(#44757ebf 0px, #44757ebf 50%, #44757e3f 50%, #44757e3f 100%)
-    `,
-  },
-}))
+import { useTheme } from '@emotion/react'
 
 export const Titlebar = () => {
+  const theme = useTheme() 
   return (
-    <StyledToolbar
-      variant='dense'
+    <Toolbar
       position='fixed'
+      variant='dense'
       sx={{
-        color: '#16314a',
-        backgroundColor: 'white',
-        minHeight: { xs: 64, sm: 48 },
-        width: '100%',
+        justifyContent: 'center',
+        [theme.breakpoints.up('sm')]: {
+          minHeight: 48,
+          background: `
+            linear-gradient(135deg, #4eb89adf 32px, #4eb89a5f 96px, #ffffff 50%, #ffffff5f calc(100% - 96px), #ffffff 100%),
+            repeating-linear-gradient(#2d8f3d1f, #2d8f3d9f 50%),
+            repeating-linear-gradient(45deg, #3f87a600, #3f87a6 40px),
+            repeating-linear-gradient(135deg, #4eb89a00, #4eb89a 40px),
+            repeating-linear-gradient(135deg, #16314800 0px, #16314800 24px, #163148df 24px, #163148bf 40px, #16314800 56px),
+            repeating-linear-gradient(45deg, #2b4a66df 0px, #2b4a66bf 16px, #2b4a6600 56px),
+            repeating-linear-gradient(#44757ebf 0px, #44757ebf 50%, #44757e3f 50%, #44757e3f 100%)
+          `,
+        },
+        [theme.breakpoints.down('sm')]: {
+          minHeight: 64,
+          background: `
+            linear-gradient(135deg, #4eb89a5f 32px, #ffffffdf 40%, #ffffff7f calc(100% - 64px), #ffffff 100%),
+            repeating-linear-gradient(#2d8f3d1f, #2d8f3d9f 50%),
+            repeating-linear-gradient(45deg, #3f87a600, #3f87a6 40px),
+            repeating-linear-gradient(135deg, #4eb89a00, #4eb89a 40px),
+            repeating-linear-gradient(135deg, #16314800 0px, #16314800 24px, #163148df 24px, #163148bf 40px, #16314800 56px),
+            repeating-linear-gradient(45deg, #2b4a66df 0px, #2b4a66bf 16px, #2b4a6600 56px),
+            repeating-linear-gradient(#44757ebf 0px, #44757ebf 50%, #44757e3f 50%, #44757e3f 100%)
+          `,
+        },
       }}
     >
-      <Box
+      <Typography
+        component='div'
+        variant='h5'
         sx={{
-            width: '100%',
-            flexDirection: { xs: 'column', sm: 'row'},
-            display: 'flex',
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row'},
+          color: '#16314a',
+          textAlign: 'center',
+          wordBreak: 'keep-all'
+        }}
       >
-        <Typography variant='h5' component='div' sx={{ paddingLeft: 1, paddingRight: 1, width: 'fit-content', textAlign: 'center', wordBreak: 'keep-all' }}>
+        <Box sx={{ px: 1 }}>
           サガ エメラルド ビヨンド
-        </Typography>
-        <Typography variant='h5' component='div' sx={{ paddingLeft: 1, paddingRight: 1, width: 'fit-content', textAlign: 'center', wordBreak: 'keep-all' }}>
+        </Box>
+        <Box sx={{ px: 1 }}>
           システム解説
-        </Typography>
-      </Box>
-    </StyledToolbar>
+        </Box>
+      </Typography>
+    </Toolbar>
   )
 }

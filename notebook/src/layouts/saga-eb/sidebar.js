@@ -20,21 +20,19 @@ import 'overlayscrollbars/overlayscrollbars.css'
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
   position: 'fixed',
-  marginTop: 10,
-  marginLeft: 8,
+  margin: '8px 0 0 8px',
   border: '1px solid',
   borderColor: '#f8d36f',
   background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
+  [theme.breakpoints.down('sm')]: {
+    marginTop: 24,
+  },
   '&:hover': {
     background: 'linear-gradient(to bottom, #805f92 0%, #ab84c2 100%)',
   },
-  [theme.breakpoints.down('sm')]: {
-    marginTop: 26,
-  }
 }))
 
 const StyledDrawer = styled(Drawer)(({ theme }) => ({
-  width: 256,
   flexShrink: 0,
   '& .MuiDrawer-paper': {
     width: 256,
@@ -44,40 +42,44 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
 }))
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
-  marginTop: 2,
-  marginBottom: 2,
+  margin: '2px 0',
   height: '45px',
-  color: 'white',
   background: 'linear-gradient(to right, #1f3b533f 0%, #1f3b53 15%, #1f3b53 20%, #1f3b5300 97%)',
+  color: '#ffffff',
   '&:hover': {
     background: 'linear-gradient(to right, #3964803f 0%, #396480 15%, #396480 20%, #39648000 97%)',
+  },
+  '&[aria-current=page]': {
+    paddingTop: '2px',
+    borderBottom: '2px solid',
+    borderImageSource: 'linear-gradient(to right, #98fde53f 0%, #98fde5 15%, #98fde5 20%, #98fde500 95%)',
+    borderImageSlice: 1,
+    background: 'linear-gradient(to right, #163148c0 0%, #16314800 15%, #16314800 20%, #163148 97%), linear-gradient(to top, #4eb89a 0%, #1f3b53 100%)',
+    fontWeight: '900',
+  },
+  '&[aria-current=page]:hover': {
+    paddingTop: '2px',
+    borderBottom: '2px solid',
+    borderImageSource: 'linear-gradient(to right, #98fde53f 0%, #98fde5 15%, #98fde5 20%, #98fde500 95%)',
+    borderImageSlice: 1,
+    background: 'linear-gradient(to right, #163148c0 0%, #16314800 15%, #16314800 20%, #163148 97%), linear-gradient(to top, #4eb89a 0%, #396480 100%)',
+    fontWeight: '900',
   },
 }))
 
 const StyledListItemParent = styled(ListItem)(({ theme }) => ({
-  marginTop: 16,
   height: '45px',
-  color: 'white',
-  background: 'linear-gradient(to right, #1d5a6c3f 0%, #1d5a6c 15%, #1d5a6c 20%, #1d5a6c00 97%)',
+  marginTop: 16,
   borderBottom: '2px solid',
   borderColor: '#ffffff',
-  borderImageSlice: 2,
   borderImageSource: 'linear-gradient(to right, #ffffff3f 0%, #ffffff 15%, #ffffff 20%, #ffffff00 95%)',
+  borderImageSlice: 2,
+  background: 'linear-gradient(to right, #1d5a6c3f 0%, #1d5a6c 15%, #1d5a6c 20%, #1d5a6c00 97%)',
+  color: '#ffffff',
   '&:hover': {
     background: 'linear-gradient(to right, #36889b3f 0%, #36889b 15%, #36889b 20%, #36889b00 97%)',
   },
 }))
-
-const ActiveStyles = {
-  height: '45px',
-  background: 'linear-gradient(to right, #163148c0 0%, #16314800 15%, #16314800 20%, #163148 97%), linear-gradient(to top, #4eb89a 0%, #1f3b53 100%)',
-  color: 'white',
-  fontWeight: '900',
-  paddingTop: '2px',
-  borderBottom: '2px solid',
-  borderImageSlice: 1,
-  borderImageSource: 'linear-gradient(to right, #98fde53f 0%, #98fde5 15%, #98fde5 20%, #98fde500 95%)',
-}
 
 const stateActions = Object.freeze({
   toggleLogic: 'toggleLogic',
@@ -157,13 +159,13 @@ export const Sidebar = () => {
   const dataNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/data/'))
 
   const drawer = (
-    <List id='navList' sx={{ paddingTop: 2, paddingBottom: 2, marginTop: 6 }}>
-      <StyledListItem component={Link} to={topNode.frontmatter.slug} activeStyle={ActiveStyles} disablePadding>
+    <List id='navList' sx={{ mt: 6, py: 2 }}>
+      <StyledListItem component={Link} to={topNode.frontmatter.slug} disablePadding>
         <ListItemButton>
           <ListItemText primary={topNode.frontmatter.title} />
         </ListItemButton>
       </StyledListItem>
-      <StyledListItemParent component={Box} activeStyle={ActiveStyles} disablePadding>
+      <StyledListItemParent component={Box} disablePadding>
         <ListItemButton onClick={() => dispach(stateActions.toggleLogic)}>
           <ListItemText primary={'ロジック'} />
           {state.logicOpen ? <ExpandLess /> : <ExpandMore />}
@@ -172,7 +174,7 @@ export const Sidebar = () => {
       <List disablePadding>
         <Collapse in={state.logicOpen} timeout='auto' unmountOnExit>
           {logicNodes.map((node, index) => (
-            <StyledListItem component={Link} to={node.frontmatter.slug} activeStyle={ActiveStyles} key={index} disablePadding>
+            <StyledListItem component={Link} to={node.frontmatter.slug} key={index} disablePadding>
               <ListItemButton>
                 <ListItemText primary={node.frontmatter.title} sx={{ pl: 1 }} />
               </ListItemButton>
@@ -180,7 +182,7 @@ export const Sidebar = () => {
           ))}
         </Collapse>
       </List>
-      <StyledListItemParent component={Link} activeStyle={ActiveStyles} disablePadding>
+      <StyledListItemParent component={Link} disablePadding>
         <ListItemButton onClick={() => dispach(stateActions.toggleData)}>
           <ListItemText primary={'データ'} />
           {state.dataOpen ? <ExpandLess /> : <ExpandMore />}
@@ -189,7 +191,7 @@ export const Sidebar = () => {
       <List disablePadding>
         <Collapse in={state.dataOpen} timeout='auto' unmountOnExit>
           {dataNodes.map((node, index) => (
-            <StyledListItem component={Link} to={node.frontmatter.slug} activeStyle={ActiveStyles} key={index} disablePadding>
+            <StyledListItem component={Link} to={node.frontmatter.slug} key={index} disablePadding>
               <ListItemButton>
                 <ListItemText primary={node.frontmatter.title} sx={{ pl: 1 }} />
               </ListItemButton>

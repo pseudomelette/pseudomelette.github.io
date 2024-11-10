@@ -33,7 +33,9 @@
     "react-katex": "^3.0.1",
     "react-router-dom": "^6.26.2",
     "react-scrollspy-navigation": "^2.0.6",
-    "react-ui-scrollspy": "^2.3.0"
+    "react-ui-scrollspy": "^2.3.0",
+    "rehype-katex": "^7.0.1",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "prettier": "^2.8.8"

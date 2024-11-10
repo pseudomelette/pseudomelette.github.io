@@ -10,8 +10,8 @@ import {
 	StyledTableContainer,
 	StyledTd,
 	StyledTh,
-	StyledThLeft,
 	StyledTr,
+	StyledTrh,
 } from '../../../layouts/saga-eb/layout'
 
 export const BattleRankData = () => {
@@ -33,8 +33,8 @@ export const BattleRankData = () => {
   const nodes = data.allSagaebEnemyRankDataCsv.nodes
 
   return(
-    <StyledTableContainer align='center' sx={{ marginTop: 3, boxShadow: 3 }}>
-      <Table stickyHeader sx={{ width: `calc(80px * 7)`, tableLayout: 'fixed' }}>
+    <StyledTableContainer align='center'>
+      <Table stickyHeader sx={{ tableLayout: 'fixed', width: `calc(80px * 7)` }}>
         <TableHead>
           <TableRow>
             <StyledTh align='center' sx={{ position: 'sticky', left: 0, zIndex: 3 }}>バトル<br/>ランク</StyledTh>
@@ -51,7 +51,7 @@ export const BattleRankData = () => {
 						if (Number(node.label.split('_')[1]) > 200) {
 							return (
 								<StyledTr>
-									<StyledThLeft align='center' scope='row' sx={{ background: '#ab84c2' }}>{Number(node.label.split('_')[1])}</StyledThLeft>
+									<StyledTrh align='center' scope='row' sx={{ background: '#ab84c2' }}>{Number(node.label.split('_')[1])}</StyledTrh>
 									<StyledTd align='center'>{node.Attack}</StyledTd>
 									<StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>
 									<StyledTd align='center'>{node.Defense}</StyledTd>
@@ -63,7 +63,7 @@ export const BattleRankData = () => {
 						} else {
 							return (
 								<StyledTr>
-									<StyledThLeft align='center' scope='row'>{Number(node.label.split('_')[1])}</StyledThLeft>
+									<StyledTrh align='center' scope='row'>{Number(node.label.split('_')[1])}</StyledTrh>
 									<StyledTd align='center'>{node.Attack}</StyledTd>
 									<StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>
 									<StyledTd align='center'>{node.Defense}</StyledTd>

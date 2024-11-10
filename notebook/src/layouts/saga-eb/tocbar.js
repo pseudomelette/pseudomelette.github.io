@@ -14,8 +14,6 @@ import { OverlayScrollbars } from 'overlayscrollbars'
 
 import 'overlayscrollbars/overlayscrollbars.css'
 
-import './tocbar.css'
-
 const rootMarginTop = 130
 const rootMarginBottom = () => document.documentElement.clientHeight - 215
 
@@ -30,7 +28,7 @@ const StyledDrawer = styled(Drawer)(({ theme }) => ({
 }))
 
 const StyledTocHeader = styled(Typography)(({ theme }) => ({
-  color: 'white',
+  color: '#ffffff',
   height: '48px',
   width: '239px',
   lineHeight: '48px',
@@ -60,15 +58,21 @@ const StyledList = styled(List)(({ theme }) => ({
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   height: '45px',
-  color: 'white',
+  color: '#ffffff',
   display: 'block',
+  '&.active': {
+    background: 'linear-gradient(to right, #4eb89a00 4px, #4eb89a 4px, #4eb89a 9px, #4eb89a5f 9px, #4eb89a00 228px)',
+  },
+  '&:hover': {
+    background: 'linear-gradient(to right, #48759400 9px, #487594 40%, #487594 60%, #48759400 228px)',
+  },
+  '&.active:hover': {
+    background: 'linear-gradient(to right, #4eb89a00 4px, #4eb89a 4px, #4eb89a 9px, #4eb89a7f 9px, #487594 60%, #48759400 228px)',
+  },
 }))
 
 export const Tocbar = ({ items }) => {
-  let tocItems = []
-  if (items !== undefined) {
-    tocItems = items
-  }
+  const tocItems = items === undefined ? [] : items
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))

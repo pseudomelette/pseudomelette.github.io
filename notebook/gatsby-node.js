@@ -39,6 +39,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       path: node.frontmatter.slug,
       component: `${template}?__contentFilePath=${node.internal.contentFilePath}`,
       context: {
+        layout: node.frontmatter.slug.split('/')[1],
         slug: node.frontmatter.slug,
       }
     })
