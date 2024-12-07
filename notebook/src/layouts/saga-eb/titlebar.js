@@ -13,10 +13,10 @@ export const Titlebar = () => {
       variant='dense'
       sx={{
         justifyContent: 'center',
-        [theme.breakpoints.up('sm')]: {
-          minHeight: 48,
-          background: `
-            linear-gradient(135deg, #4eb89adf 32px, #4eb89a5f 96px, #ffffff 50%, #ffffff5f calc(100% - 96px), #ffffff 100%),
+        minHeight: { xs: 64, sm: 48},
+        background: {
+          xs: `
+            linear-gradient(135deg, #4eb89a5f 32px, #ffffffdf 40%, #ffffff7f calc(100% - 64px), #ffffff 100%),
             repeating-linear-gradient(#2d8f3d1f, #2d8f3d9f 50%),
             repeating-linear-gradient(45deg, #3f87a600, #3f87a6 40px),
             repeating-linear-gradient(135deg, #4eb89a00, #4eb89a 40px),
@@ -24,11 +24,8 @@ export const Titlebar = () => {
             repeating-linear-gradient(45deg, #2b4a66df 0px, #2b4a66bf 16px, #2b4a6600 56px),
             repeating-linear-gradient(#44757ebf 0px, #44757ebf 50%, #44757e3f 50%, #44757e3f 100%)
           `,
-        },
-        [theme.breakpoints.down('sm')]: {
-          minHeight: 64,
-          background: `
-            linear-gradient(135deg, #4eb89a5f 32px, #ffffffdf 40%, #ffffff7f calc(100% - 64px), #ffffff 100%),
+          sm: `
+            linear-gradient(135deg, #4eb89adf 32px, #4eb89a5f 96px, #ffffff 50%, #ffffff5f calc(100% - 96px), #ffffff 100%),
             repeating-linear-gradient(#2d8f3d1f, #2d8f3d9f 50%),
             repeating-linear-gradient(45deg, #3f87a600, #3f87a6 40px),
             repeating-linear-gradient(135deg, #4eb89a00, #4eb89a 40px),

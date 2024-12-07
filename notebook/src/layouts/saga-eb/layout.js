@@ -18,8 +18,6 @@ import './layout.css'
 
 OverlayScrollbars.plugin(ClickScrollPlugin)
 
-const drawerWidth = 256
-
 export const StyledMathBox = styled(Box)(({ theme }) => ({
   margin: '24px 0',
   padding: '8px 0',
@@ -120,13 +118,7 @@ export const SagaEBLayout = ({ children }) => {
         <AppBar sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Titlebar />
         </AppBar>
-        <Box 
-          component='nav'
-          sx={{
-            flexShrink: { sm: 0 },
-            width: { lg: drawerWidth },
-          }}
-        >
+        <Box component='nav'>
           <ContextProvider>
             <Sidebar />
           </ContextProvider>
@@ -137,7 +129,7 @@ export const SagaEBLayout = ({ children }) => {
             display: 'flex',
             flexGrow: 1,
             flexFlow: 'column',
-            width: { xs: '100%', lg: `calc(100% - ${drawerWidth}px)` },
+            width: '100%',
             height: '100%', 
             minHeight: '100vh',
           }}

@@ -3,6 +3,7 @@ import { graphql, Link, useStaticQuery } from 'gatsby'
 
 import { useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
+import CloseIcon from '@mui/icons-material/Close';
 import Collapse from '@mui/material/Collapse'
 import Drawer from '@mui/material/Drawer'
 import ExpandLess from '@mui/icons-material/ExpandLess'
@@ -17,29 +18,6 @@ import { styled, useTheme } from '@mui/material/styles'
 import { OverlayScrollbars } from 'overlayscrollbars'
 
 import 'overlayscrollbars/overlayscrollbars.css'
-
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  position: 'fixed',
-  margin: '8px 0 0 8px',
-  border: '1px solid',
-  borderColor: '#f8d36f',
-  background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
-  [theme.breakpoints.down('sm')]: {
-    marginTop: 24,
-  },
-  '&:hover': {
-    background: 'linear-gradient(to bottom, #805f92 0%, #ab84c2 100%)',
-  },
-}))
-
-const StyledDrawer = styled(Drawer)(({ theme }) => ({
-  flexShrink: 0,
-  '& .MuiDrawer-paper': {
-    width: 256,
-    boxSizing: 'border-box',
-    background: '#163148',
-  },
-}))
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   margin: '2px 0',
@@ -126,9 +104,9 @@ export const Sidebar = () => {
   const nodes = data.allMdx.nodes
 
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
+  const isDownLg = useMediaQuery(theme.breakpoints.down('lg'))
   const { state, dispach } = React.useContext(Context)
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  const [drawerOpen, setDrawerOpen] = React.useState(false)
 
   const initOverlayScrollbars = () => {
     OverlayScrollbars(document.querySelector('ul[id=navList]'), {
@@ -142,17 +120,17 @@ export const Sidebar = () => {
   }
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
+    setDrawerOpen(!drawerOpen)
   }
 
   React.useEffect(() => {
-    if (!isMobile) {
+    if (!isDownLg) {
       initOverlayScrollbars()
-      setMobileOpen(false)
-    } else if (mobileOpen) {
+      setDrawerOpen(false)
+    } else if (drawerOpen) {
       initOverlayScrollbars()
     }
-  }, [isMobile, mobileOpen])
+  }, [isDownLg, drawerOpen])
 
   const topNode = nodes.find((node) => node.frontmatter.slug === '/saga-eb/')
   const logicNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/logic/'))
@@ -204,18 +182,43 @@ export const Sidebar = () => {
 
   return (
     <>
-      <StyledIconButton onClick={handleDrawerToggle} sx={{ display: { lg: 'none' }, boxShadow: 8, zIndex: theme.zIndex.drawer + 100 }}>
-        <MenuIcon sx={{ fontSize: 32, color: '#ffffff' }} />
-      </StyledIconButton>
-      <StyledDrawer
-        variant={isMobile ? 'temporary' : 'permanent'}
-        open={isMobile ? mobileOpen : true}
+      <IconButton
+        onClick={handleDrawerToggle}
+        sx={{
+          display: { lg: 'none' },
+          position: 'fixed',
+          zIndex: theme.zIndex.drawer + 100,
+          mt: { xs: 3, sm: 1 },
+          ml: 1,
+          border: '1px solid',
+          borderColor: '#f8d36f',
+          boxShadow: 8,
+          background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
+          '&:hover': {
+            background: 'linear-gradient(to bottom, #805f92 0%, #ab84c2 100%)',
+          },
+        }}
+      >
+        {drawerOpen ? <CloseIcon sx={{ fontSize: 32, color: '#ffffff' }} /> : <MenuIcon sx={{ fontSize: 32, color: '#ffffff' }} />}
+      </IconButton>
+      <Drawer
+        variant={isDownLg ? 'temporary' : 'permanent'}
+        open={isDownLg ? drawerOpen : true}
         onClose={handleDrawerToggle}
         ModalProps={{ keepMounted: true }}
-        PaperProps={{ height: '100%', elevation: 4 }}
+        PaperProps={{height: '100%', elevation: 4 }}
+        sx={{
+          flexShrink: 0,
+          width: 256,
+          '& .MuiDrawer-paper': {
+            width: 256, 
+            boxSizing: 'border-box',
+            background: '#163148',
+          },
+        }}
       >
         {drawer}
-      </StyledDrawer>
+      </Drawer>
     </>
   )
 }

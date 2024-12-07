@@ -17,16 +17,6 @@ import 'overlayscrollbars/overlayscrollbars.css'
 const rootMarginTop = 130
 const rootMarginBottom = () => document.documentElement.clientHeight - 215
 
-const StyledDrawer = styled(Drawer)(({ theme }) => ({
-  width: 256,
-  flexShrink: 0,
-  '& .MuiDrawer-paper': {
-    width: 256,
-    boxSizing: 'border-box',
-    background: '#163148',
-  },
-}))
-
 const StyledTocHeader = styled(Typography)(({ theme }) => ({
   color: '#ffffff',
   height: '48px',
@@ -75,11 +65,11 @@ export const Tocbar = ({ items }) => {
   const tocItems = items === undefined ? [] : items
 
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const [mobileOpen, setMobileOpen] = React.useState(false)
+  const isDownMd = useMediaQuery(theme.breakpoints.down('md'))
+  const [drawerOpen, setDrawerOpen] = React.useState(false)
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen)
+    setDrawerOpen(!drawerOpen)
   }
 
   const doWhenIntersect = (entries) => {
@@ -98,7 +88,7 @@ export const Tocbar = ({ items }) => {
   }
 
   React.useEffect(() => {
-    if (!isMobile) {
+    if (!isDownMd) {
       OverlayScrollbars(document.querySelector('ul[id=tocList]').parentElement, {
         scrollbars: {
           theme: 'os-theme-dark os-theme-tocbar',
@@ -129,7 +119,7 @@ export const Tocbar = ({ items }) => {
       const observer = new IntersectionObserver(doWhenIntersect, options)    
       sections.forEach(item => observer.observe(item))
     }
-  }, [isMobile])
+  }, [isDownMd])
 
   const drawer = (
     <StyledList id='tocList'>
@@ -144,16 +134,25 @@ export const Tocbar = ({ items }) => {
   )
 
   return (
-    <StyledDrawer
-      variant={isMobile ? 'temporary' : 'permanent'}
-      open={isMobile ? mobileOpen : true}
+    <Drawer
+      variant={isDownMd ? 'temporary' : 'permanent'}
+      open={isDownMd ? drawerOpen : true}
       onClose={handleDrawerToggle}
       ModalProps={{ keepMounted: true }}
       PaperProps={{ sx: { height: 'calc(100% - 48px)', top: 48 } }}
       anchor='right'
+      sx={{
+        flexShrink: 0,
+        width: 256,
+        '& .MuiDrawer-paper': {
+          width: 256,
+          boxSizing: 'border-box',
+          background: '#163148',
+        },
+      }}
     >
       <StyledTocHeader variant='h6' component='div' align='center' position='fixed'>目次</StyledTocHeader>
       <StyledTocBody>{drawer}</StyledTocBody>
-    </StyledDrawer>
+    </Drawer>
   )
 }
