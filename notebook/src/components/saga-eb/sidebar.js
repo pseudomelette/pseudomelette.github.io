@@ -20,8 +20,8 @@ import { OverlayScrollbars } from 'overlayscrollbars'
 import 'overlayscrollbars/overlayscrollbars.css'
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
+  height: '40px',
   margin: '2px 0',
-  height: '45px',
   background: 'linear-gradient(to right, #1f3b533f 0%, #1f3b53 15%, #1f3b53 20%, #1f3b5300 97%)',
   color: '#ffffff',
   '&:hover': {
@@ -33,7 +33,6 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
     borderImageSource: 'linear-gradient(to right, #98fde53f 0%, #98fde5 15%, #98fde5 20%, #98fde500 95%)',
     borderImageSlice: 1,
     background: 'linear-gradient(to right, #163148c0 0%, #16314800 15%, #16314800 20%, #163148 97%), linear-gradient(to top, #4eb89a 0%, #1f3b53 100%)',
-    fontWeight: '900',
   },
   '&[aria-current=page]:hover': {
     paddingTop: '2px',
@@ -41,12 +40,11 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
     borderImageSource: 'linear-gradient(to right, #98fde53f 0%, #98fde5 15%, #98fde5 20%, #98fde500 95%)',
     borderImageSlice: 1,
     background: 'linear-gradient(to right, #163148c0 0%, #16314800 15%, #16314800 20%, #163148 97%), linear-gradient(to top, #4eb89a 0%, #396480 100%)',
-    fontWeight: '900',
   },
 }))
 
 const StyledListItemParent = styled(ListItem)(({ theme }) => ({
-  height: '45px',
+  height: '40px',
   marginTop: 16,
   borderBottom: '2px solid',
   borderColor: '#ffffff',
@@ -137,24 +135,24 @@ export const Sidebar = () => {
   const dataNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/data/'))
 
   const drawer = (
-    <List id='navList' sx={{ mt: 6, py: 2 }}>
-      <StyledListItem component={Link} to={topNode.frontmatter.slug} disablePadding>
+    <List id='navList' sx={{ mt: { xs: 8, sm: 6 }, py: 2 }}>
+      <StyledListItem component={Link} disablePadding to={topNode.frontmatter.slug}>
         <ListItemButton>
-          <ListItemText primary={topNode.frontmatter.title} />
+          <ListItemText primary={topNode.frontmatter.title}/>
         </ListItemButton>
       </StyledListItem>
       <StyledListItemParent component={Box} disablePadding>
         <ListItemButton onClick={() => dispach(stateActions.toggleLogic)}>
-          <ListItemText primary={'ロジック'} />
-          {state.logicOpen ? <ExpandLess /> : <ExpandMore />}
+          <ListItemText primary={'ロジック'}/>
+          {state.logicOpen ? <ExpandLess/> : <ExpandMore/>}
         </ListItemButton>
       </StyledListItemParent>
       <List disablePadding>
         <Collapse in={state.logicOpen} timeout='auto' unmountOnExit>
           {logicNodes.map((node, index) => (
-            <StyledListItem component={Link} to={node.frontmatter.slug} key={index} disablePadding>
+            <StyledListItem component={Link} disablePadding key={index} to={node.frontmatter.slug}>
               <ListItemButton>
-                <ListItemText primary={node.frontmatter.title} sx={{ pl: 1 }} />
+                <ListItemText primary={node.frontmatter.title} sx={{ pl: 1 }}/>
               </ListItemButton>
             </StyledListItem>
           ))}
@@ -162,16 +160,16 @@ export const Sidebar = () => {
       </List>
       <StyledListItemParent component={Link} disablePadding>
         <ListItemButton onClick={() => dispach(stateActions.toggleData)}>
-          <ListItemText primary={'データ'} />
-          {state.dataOpen ? <ExpandLess /> : <ExpandMore />}
+          <ListItemText primary={'データ'}/>
+          {state.dataOpen ? <ExpandLess/> : <ExpandMore/>}
         </ListItemButton>
       </StyledListItemParent>
       <List disablePadding>
         <Collapse in={state.dataOpen} timeout='auto' unmountOnExit>
           {dataNodes.map((node, index) => (
-            <StyledListItem component={Link} to={node.frontmatter.slug} key={index} disablePadding>
+            <StyledListItem component={Link} disablePadding key={index} to={node.frontmatter.slug}>
               <ListItemButton>
-                <ListItemText primary={node.frontmatter.title} sx={{ pl: 1 }} />
+                <ListItemText primary={node.frontmatter.title} sx={{ pl: 1 }}/>
               </ListItemButton>
             </StyledListItem>
           ))}
@@ -199,14 +197,14 @@ export const Sidebar = () => {
           },
         }}
       >
-        {drawerOpen ? <CloseIcon sx={{ fontSize: 32, color: '#ffffff' }} /> : <MenuIcon sx={{ fontSize: 32, color: '#ffffff' }} />}
+        {drawerOpen ? <CloseIcon sx={{ color: '#ffffff', fontSize: 32 }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: 32 }}/>}
       </IconButton>
       <Drawer
-        variant={isDownLg ? 'temporary' : 'permanent'}
-        open={isDownLg ? drawerOpen : true}
         onClose={handleDrawerToggle}
+        open={isDownLg ? drawerOpen : true}
+        variant={isDownLg ? 'temporary' : 'permanent'}
         ModalProps={{ keepMounted: true }}
-        PaperProps={{height: '100%', elevation: 4 }}
+        PaperProps={{ elevation: 4, sx: { height: '100%' } }}
         sx={{
           flexShrink: 0,
           width: 256,

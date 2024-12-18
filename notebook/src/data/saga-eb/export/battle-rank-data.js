@@ -10,9 +10,10 @@ import {
 	StyledTableContainer,
 	StyledTd,
 	StyledTh,
-	StyledTr,
 	StyledTrh,
-} from '../../../layouts/saga-eb/layout'
+	StyledTrStripedR,
+	StyledTrStripedB,
+} from '../../../components/saga-eb/layout'
 
 export const BattleRankData = () => {
 	const data = useStaticQuery(graphql`
@@ -34,7 +35,7 @@ export const BattleRankData = () => {
 
   return(
     <StyledTableContainer align='center'>
-      <Table stickyHeader sx={{ tableLayout: 'fixed', width: `calc(80px * 7)` }}>
+      <Table stickyHeader sx={{ width: `calc(80px * 7)`, tableLayout: 'fixed' }}>
         <TableHead>
           <TableRow>
             <StyledTh align='center' sx={{ position: 'sticky', left: 0, zIndex: 3 }}>バトル<br/>ランク</StyledTh>
@@ -50,19 +51,7 @@ export const BattleRankData = () => {
           {nodes.map(node => {
 						if (Number(node.label.split('_')[1]) > 200) {
 							return (
-								<StyledTr>
-									<StyledTrh align='center' scope='row' sx={{ background: '#ab84c2' }}>{Number(node.label.split('_')[1])}</StyledTrh>
-									<StyledTd align='center'>{node.Attack}</StyledTd>
-									<StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>
-									<StyledTd align='center'>{node.Defense}</StyledTd>
-									<StyledTd align='center'>{node.HP}</StyledTd>
-									<StyledTd align='center'>{node.Parameter}</StyledTd>
-									<StyledTd align='center'>{node.growRank}</StyledTd>
-								</StyledTr>
-							)
-						} else {
-							return (
-								<StyledTr>
+								<StyledTrStripedR>
 									<StyledTrh align='center' scope='row'>{Number(node.label.split('_')[1])}</StyledTrh>
 									<StyledTd align='center'>{node.Attack}</StyledTd>
 									<StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>
@@ -70,7 +59,19 @@ export const BattleRankData = () => {
 									<StyledTd align='center'>{node.HP}</StyledTd>
 									<StyledTd align='center'>{node.Parameter}</StyledTd>
 									<StyledTd align='center'>{node.growRank}</StyledTd>
-								</StyledTr>
+								</StyledTrStripedR>
+							)
+						} else {
+							return (
+								<StyledTrStripedB>
+									<StyledTrh align='center' scope='row'>{Number(node.label.split('_')[1])}</StyledTrh>
+									<StyledTd align='center'>{node.Attack}</StyledTd>
+									<StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>
+									<StyledTd align='center'>{node.Defense}</StyledTd>
+									<StyledTd align='center'>{node.HP}</StyledTd>
+									<StyledTd align='center'>{node.Parameter}</StyledTd>
+									<StyledTd align='center'>{node.growRank}</StyledTd>
+								</StyledTrStripedB>
 							)
 						}
           })}

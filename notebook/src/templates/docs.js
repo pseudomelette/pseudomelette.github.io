@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { graphql } from 'gatsby'
 
-import { SagaEbTemplate, SagaEbHead } from '../layouts/saga-eb/main'
+import { SagaEbTemplate, SagaEbHead } from '../components/saga-eb/main'
 
 export const PageTemplate = ({ data, children, pageContext }) => {
   switch (pageContext.layout) {
@@ -15,7 +15,7 @@ export const PageTemplate = ({ data, children, pageContext }) => {
 export const Head = ({ data, pageContext }) => {
   switch (pageContext.layout) {
     case 'saga-eb':
-      return <SagaEbHead data={data} />
+      return <SagaEbHead data={data}/>
     default:
       return <></>
   }
@@ -28,6 +28,7 @@ export const query = graphql`
         title
         subtitle
         slug
+        description
       }
       tableOfContents(maxDepth: 2)
     }

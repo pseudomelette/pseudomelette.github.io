@@ -17,39 +17,16 @@ import 'overlayscrollbars/overlayscrollbars.css'
 const rootMarginTop = 130
 const rootMarginBottom = () => document.documentElement.clientHeight - 215
 
-const StyledTocHeader = styled(Typography)(({ theme }) => ({
-  color: '#ffffff',
-  height: '48px',
-  width: '239px',
-  lineHeight: '48px',
-  marginTop: 16,
-  marginLeft: 4,
-  borderBottom: '2px solid',
-  borderColor: '#98fde5',
-  background: 'linear-gradient(to top, #4eb89a 0%, #163148 84%)',
-}))
-
-const StyledTocBody = styled(Box)(({ theme }) => ({
-  marginTop: 64,
-  marginLeft: 4,
-  marginRight: 12,
-  borderBottomLeftRadius: 8,
-  borderBottomRightRadius: 8,
-}))
-
 const StyledList = styled(List)(({ theme }) => ({
-  paddingTop: 16,
-  paddingBottom: 16,
-  border: '0px solid',
-  borderRadius: 0,
-  borderColor: '#163148',
+  padding: '16px 0',
   background: '#2b4a66',
 }))
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
-  height: '45px',
+  display: 'flex',
+  height: '40px',
+  margin: '2px 0',
   color: '#ffffff',
-  display: 'block',
   '&.active': {
     background: 'linear-gradient(to right, #4eb89a00 4px, #4eb89a 4px, #4eb89a 9px, #4eb89a5f 9px, #4eb89a00 228px)',
   },
@@ -98,18 +75,21 @@ export const Tocbar = ({ items }) => {
         }
       })
 
-      const headings = Array.from(document.querySelectorAll('description > h6'))
+      const headings = Array.from(document.querySelectorAll('description > div > h6'))
       for (let i in headings) {
         headings[i].setAttribute('id', 'heading-'+i)
       }
-      const sections = Array.from(document.querySelectorAll('description > div'))
+      console.log(headings)
+      const sections = Array.from(document.querySelectorAll('description > div > div'))
       for (let i in sections) {
         sections[i].setAttribute('id', 'section-'+i)
       }
+      console.log(sections)
       const sectionTrackers = Array.from(document.querySelectorAll('ul[id=tocList] > a'))
       for (let i in sectionTrackers) {
         sectionTrackers[i].setAttribute('id', 'section-'+i)
       }
+      console.log(sectionTrackers)
 
       const options = {
         root: null,
@@ -121,38 +101,64 @@ export const Tocbar = ({ items }) => {
     }
   }, [isDownMd])
 
-  const drawer = (
-    <StyledList id='tocList'>
-      {tocItems.map((item, index) => (
-        <StyledListItem component={AnchorLink} to={window.location.pathname + '#heading-' + index} stripHash disablePadding>
-          <ListItemButton>
-            <ListItemText primary={item.title} primaryTypographyProps={{ variant: 'body2' }} />
-          </ListItemButton>
-        </StyledListItem>
-      ))}
-    </StyledList>
-  )
+  const drawer = typeof window === 'undefined'? <></>
+    : <StyledList id='tocList'>
+        {tocItems.map((item, index) => (
+          <StyledListItem component={AnchorLink} disablePadding stripHash to={window.location.pathname + '#heading-' + index}>
+            <ListItemButton>
+              <ListItemText primary={item.title} primaryTypographyProps={{ variant: 'body2' }}/>
+            </ListItemButton>
+          </StyledListItem>
+        ))}
+      </StyledList>
 
   return (
     <Drawer
-      variant={isDownMd ? 'temporary' : 'permanent'}
-      open={isDownMd ? drawerOpen : true}
-      onClose={handleDrawerToggle}
-      ModalProps={{ keepMounted: true }}
-      PaperProps={{ sx: { height: 'calc(100% - 48px)', top: 48 } }}
       anchor='right'
+      onClose={handleDrawerToggle}
+      open={isDownMd ? drawerOpen : true}
+      variant={isDownMd ? 'temporary' : 'permanent'}
+      ModalProps={{ keepMounted: true }}
+      PaperProps={{ sx: { top: 48, height: 'calc(100% - 48px)', border: 0 } }}
       sx={{
         flexShrink: 0,
         width: 256,
         '& .MuiDrawer-paper': {
           width: 256,
           boxSizing: 'border-box',
-          background: '#163148',
+          background: '#1f3b53',
         },
       }}
     >
-      <StyledTocHeader variant='h6' component='div' align='center' position='fixed'>目次</StyledTocHeader>
-      <StyledTocBody>{drawer}</StyledTocBody>
+      <Typography
+        align='center'
+        component='div'
+        position='fixed'
+        variant='h6'
+        sx={{
+          width: '240px',
+          height: '40px',
+          mt: 2,
+          ml: 1,
+          borderBottom: '2px solid',
+          borderColor: '#98fde5',
+          background: 'linear-gradient(to top, #4eb89a 0%, #1f3b53 100%)',        
+          color: '#ffffff',
+          lineHeight: '40px',
+        }}
+      >
+        目次
+      </Typography>
+      <Box
+        sx={{
+          mt: 7,
+          mx: 1,
+          borderBottomLeftRadius: 8,
+          borderBottomRightRadius: 8,
+        }}
+      >
+        {drawer}
+      </Box>
     </Drawer>
   )
 }

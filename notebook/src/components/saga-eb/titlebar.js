@@ -3,17 +3,16 @@ import * as React from 'react'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { useTheme } from '@emotion/react'
 
 export const Titlebar = () => {
-  const theme = useTheme() 
   return (
     <Toolbar
       position='fixed'
       variant='dense'
       sx={{
         justifyContent: 'center',
-        minHeight: { xs: 64, sm: 48},
+        minHeight: { xs: 64, sm: 48 },
+        maxHeight: 64,
         background: {
           xs: `
             linear-gradient(135deg, #4eb89a5f 32px, #ffffffdf 40%, #ffffff7f calc(100% - 64px), #ffffff 100%),
@@ -41,10 +40,10 @@ export const Titlebar = () => {
         variant='h5'
         sx={{
           display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row'},
+          flexDirection: { xs: 'column', sm: 'row' },
           color: '#16314a',
           textAlign: 'center',
-          wordBreak: 'keep-all'
+          wordBreak: 'keep-all',
         }}
       >
         <Box sx={{ px: 1 }}>

@@ -12,8 +12,6 @@ import Seo from '../../components/seo'
 import { Tocbar } from './tocbar'
 import { Footer } from './footer'
 
-const drawerWidth = 256
-
 const StyledTypographyH6 = styled(Typography)(({ theme }) => ({
   margin: '32px 0 16px 0',
   padding: '4px 12px 2px 12px',
@@ -41,13 +39,13 @@ const StyledTypographyH7 = styled(Typography)(({ theme }) => ({
 }))
 
 const components = {
-  h1: props => <StyledTypographyH6 variant='h6' {...props} />,
-  h2: props => <StyledTypographyH7 {...props} />,
-  p: props => <Typography sx={{ mb: 2 }} {...props} />,
-  ul: props => <List disablePadding sx={{ listStyleType: 'disc', mb: 2, ml: 3 }} {...props} />,
-  ol: props => <List disablePadding sx={{ listStyleType: 'decimal', mb: 2, ml: 3 }} {...props} />,
-  li: props => <ListItem disablePadding sx={{ display: 'list-item', mb: 1 }} {...props} />,
-  a: props => <Link style={{ color: '#e3aade' }} {...props} />,
+  h1: props => <StyledTypographyH6 variant='h6' {...props}/>,
+  h2: props => <StyledTypographyH7 {...props}/>,
+  p: props => <Typography sx={{ mb: 2 }} {...props}/>,
+  ul: props => <List disablePadding sx={{ mb: 2, ml: 3, listStyleType: 'disc' }} {...props}/>,
+  ol: props => <List disablePadding sx={{ mb: 2, ml: 3, listStyleType: 'decimal' }} {...props}/>,
+  li: props => <ListItem disablePadding sx={{ display: 'list-item', mb: 1 }} {...props}/>,
+  a: props => <Link style={{ color: '#e3aade' }} {...props}/>,
 }
 
 export const SagaEbTemplate = ({ data, children }) => {
@@ -57,8 +55,8 @@ export const SagaEbTemplate = ({ data, children }) => {
         display: 'flex',
         flexGrow: 1,
         justifyContent: 'center',
-        mt: 6,
-        background: '#2b4a66',
+        mt: { xs: 8, sm: 6 },
+        background: '#1f3b53',
         color: '#ffffff',      
       }}
     >
@@ -67,41 +65,43 @@ export const SagaEbTemplate = ({ data, children }) => {
           component='description'
           sx={{
             display: 'block',
-            maxWidth: 680,
             minHeight: `calc(100% - 80px)`,
-            mx: 'auto',
-            p: 3,
+            borderBottomRightRadius: { xs: 0, md: 8 },
+            background: '#2b4a66',
           }}
         >
-          <Typography variant='h5' align='center'>
-            {data.mdx.frontmatter.title}
-          </Typography>
-          <Typography
-            align='center'
-            sx={{
-              borderTop: 1,
-              borderColor: '#f8d36f',
-              background: 'linear-gradient(to right, #805f9200 10%, #805f92 30%, #805f92 70%, #805f9200 90%)',
-            }}
-          >
-            {data.mdx.frontmatter.subtitle}
-          </Typography>
-          <MDXProvider components={components}>
-            {children}
-          </MDXProvider>
+          <Box sx={{ maxWidth: `calc(680px + 24px * 2)`, mx: 'auto', p: 3 }}>
+            <Typography align='center' variant='h5'>
+              {data.mdx.frontmatter.title}
+            </Typography>
+            <Typography
+              align='center'
+              sx={{
+                borderTop: 1,
+                borderColor: '#f8d36f',
+                background: 'linear-gradient(to right, #805f9200 10%, #805f92 30%, #805f92 70%, #805f9200 90%)',
+              }}
+            >
+              {data.mdx.frontmatter.subtitle}
+            </Typography>
+            <MDXProvider components={components}>
+              {children}
+            </MDXProvider>
+          </Box>
         </Box>
         <Box component='footer'>
-          <Footer />
+          <Footer/>
         </Box>
       </Box>
       <Box component='toc'>
-        <Tocbar items={data.mdx.tableOfContents.items} />
+        <Tocbar items={data.mdx.tableOfContents.items}/>
       </Box>
     </Box>
   )
 }
 
 export const SagaEbHead = ({ data }) => {
-  const title = data.mdx.frontmatter.title + ' – サガ エメラルド ビヨンド（サガエメ）'
-  return <Seo title={title} />
+  const title = data.mdx.frontmatter.title + ' — サガ エメラルド ビヨンド システム解説'
+  const description = 'サガ エメラルド ビヨンド（サガエメ）のシステム解説サイト。' + data.mdx.frontmatter.description
+  return <Seo title={title} description={description}/>
 }
