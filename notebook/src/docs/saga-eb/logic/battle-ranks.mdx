@@ -159,38 +159,42 @@ import {
   潜在バトルランクは下式で算出されます。
 
   <StyledMathBox>
-    <BlockMath math='\hspace{0.5em}\text{潜在BR}=\sum_{m\in BP} \text{メンバー}m\text{の強さ}\hspace{0.5em}' />
+    <BlockMath math='\hspace{0.5em}\text{潜在BR}=\sum_{m\in BP} \text{メンバー}m\text{の強さ}\hspace{0.5em}'/>
   </StyledMathBox>
 
-  ここで、<InlineMath math='BP' /> はバトルパーティを意味し、サポートメンバーや控えメンバーを含みません。<br/>
+  ここで、<InlineMath math='BP'/> はバトルパーティを意味し、サポートメンバーや控えメンバーを含みません。<br/>
   メンバーの強さは下式で算出されます。
 
   <StyledMathBox>
-    <BlockMath math='\hspace{0.5em}\text{メンバーの強さ}=\text{HP評価値}+\text{能力値評価値}+\text{スキル評価値}\hspace{0.5em}\\[1.3em]
-        \hspace{0.5em}\text{HP評価値}=\frac{(HP-140)\times 18}{1000}\hspace{0.5em}\\[1em]
-        \hspace{0.5em}\text{能力値評価値}=\frac{(\max Stat-20)\times 72}{1000}\hspace{0.5em}\\[1em]
-        \hspace{0.5em}\text{スキル評価値}=\frac{(\max SLv-5)\times 315}{1000}\hspace{0.5em}' />
+    <BlockMath
+      math='\hspace{0.5em}\text{メンバーの強さ}=\text{HP評価値}+\text{能力値評価値}+\text{スキル評価値}\hspace{0.5em}\\[1.3em]
+          \hspace{0.5em}\text{HP評価値}=\frac{(HP-140)\times 18}{1000}\hspace{0.5em}\\[1em]
+          \hspace{0.5em}\text{能力値評価値}=\frac{(\max Stat-20)\times 72}{1000}\hspace{0.5em}\\[1em]
+          \hspace{0.5em}\text{スキル評価値}=\frac{(\max SLv-5)\times 315}{1000}\hspace{0.5em}'
+    />
   </StyledMathBox>
 
-  ここで、<InlineMath math='\max Stat' /> は能力値6種の中で装備補正込みで最も高い値、<InlineMath math='\max SLv' /> は所持スキルのレベルの中で最も高い値を意味します。<br/>
+  ここで、<InlineMath math='\max Stat'/> は能力値6種の中で装備補正込みで最も高い値、<InlineMath math='\max SLv'/> は所持スキルのレベルの中で最も高い値を意味します。<br/>
   潜在バトルランクはバトル準備画面突入時点でのバトルパーティのステータスで算出されるため、バトル準備画面でメンバー・装備変更をしても変動しません。
 </Box>
 
 # 敵バトルランクの算出方法
-<Box sx={{ minHeight: { xs:`calc(100vh - 64px - 8px - 50px - 24px - 80px)`, sm:`calc(100vh - 48px - 8px - 54px - 24px - 80px)` } }} >
+<Box sx={{ minHeight: { xs: `calc(100vh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100vh - 48px - 8px - 54px - 24px - 80px)` } }}>
   敵バトルランクはそれぞれの敵について下式で算出されます。
 
   <StyledMathBox>
-    <BlockMath math='\hspace{0.5em}\text{敵BR}=\max(\text{基本BR}+\text{相対BR}+\text{ひらめきレベル},\hspace{0.5em}\text{BR下限})\hspace{0.5em}' />
+    <BlockMath math='\hspace{0.5em}\text{敵BR}=\max(\text{基本BR}+\text{相対BR}+\text{ひらめきレベル},\hspace{0.5em}\text{BR下限})\hspace{0.5em}'/>
   </StyledMathBox>
 
   ここで、相対バトルランクとバトルランク下限はバトルに設定されている内部値で、ひらめきレベルは敵キャラクターに設定されている内部値です。<br/>
   基本バトルランクは下式で算出されます。
 
   <StyledMathBox>
-    <BlockMath math='\hspace{0.5em}\text{基本BR}=\begin{cases}\text{現在BR}&(\text{楽勝または普通})\\
-        \max(\text{現在BR},\hspace{0.5em}\text{潜在BR}\times 0.8)&(\text{強敵})\\
-        \max(\text{現在BR},\hspace{0.5em}\text{潜在BR})&(\text{最凶})\end{cases}\hspace{0.5em}' />
+    <BlockMath
+      math='\hspace{0.5em}\text{基本BR}=\begin{cases}\text{現在BR}&(\text{楽勝または普通})\\
+          \max(\text{現在BR},\hspace{0.5em}\text{潜在BR}\times 0.8)&(\text{強敵})\\
+          \max(\text{現在BR},\hspace{0.5em}\text{潜在BR})&(\text{最凶})\end{cases}\hspace{0.5em}'
+    />
   </StyledMathBox>
 
   基本バトルランクの計算結果は小数点以下が切り捨てられます。
