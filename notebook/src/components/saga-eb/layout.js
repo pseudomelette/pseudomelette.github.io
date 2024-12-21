@@ -28,21 +28,24 @@ export const StyledMathBox = styled(Box)(({ theme }) => ({
 export const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   width: 'fit-content',
   maxWidth: '100%',
-  maxHeight: `calc(100vh - 192px)`,
+  maxHeight: `calc(100dvh - 256px)`,
   margin: '24px auto',
   boxShadow: '0px 3px 6px -2px #0000007f',
   background: '#36536d',
+  [theme.breakpoints.up('sm')]: {
+    maxHeight: `calc(100dvh - 192px)`,
+  },
 }))
 
 export const StyledTd = styled(TableCell)(({ theme }) => ({
-  padding: '5px 8px',
+  padding: '6px 8px',
   border: '1px solid',
   borderColor: '#2b4a66',
   color: '#ffffff',
 }))
 
 export const StyledTh = styled(TableCell)(({ theme }) => ({
-  padding: '5px 8px',
+  padding: '6px 8px',
   border: '1px solid',
   borderColor: '#2b4a66',
   background: '#cccccc',
@@ -58,7 +61,7 @@ export const StyledTr = styled(TableRow)(({ theme }) => ({
 export const StyledTrh = styled(TableCell)(({ theme }) => ({
   position: 'sticky',
   left: 0,
-  padding: '5px 8px',
+  padding: '6px 8px',
   border: '1px solid',
   borderColor: '#2b4a66',
   background: '#cccccc',
@@ -102,7 +105,13 @@ export const SagaEBLayout = ({ children }) => {
   const theme = responsiveFontSizes(createTheme())
 
   if (typeof document !== 'undefined') {
-    OverlayScrollbars(document.querySelector('body'), {
+    OverlayScrollbars({
+      target: document.querySelector('body'),
+      cancel: {
+        nativeScrollbarsOverlaid: true,
+      },
+    },
+    {
       paddingAbsolute: true,
       scrollbars: {
         theme: 'os-theme-dark os-theme-body',
@@ -127,8 +136,6 @@ export const SagaEBLayout = ({ children }) => {
         OverlayScrollbars(elm.parentElement, {
           scrollbars: {
             theme: 'os-theme-dark os-theme-table',
-            autoHide: 'move',
-            autoHideDelay: 300,
             clickScroll: true,
           }
         })
@@ -143,7 +150,8 @@ export const SagaEBLayout = ({ children }) => {
         display: 'flex',
         minWidth: '300px',
         height: '100%',
-        minHeight: '100vh',
+        minHeight: '100dvh',
+        background: '#163148',
       }}>
         <AppBar sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Titlebar/>
@@ -161,7 +169,7 @@ export const SagaEBLayout = ({ children }) => {
             flexFlow: 'column',
             width: '100%',
             height: '100%', 
-            minHeight: '100vh',
+            minHeight: '100dvh',
           }}
         >
           {children}

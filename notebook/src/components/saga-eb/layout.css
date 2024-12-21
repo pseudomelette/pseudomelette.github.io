@@ -71,7 +71,7 @@
   --os-handle-perpendicular-size: 100%;
   --os-handle-perpendicular-size-hover: 100%;
   --os-handle-perpendicular-size-active: 100%;
-  --os-handle-interactive-area-offset: 120px;
+  --os-handle-interactive-area-offset: 0px;
 }
 .os-theme-math {
   --os-size: 4px;
@@ -96,10 +96,10 @@
   --os-handle-perpendicular-size: 100%;
   --os-handle-perpendicular-size-hover: 100%;
   --os-handle-perpendicular-size-active: 100%;
-  --os-handle-interactive-area-offset: 120px;
+  --os-handle-interactive-area-offset: 4px;
 }
 .os-theme-table {
-  --os-size: 8px;
+  --os-size: 4px;
   --os-padding-perpendicular: 0px;
   --os-padding-axis: 4px;
   --os-track-border-radius: 4px;
@@ -121,7 +121,7 @@
   --os-handle-perpendicular-size: 100%;
   --os-handle-perpendicular-size-hover: 100%;
   --os-handle-perpendicular-size-active: 100%;
-  --os-handle-interactive-area-offset: 120px;
+  --os-handle-interactive-area-offset: 4px;
 }
 
 .katex {
