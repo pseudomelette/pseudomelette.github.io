@@ -46,7 +46,10 @@ export const Titlebar = () => {
           wordBreak: 'keep-all',
         }}
       >
-        <Box sx={{ px: 1 }}>
+        <Box sx={{ display: { xs: 'none', md: 'inline' }, px: 1 }}>
+          サガ エメラルド ビヨンド（サガエメ）
+        </Box>
+        <Box sx={{ display: { xs: 'inline', md: 'none' }, px: 1 }}>
           サガ エメラルド ビヨンド
         </Box>
         <Box sx={{ px: 1 }}>
