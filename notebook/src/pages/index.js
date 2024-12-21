@@ -18,7 +18,7 @@ const IndexPage = () => (
   <Layout>
     <div className={styles.textCenter}>
       <h1>
-        Welcome to <b>Pomelette Nest!</b>
+        Welcome to Pomelette Nest!
       </h1>
     </div>
     <ul className={styles.list}>

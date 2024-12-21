@@ -102,7 +102,13 @@ export const StyledTrStripedB = styled(TableRow)(({ theme }) => ({
 }))
 
 export const SagaEBLayout = ({ children }) => {
-  const theme = responsiveFontSizes(createTheme())
+  const theme = responsiveFontSizes(createTheme({
+    palette: {
+      background: {
+        default: '#2d2127',
+      },
+    },
+  }))
 
   if (typeof document !== 'undefined') {
     OverlayScrollbars({
