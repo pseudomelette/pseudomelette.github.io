@@ -4,7 +4,6 @@ import { useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
 import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import { styled, useTheme } from '@mui/material/styles'
@@ -17,16 +16,12 @@ import 'overlayscrollbars/overlayscrollbars.css'
 const rootMarginTop = 130
 const rootMarginBottom = () => document.documentElement.clientHeight - 215
 
-const StyledList = styled(List)(({ theme }) => ({
-  padding: '16px 0',
-  background: '#2b4a66',
-}))
-
-const StyledListItem = styled(ListItem)(({ theme }) => ({
+const StyledAnchorLink = styled(AnchorLink)(({ theme }) => ({
   display: 'flex',
   height: '40px',
   margin: '2px 0',
   color: '#ffffff',
+  textDecoration: 'none',
   '&.active': {
     background: 'linear-gradient(to right, #4eb89a00 4px, #4eb89a 4px, #4eb89a 9px, #4eb89a5f 9px, #4eb89a00 228px)',
   },
@@ -36,6 +31,11 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   '&.active:hover': {
     background: 'linear-gradient(to right, #4eb89a00 4px, #4eb89a 4px, #4eb89a 9px, #4eb89a7f 9px, #487594 60%, #48759400 228px)',
   },
+}))
+
+const StyledList = styled(List)(({ theme }) => ({
+  padding: '16px 0',
+  background: '#2b4a66',
 }))
 
 export const Tocbar = ({ items }) => {
@@ -75,21 +75,12 @@ export const Tocbar = ({ items }) => {
         }
       })
 
-      const headings = Array.from(document.querySelectorAll('description > div > h6'))
-      for (let i in headings) {
-        headings[i].setAttribute('id', 'heading-'+i)
-      }
-      console.log(headings)
-      const sections = Array.from(document.querySelectorAll('description > div > div'))
-      for (let i in sections) {
-        sections[i].setAttribute('id', 'section-'+i)
-      }
-      console.log(sections)
+      const headings = Array.from(document.querySelectorAll('div[id=doc] > h6'))
+      const sections = Array.from(document.querySelectorAll('div[id=doc] > div'))
       const sectionTrackers = Array.from(document.querySelectorAll('ul[id=tocList] > a'))
-      for (let i in sectionTrackers) {
-        sectionTrackers[i].setAttribute('id', 'section-'+i)
-      }
-      console.log(sectionTrackers)
+      headings.forEach((heading, index) => (heading.setAttribute('id', 'section-heading-'+index)))
+      sections.forEach((section, index) => (section.setAttribute('id', 'section-body-'+index)))
+      sectionTrackers.forEach((tracker, index) => (tracker.setAttribute('id', 'section-body-'+index)))
 
       const options = {
         root: null,
@@ -104,11 +95,11 @@ export const Tocbar = ({ items }) => {
   const drawer = typeof window === 'undefined'? <></>
     : <StyledList id='tocList'>
         {tocItems.map((item, index) => (
-          <StyledListItem component={AnchorLink} disablePadding stripHash to={window.location.pathname + '#heading-' + index}>
+          <StyledAnchorLink disablePadding key={index} stripHash to={window.location.pathname + '#section-heading-' + index}>
             <ListItemButton>
               <ListItemText primary={item.title} primaryTypographyProps={{ variant: 'body2' }}/>
             </ListItemButton>
-          </StyledListItem>
+          </StyledAnchorLink>
         ))}
       </StyledList>
 

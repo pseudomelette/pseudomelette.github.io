@@ -130,8 +130,8 @@ export const SagaEBLayout = ({ children }) => {
 
   React.useEffect(() => {
     if (typeof document !== 'undefined') {
-      document.querySelectorAll('div[data-testid]').forEach((elm) => {
-        OverlayScrollbars(elm.parentElement, {
+      document.querySelectorAll('.katex-box').forEach((elm) => {
+        OverlayScrollbars(elm, {
           scrollbars: {
             theme: 'os-theme-dark os-theme-math',
             clickScroll: true,

@@ -15,12 +15,8 @@ export const Footer = () => {
       }}
     >
       <Typography align='center' variant='body2' sx={{ mx: 'auto' }}>
-        <Box>
-          © SQUARE ENIX
-        </Box>
-        <Box>
-          記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。
-        </Box>
+        © SQUARE ENIX<br/>
+        記載されている会社名・製品名・システム名などは、各社の商標、または登録商標です。
       </Typography>
     </Box>
   )

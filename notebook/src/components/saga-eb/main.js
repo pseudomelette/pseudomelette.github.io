@@ -60,9 +60,8 @@ export const SagaEbTemplate = ({ data, children }) => {
         color: '#ffffff',      
       }}
     >
-      <Box component='contents' sx={{ width: '100%' }}>
+      <Box sx={{ width: '100%' }}>
         <Box
-          component='description'
           sx={{
             display: 'block',
             minHeight: `calc(100% - 80px)`,
@@ -70,7 +69,7 @@ export const SagaEbTemplate = ({ data, children }) => {
             background: '#2b4a66',
           }}
         >
-          <Box sx={{ maxWidth: `calc(680px + 24px * 2)`, mx: 'auto', p: 3 }}>
+          <Box id='doc' sx={{ maxWidth: `calc(680px + 24px * 2)`, mx: 'auto', p: 3 }}>
             <Typography align='center' variant='h5'>
               {data.mdx.frontmatter.title}
             </Typography>
@@ -89,11 +88,11 @@ export const SagaEbTemplate = ({ data, children }) => {
             </MDXProvider>
           </Box>
         </Box>
-        <Box component='footer'>
+        <Box>
           <Footer/>
         </Box>
       </Box>
-      <Box component='toc'>
+      <Box>
         <Tocbar items={data.mdx.tableOfContents.items}/>
       </Box>
     </Box>

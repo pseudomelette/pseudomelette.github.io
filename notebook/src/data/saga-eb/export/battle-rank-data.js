@@ -48,10 +48,10 @@ export const BattleRankData = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {nodes.map(node => {
+          {nodes.map((node, index) => {
 						if (Number(node.label.split('_')[1]) > 200) {
 							return (
-								<StyledTrStripedR>
+								<StyledTrStripedR key={index}>
 									<StyledTrh align='center' scope='row'>{Number(node.label.split('_')[1])}</StyledTrh>
 									<StyledTd align='center'>{node.Attack}</StyledTd>
 									<StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>
@@ -63,7 +63,7 @@ export const BattleRankData = () => {
 							)
 						} else {
 							return (
-								<StyledTrStripedB>
+								<StyledTrStripedB key={index}>
 									<StyledTrh align='center' scope='row'>{Number(node.label.split('_')[1])}</StyledTrh>
 									<StyledTd align='center'>{node.Attack}</StyledTd>
 									<StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>

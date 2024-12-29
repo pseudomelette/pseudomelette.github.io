@@ -5,6 +5,8 @@ slug: '/saga-eb/logic/battle-ranks/'
 description: 'バトルランクにまつわる処理ロジックを記載。'
 ---
 
+import { Link } from 'gatsby'
+
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -47,7 +49,7 @@ import {
     - 現在バトルランクを下回ることはなく、最大値は250。
   </Box>
 
-  バトルランクに紐づく各種内部値については [データ ＞ バトルランク](/saga-eb/data/battle-ranks) を参照してください。
+  バトルランクに紐づく各種内部値については <Link to={'/saga-eb/data/battle-ranks/'}>データ ＞ バトルランク</Link> を参照してください。
 </Box>
 
 # 現在バトルランクの上昇条件
@@ -102,9 +104,9 @@ import {
       </TableBody>
     </Table>
   </StyledTableContainer>
-  <Typography sx={{ width: `calc(104px * 4)`, maxWidth: '100%', mt: -2, mx: 'auto', textAlign: 'right'}}>
+  <Box sx={{ width: `calc(104px * 4)`, maxWidth: '100%', mt: -2, mx: 'auto', textAlign: 'right'}}>
   \*：条件なし
-  </Typography>
+  </Box>
 </Box>
 
 # 現在バトルランクの上昇量
@@ -113,7 +115,7 @@ import {
 
   バトルランク上昇量は下式で算出されます。
 
-  <StyledMathBox>
+  <StyledMathBox className='katex-box'>
     <BlockMath math='\hspace{0.5em}\text{BR上昇量}=\begin{cases}1&(\text{現在BR}\geq\text{潜在BR})\\1+\text{ランク差ボーナス}&(\text{現在BR}<\text{潜在BR})\end{cases}\hspace{0.5em}'/>
   </StyledMathBox>
 
@@ -121,11 +123,9 @@ import {
 
   ランク差ボーナスは下式で算出されます。
 
-  <StyledMathBox>
-    <BlockMath
-      math='\hspace{0.5em}\text{ランク差ボーナス}=\min(\text{ランク差評価値},\hspace{0.5em}\text{潜在BR}-\text{現在BR})\hspace{0.5em}\\[1.3em]
-          \hspace{0.5em}\text{ランク差評価値}=\text{潜在BR}\times \frac{\text{潜在BR}\times 1.5-\text{現在BR}}{\text{潜在BR}\times 10+\text{現在BR}\times 1.5}+1\hspace{0.5em}'
-    />
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{ランク差ボーナス}=\min(\text{ランク差評価値},\hspace{0.5em}\text{潜在BR}-\text{現在BR})\hspace{0.5em}'/>
+    <BlockMath math='\hspace{0.5em}\text{ランク差評価値}=\text{潜在BR}\times \frac{\text{潜在BR}\times 1.5-\text{現在BR}}{\text{潜在BR}\times 10+\text{現在BR}\times 1.5}+1\hspace{0.5em}'/>
   </StyledMathBox>
 
   ランク差評価値とランク差ボーナスの計算結果は小数点以下が切り捨てられます。
@@ -139,7 +139,7 @@ import {
 
   バトルランク上限を踏まえると、バトルランク上昇量加算後の現在バトルランクは下式で算出されます。
 
-  <StyledMathBox>
+  <StyledMathBox className='katex-box'>
     <BlockMath math='\hspace{0.5em}\text{現在BR}_{next}=\min(\text{現在BR}+\text{BR上昇量},\hspace{0.5em}\text{BR上限})\hspace{0.5em}'/>
   </StyledMathBox>
 
@@ -149,7 +149,7 @@ import {
 
   それぞれのタイミングについて、新しいバトルランク上限は下式で算出されます。
 
-  <StyledMathBox>
+  <StyledMathBox className='katex-box'>
     <BlockMath
       math='\hspace{0.5em}\text{BR上限}=\begin{cases}\text{現在BR}+10+\text{ランク差ボーナス}&(\text{1.})\\
           \text{現在BR}+10&(\text{2.})\end{cases}\hspace{0.5em}'
@@ -163,7 +163,7 @@ import {
 <Box>
   潜在バトルランクは下式で算出されます。
 
-  <StyledMathBox>
+  <StyledMathBox className='katex-box'>
     <BlockMath math='\hspace{0.5em}\text{潜在BR}=\sum_{m\in BP} \text{メンバー}m\text{の強さ}\hspace{0.5em}'/>
   </StyledMathBox>
 
@@ -171,13 +171,11 @@ import {
 
   メンバーの強さは下式で算出されます。
 
-  <StyledMathBox>
-    <BlockMath
-      math='\hspace{0.5em}\text{メンバーの強さ}=\text{HP評価値}+\text{能力値評価値}+\text{スキル評価値}\hspace{0.5em}\\[1.3em]
-          \hspace{0.5em}\text{HP評価値}=\frac{(HP-140)\times 18}{1000}\hspace{0.5em}\\[1em]
-          \hspace{0.5em}\text{能力値評価値}=\frac{(\max Stat-20)\times 72}{1000}\hspace{0.5em}\\[1em]
-          \hspace{0.5em}\text{スキル評価値}=\frac{(\max SLv-5)\times 315}{1000}\hspace{0.5em}'
-    />
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{メンバーの強さ}=\text{HP評価値}+\text{能力値評価値}+\text{スキル評価値}\hspace{0.5em}'/>
+    <BlockMath math='\hspace{0.5em}\text{HP評価値}=\frac{(HP-140)\times 18}{1000}\hspace{0.5em}'/>
+    <BlockMath math='\hspace{0.5em}\text{能力値評価値}=\frac{(\max Stat-20)\times 72}{1000}\hspace{0.5em}'/>
+    <BlockMath math='\hspace{0.5em}\text{スキル評価値}=\frac{(\max SLv-5)\times 315}{1000}\hspace{0.5em}'/>
   </StyledMathBox>
 
   ここで、<InlineMath math='\max Stat'/> は能力値6種の中で装備補正込みで最も高い値、<InlineMath math='\max SLv'/> は所持スキルのレベルの中で最も高い値を意味します。
@@ -189,7 +187,7 @@ import {
 <Box sx={{ minHeight: { xs: `calc(100dvh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100dvh - 48px - 8px - 54px - 24px - 80px)` } }}>
   敵バトルランクはそれぞれの敵について下式で算出されます。
 
-  <StyledMathBox>
+  <StyledMathBox className='katex-box'>
     <BlockMath math='\hspace{0.5em}\text{敵BR}=\max(\text{基本BR}+\text{相対BR}+\text{ひらめきレベル},\hspace{0.5em}\text{BR下限})\hspace{0.5em}'/>
   </StyledMathBox>
 
@@ -197,7 +195,7 @@ import {
 
   基本バトルランクは下式で算出されます。
 
-  <StyledMathBox>
+  <StyledMathBox className='katex-box'>
     <BlockMath
       math='\hspace{0.5em}\text{基本BR}=\begin{cases}\text{現在BR}&(\text{楽勝または普通})\\
           \max(\text{現在BR},\hspace{0.5em}\text{潜在BR}\times 0.8)&(\text{強敵})\\

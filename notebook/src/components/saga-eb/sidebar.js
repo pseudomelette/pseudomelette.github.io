@@ -158,7 +158,7 @@ export const Sidebar = () => {
           ))}
         </Collapse>
       </List>
-      <StyledListItemParent component={Link} disablePadding>
+      <StyledListItemParent component={Box} disablePadding>
         <ListItemButton onClick={() => dispach(stateActions.toggleData)}>
           <ListItemText primary={'データ'}/>
           {state.dataOpen ? <ExpandLess/> : <ExpandMore/>}

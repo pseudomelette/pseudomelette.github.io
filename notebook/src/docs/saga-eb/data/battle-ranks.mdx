@@ -5,6 +5,8 @@ slug: '/saga-eb/data/battle-ranks/'
 description: 'バトルランクにまつわるデータ定義を記載。'
 ---
 
+import { Link } from 'gatsby'
+
 import Box from '@mui/material/Box'
 
 import { BattleRankData } from '../../../data/saga-eb/export/battle-rank-data'
@@ -26,7 +28,7 @@ import { BattleRankData } from '../../../data/saga-eb/export/battle-rank-data'
 
     パーティ加入時ステータス、せんせいの修行におけるステータス成長上限の算出では現在バトルランク（1～200）が参照されます。それ以外の目的では敵バトルランク（1～250）が参照されます。
 
-    バトルランクの詳細については [ロジック ＞ バトルランク](/saga-eb/logic/battle-ranks) を参照してください。
+    バトルランクの詳細については <Link to={'/saga-eb/logic/battle-ranks/'}>ロジック ＞ バトルランク</Link> を参照してください。
 
     ## 武器威力
     敵の武器威力です。
