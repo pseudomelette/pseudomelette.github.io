@@ -157,7 +157,7 @@ export const SagaEBLayout = ({ children }) => {
         minWidth: '300px',
         height: '100%',
         minHeight: '100dvh',
-        background: '#163148',
+        background: '#2b4a66',
       }}>
         <AppBar sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Titlebar/>

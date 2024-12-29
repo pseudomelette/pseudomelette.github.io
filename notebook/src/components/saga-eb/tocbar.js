@@ -14,7 +14,7 @@ import { OverlayScrollbars } from 'overlayscrollbars'
 import 'overlayscrollbars/overlayscrollbars.css'
 
 const rootMarginTop = 130
-const rootMarginBottom = () => document.documentElement.clientHeight - 215
+const rootMarginBottom = () => document.documentElement.clientHeight - 216
 
 const StyledAnchorLink = styled(AnchorLink)(({ theme }) => ({
   display: 'flex',
@@ -38,7 +38,7 @@ const StyledList = styled(List)(({ theme }) => ({
   background: '#2b4a66',
 }))
 
-export const Tocbar = ({ items }) => {
+export const Tocbar = ({ slug, items }) => {
   const tocItems = items === undefined ? [] : items
 
   const theme = useTheme()
@@ -92,16 +92,17 @@ export const Tocbar = ({ items }) => {
     }
   }, [isDownMd])
 
-  const drawer = typeof window === 'undefined'? <></>
-    : <StyledList id='tocList'>
-        {tocItems.map((item, index) => (
-          <StyledAnchorLink disablePadding key={index} stripHash to={window.location.pathname + '#section-heading-' + index}>
-            <ListItemButton>
-              <ListItemText primary={item.title} primaryTypographyProps={{ variant: 'body2' }}/>
-            </ListItemButton>
-          </StyledAnchorLink>
-        ))}
-      </StyledList>
+  const drawer = (
+    <StyledList id='tocList'>
+      {tocItems.map((item, index) => (
+        <StyledAnchorLink disablePadding key={index} stripHash to={slug + '#section-heading-' + index}>
+          <ListItemButton>
+            <ListItemText primary={item.title} primaryTypographyProps={{ variant: 'body2' }}/>
+          </ListItemButton>
+        </StyledAnchorLink>
+      ))}
+    </StyledList>
+  )
 
   return (
     <Drawer

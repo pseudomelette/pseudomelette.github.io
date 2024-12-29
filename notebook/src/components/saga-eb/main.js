@@ -93,7 +93,7 @@ export const SagaEbTemplate = ({ data, children }) => {
         </Box>
       </Box>
       <Box>
-        <Tocbar items={data.mdx.tableOfContents.items}/>
+        <Tocbar slug={data.mdx.frontmatter.slug} items={data.mdx.tableOfContents.items}/>
       </Box>
     </Box>
   )
