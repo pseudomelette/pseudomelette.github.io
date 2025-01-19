@@ -75,13 +75,13 @@ export const StyledTrStripedR = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     background: '#382a4b',
   },
-  '&:nth-of-type(odd) :first-of-type': {
+  '&:nth-of-type(odd) td:first-of-type': {
     background: '#6c5681',
   },
   '&:nth-of-type(even)': {
     background: '#423356',
   },
-  '&:nth-of-type(even) :first-of-type': {
+  '&:nth-of-type(even) td:first-of-type': {
     background: '#7f6192',
   },
 }))
@@ -90,13 +90,28 @@ export const StyledTrStripedB = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     background: '#163148',
   },
-  '&:nth-of-type(odd) :first-of-type': {
+  '&:nth-of-type(odd) td:first-of-type': {
     background: '#476381',
   },
   '&:nth-of-type(even)': {
     background: '#1f3b53',
   },
-  '&:nth-of-type(even) :first-of-type': {
+  '&:nth-of-type(even) td:first-of-type': {
+    background: '#526f92',
+  },
+}))
+
+export const StyledTrTwoToneB = styled(TableRow)(({ theme }) => ({
+  '&.darker-blue-row, &.darker-blue-row-w-header': {
+    background: '#163148',
+  },
+  '&.darker-blue-row-w-header td:first-of-type': {
+    background: '#476381',
+  },
+  '&.lighter-blue-row, &.lighter-blue-row-w-header': {
+    background: '#1f3b53',
+  },
+  '&.lighter-blue-row-w-header td:first-of-type': {
     background: '#526f92',
   },
 }))

@@ -19,6 +19,7 @@
     "gatsby-plugin-material-ui": "^4.1.0",
     "gatsby-plugin-mdx": "^5.13.1",
     "gatsby-plugin-offline": "^6.13.3",
+    "gatsby-plugin-react-svg": "^3.3.0",
     "gatsby-plugin-robots-txt": "^1.8.0",
     "gatsby-plugin-sharp": "^5.13.1",
     "gatsby-plugin-sitemap": "^6.13.1",

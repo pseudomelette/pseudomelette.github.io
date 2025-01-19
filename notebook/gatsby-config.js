@@ -56,6 +56,14 @@ module.exports = {
     `gatsby-plugin-material-ui`,
     `gatsby-plugin-mdx`,
     `gatsby-plugin-offline`,
+    {
+      resolve: `gatsby-plugin-react-svg`,
+      options: {
+        rule: {
+          include: /images/,
+        },
+      },
+    },
     `gatsby-plugin-robots-txt`,
     `gatsby-plugin-sharp`,
     {

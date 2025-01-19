@@ -1,0 +1,52 @@
+---
+title: '味方の技・術'
+subtitle: 'Player Techs & Spells'
+slug: '/saga-eb/data/player-arts/'
+description: '味方の技・術にまつわるデータ定義を記載。'
+---
+
+import { Link } from 'gatsby'
+
+import Box from '@mui/material/Box'
+
+import { PlayerArtsData } from '../../../data/saga-eb/export/player-arts-data'
+
+# テーブルデータ
+<Box>
+  味方が使用可能な技・術のデータは下表の通りです。
+
+  <PlayerArtsData/>
+</Box>
+
+# データの見方
+<Box sx={{ minHeight: { xs: `calc(100dvh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100dvh - 48px - 8px - 54px - 24px - 80px)` } }} >
+  テーブルを構成するデータ系列について説明します。
+
+  <Box sx={{ ml: 2, my: 3 }}>
+    ## カテゴリ
+    技・術の区分です。
+
+    システム上の取り扱いの違いによって分類しています。
+
+    ## 武器威力
+    技・術の区分です。
+
+    武器種別などによって分類しています。
+
+    ## スキルレベル
+    技・術の区分です。
+
+    武器種別をサブカテゴリによって分類しています。
+
+    ## 名前
+    技・術の名前です。
+
+    ## ランク
+    技・術のランクです。
+
+    ## ランクアップ必要回数
+    技・術が当該ランクに至るためのランクアップ必要回数です。
+
+    ランクアップの詳細については <Link to={'/saga-eb/logic/ranking-up-techs-spells/'}>ロジック ＞ 技・術のランクアップ</Link> を参照してください。
+  </Box>
+</Box>
