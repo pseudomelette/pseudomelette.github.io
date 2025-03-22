@@ -3,6 +3,7 @@ title: '技・術のランクアップ'
 subtitle: 'Ranking Up Techs & Spells'
 slug: '/saga-eb/logic/ranking-up-techs-spells/'
 description: '技・術のランクアップにまつわる処理ロジックを記載。'
+status: 'publishable'
 ---
 
 import Box from '@mui/material/Box'
@@ -18,21 +19,25 @@ import {
   StyledTd,
   StyledTh,
   StyledTr,
+  StyledTrh,
+  StyledTrTwoToneB,
 } from '../../../components/saga-eb/layout'
 
 # ランクアップの仕組み
 <Box>
-  技・術はバトル中に何度も使い込んで使用回数を蓄積していくとランクアップします。
+  技・術は使用回数が一定値に到達するとランクアップします。
 
-  ランクアップが発生するためには、以下2段階の判定に全て成功する必要があります。
+  最大ランクは技・術によって異なり、ランクアップに必要な使用回数はそれぞれの技・術のランクごとに設定されています。技・術ごとの使用回数はブラッド技も含め、味方キャラクターごとに管理されます。味方キャラクター、技・術によらず、使用回数の初期値は0です。
+
+  ランクアップは以下2段階の判定において条件を満たすと発生します。
 
   <Box sx={{ ml: 2, my: 3 }}>
     ## 使用回数加算判定
-    個々の技・術の発動直前に使用回数加算判定が行われます。
+    個々の技・術が発動する直前に使用回数加算判定が行われます。プロテクト、ひらめき、オーバードライブ、独壇場によって1ターンに複数回行動する場合は都度判定されます。
 
-    以下の条件を見たすとランクアップ判定前に使用回数が加算されます。
+    以下の条件を見たすと直後に発動する技・術の使用回数が加算されます。
 
-    - 混乱状態でないこと
+    - 混乱状態でない
 
     ## ランクアップ判定
     使用回数加算後にランクアップ判定が行われます。
@@ -40,26 +45,39 @@ import {
     下式を満たすとランクアップが発生します。
 
     <StyledMathBox className='katex-box'>
-      <BlockMath math='\hspace{0.5em}\text{使用回数}\geq\text{ランクアップ必要回数}_{n}\hspace{0.5em}'/>
+      <BlockMath math='\hspace{0.5em}\text{使用回数}\geq\text{ランクアップ必要回数}_{n+1}\hspace{0.5em}'/>
     </StyledMathBox>
 
-    ここで、ランクアップ必要回数は個々の技・術に設定されている内部値で、ランクアップ必要回数<InlineMath math='_{n}'/> はランク <InlineMath math='n'/> に至るためのランクアップ必要回数を意味します。
+    ここで、<InlineMath math='n'/> は現在ランク、ランクアップ必要回数<InlineMath math='_{n+1}'/> は次ランクへのランクアップに必要な使用回数を意味します。
+
+    ランクアップが発生すると、直後に発動する技・術にはランクアップ後の性能が適用されます。
   </Box>
+</Box>
+
+# ランクアップによるボーナス
+<Box>
+  ランクアップ発生直後に発動する技・術は以下相当の特性を持ちます。
+
+  - 必中
+
+  本来の特性が対地攻撃であっても飛行敵に命中します。回避率100%の敵（海賊ビビ［2］）にも回避されません。
+
+  ガード・カウンター不可にはなりません。状態異常付与成功率も補正されません。
 </Box>
 
 # 使用回数の加算量
 <Box>
-  使用回数加算量は副防具「達人の王冠」を装備すると変化します。
+  使用回数加算量は副防具「達人の王冠」を装備すると変化する可能性があります。
 
-  達人の王冠が持つ特性「技ランク成長アップ」には、使用回数加算量が増加するボーナス（成長ボーナス）の発生確率を上昇させる効果があります。
+  達人の王冠が持つ特性「技ランク成長アップ」には、使用回数加算量が増加するボーナス（成長ボーナス）の発生確率を上昇させる効果があります。技ランク成長アップは術に対しても同様の効果を発揮します。
 
-  達人の王冠と成長ボーナス発生確率の関係は下表の通りです。
+  技ランク成長アップと成長ボーナス発生確率の関係は下表の通りです。
 
   <StyledTableContainer align='center'>
     <Table stickyHeader sx={{ width: `calc(104px * 2)`,tableLayout: 'fixed' }}>
-      <TableHead>
+      <TableHead sx={{ zIndex: 50000 }}>
         <TableRow>
-          <StyledTh align='center'>達人の王冠</StyledTh>
+          <StyledTh align='center'>技ランク成長<br/>アップ</StyledTh>
           <StyledTh align='center'>成長ボーナス<br/>発生確率</StyledTh>
         </TableRow>
       </TableHead>
@@ -76,7 +94,7 @@ import {
     </Table>
   </StyledTableContainer>
 
-  技ランク成長アップは重複しないので、複数個装備しても発生確率は変わりません。
+  技ランク成長アップは重複しないため、達人の王冠を複数個装備しても成長ボーナス発生確率は変わりません。
 
   成長ボーナスと使用回数加算量の関係は下表の通りです。
 
@@ -101,106 +119,72 @@ import {
     </Table>
   </StyledTableContainer>
 
-  達人の王冠の王冠があれば、使用回数が1.5倍の速さで増加すると期待できます。
-
-  ランクアップが発生すると使用回数が下式で修正されます。
-
-  <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{使用回数}=\text{ランクアップ必要回数}_{n}\hspace{0.5em}'/>
-  </StyledMathBox>
-
-  使用回数はランクアップで0にリセットされないため、次ランクに至るのにランクアップ必要回数と同等の使用回数を新たに累積させる必要はありません。
+  達人の王冠を装備すれば、1.5倍の速さで使用回数が増加すると期待できます。
 </Box>
 
-# ランクアップによるボーナス
+# 使用回数の修正
 <Box>
-  ランクアップ時に発動する技・術には以下の特性があります。
+  技・術の使用回数は発動による加算以外でも修正される場合があります。
 
-  - ランクアップ後の威力を持つ
-  - 命中率が100%になる
-  - 回避不能になる
-
-  ガード・カウンター不能にはなりません。また、状態異常付与成功率も補正されません。
-</Box>
-
-# ランク・使用回数のリセット
-<Box>
-  ランク・使用回数はどちらも基本的にリセットされません。
-
-  各種ユースケースとリセットの関係は下表の通りです。
+  各種ケースと修正対象、修正後の使用回数の関係は下表の通りです。
 
   <StyledTableContainer align='center'>
-    <Table stickyHeader sx={{ width: `calc(232px + 80px * 2)`,tableLayout: 'fixed' }}>
-      <TableHead sx={{ position: 'sticky', top: 0 }}>
+    <Table stickyHeader sx={{ width: `calc(160px + 152px * 2 + 192px)` }}>
+      <TableHead sx={{ position: 'sticky', top: 0, zIndex: 3 }}>
         <TableRow>
-          <StyledTh align='center' rowSpan={2} sx={{ width: '232px' }}>ユースケース</StyledTh>
-          <StyledTh align='center' colSpan={2}>リセット *</StyledTh>
+          <StyledTh align='center' rowSpan={2} sx={{ position: 'sticky', left: 0, zIndex: 3, width: '160px' }}>使用回数が<br/>修正されるケース</StyledTh>
+          <StyledTh align='center' colSpan={2}>修正対象</StyledTh>
+          <StyledTh align='center' rowSpan={2} sx={{ width: '192px' }}>修正後の使用回数</StyledTh>
         </TableRow>
         <TableRow>
-          <StyledTh align='center'>ランク</StyledTh>
-          <StyledTh align='center'>使用回数</StyledTh>
+          <StyledTh align='center' sx={{ width: '152px' }}>味方キャラクター</StyledTh>
+          <StyledTh align='center' sx={{ width: '152px' }}>技・術</StyledTh>
         </TableRow>
       </TableHead>
       <TableBody>
-        <StyledTr sx={{ height: '55px' }}>
-          <StyledTd align='left'>技・術がランクアップする</StyledTd>
-          <StyledTd align='center'>なし</StyledTd>
-          <StyledTd align='center'>なし</StyledTd>
-        </StyledTr>
-        <StyledTr sx={{ height: '55px' }}>
-          <StyledTd align='left'>バトルで全滅する</StyledTd>
-          <StyledTd align='center'>なし</StyledTd>
-          <StyledTd align='center'>なし</StyledTd>
-        </StyledTr>
-        <StyledTr sx={{ height: '55px' }}>
-          <StyledTd align='left'>技・術が装備欄から消滅する<br/>（固有技を持つ装備の解除など）</StyledTd>
-          <StyledTd align='center'>なし</StyledTd>
-          <StyledTd align='center'>なし</StyledTd>
-        </StyledTr>
-        <StyledTr sx={{ height: '55px' }}>
-          <StyledTd align='left'>技・術ランクを引き継いで<br/>周回プレイを開始する</StyledTd>
-          <StyledTd align='center'>なし</StyledTd>
-          <StyledTd align='center'>なし</StyledTd>
-        </StyledTr>
-        <StyledTr sx={{ height: '55px' }}>
-          <StyledTd align='left'>技・術ランクを引き継がずに<br/>周回プレイを開始する</StyledTd>
-          <StyledTd align='center'>あり<br/>（I）</StyledTd>
-          <StyledTd align='center'>あり<br/>（0）</StyledTd>
-        </StyledTr>
+        <StyledTrTwoToneB className='darker-row-w-header' sx={{ height: '74px' }}>
+          <StyledTrh align='left'>ランクアップ条件を<br/>ブラッド技以外の<br/>技・術が満たす<br/></StyledTrh>
+          <StyledTd align='center'>技・術を発動する<br/>キャラクター</StyledTd>
+          <StyledTd align='center'>ランクアップ条件を<br/>満たす技・術</StyledTd>
+          <StyledTd align='center'>ランクアップ必要回数<InlineMath math='_{n+1}'/></StyledTd>
+        </StyledTrTwoToneB>
+        <StyledTrTwoToneB className='darker-row-w-header' sx={{ height: '74px' }}>
+          <StyledTrh align='left'>ランクアップ条件を<br/>ブラッド技が満たす</StyledTrh>
+          <StyledTd align='center'>ブラッド技を<br/>習得可能な<br/>全てのキャラクター</StyledTd>
+          <StyledTd align='center'>ランクアップ条件を<br/>満たすブラッド技</StyledTd>
+          <StyledTd align='center'>ランクアップ必要回数<InlineMath math='_{n+1}'/><br/></StyledTd>
+        </StyledTrTwoToneB>
+        <StyledTrTwoToneB className='darker-row-w-header' sx={{ height: '74px' }}>
+          <StyledTrh align='left'>ランク <InlineMath math='n'/> の技の<br/>写し身に成功する</StyledTrh>
+          <StyledTd align='center'>写し身に成功する<br/>キャラクター</StyledTd>
+          <StyledTd align='center'>写し身によって<br/>コピーされる技</StyledTd>
+          <StyledTd align='center'>ランクアップ必要回数<InlineMath math='_{n}'/></StyledTd>
+        </StyledTrTwoToneB>
+        <StyledTrTwoToneB className='darker-row-w-header' sx={{ height: '74px' }}>
+          <StyledTrh align='left'>技ランクの引き継ぎを<br/>ONにしてゲームを<br/>はじめから開始する</StyledTrh>
+          <StyledTd align='center'>全てのキャラクター</StyledTd>
+          <StyledTd align='center'>全ての技・術</StyledTd>
+          <StyledTd align='center'>統合クリアデータに<br/>保存されている使用回数<br/>（統合使用回数）</StyledTd>
+        </StyledTrTwoToneB>
+        <StyledTrTwoToneB className='darker-row-w-header' sx={{ height: '74px' }}>
+          <StyledTrh align='left'>技ランクの引き継ぎを<br/>OFFにしてゲームを<br/>はじめから開始する</StyledTrh>
+          <StyledTd align='center'>全てのキャラクター</StyledTd>
+          <StyledTd align='center'>全ての技・術</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+        </StyledTrTwoToneB>
       </TableBody>
     </Table>
   </StyledTableContainer>
-  <Box sx={{ width: `calc(240px + 76px + 76px)`, maxWidth: '100%', mt: -2, mx: 'auto', textAlign: 'right' }}>
-    \*：括弧内はリセット後の数値
-  </Box>
+
+  固有技を持つ装備の解除などによって技・術が装備欄から消滅する場合、騎士化などによって技・術が装備不可になる場合でも使用回数は修正されません。
+
+  技・術の引き継ぎがOFFの場合でも、技ランクの引き継ぎがONであれば習得実績のある全ての技・術の統合使用回数が引き継がれます。写し身以外の方法で習得すれば、引き継がれている使用回数に沿ったランクで使用可能です。ひらめき発生のタイミングでも使用回数は加算されるので、ひらめきとランクアップが同時発生する場合もあります。
+
+  統合クリアデータはゲームをクリアすると更新されます。
+
+  新しい統合使用回数は、全ての味方キャラクターの技・術ごとに下式で算出されます。
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{統合使用回数}_{next}=\max(\text{統合使用回数},\hspace{0.5em}\text{クリア時点の使用回数})\hspace{0.5em}'/>
+  </StyledMathBox>
 </Box>
-
-# 特殊なランクアップ
-<Box sx={{ minHeight: { xs: `calc(100dvh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100dvh - 48px - 8px - 54px - 24px - 80px)` } }}>
-  写し身とブラッド技にはランクアップにまつわる特殊な仕組みが存在します。
-
-  <Box sx={{ ml: 2, my: 3 }}>
-    ## 写し身によるランクアップ
-    写し身は他キャラクターがバトル中に使用した技をランクごとコピーします。
-
-    写し身によって使用回数を無視してランクアップする場合でも同様に、ランクアップ必要回数で使用回数が修正されます。
-
-    ## ブラッド技のランクアップ
-    ブラッド技はパーティ全体で共用されるという特徴があります。
-
-    キャラクター毎ではなくパーティ全体で管理されるため、装備キャラクターが変わってもランク・使用回数が引き継がれます。
-  </Box>
-</Box>
-
-# 技・術使用回数の加算量
-- ★プロテクトの連続加算があるか？
-- ★混乱で回数加算されないか？
-- ★閃き時に加算されるか？
-- ★即時状態異常回復後は加算されるか？
-- ★術詠唱中断は加算されるか？
-- ★ブラッドアーツは加算を引き継ぐか？
-- ★回数は引き継がれるか？
-- ★ランクアップ時は特殊効果はあるか？
-- ★達人の王冠は術にも効果があるか？
-- ★ディレイオーダーみたいなBP低下技は以降の独断場に影響するか？
-- ★オーバードライブで再発動した場合はランクアップ後の威力になるか？

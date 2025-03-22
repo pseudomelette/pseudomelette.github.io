@@ -60,7 +60,7 @@ export const SagaEbTemplate = ({ data, children }) => {
         color: '#ffffff',      
       }}
     >
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: { xs: '100%', md: `calc(100% - 256px)`} }}>
         <Box
           sx={{
             display: 'block',

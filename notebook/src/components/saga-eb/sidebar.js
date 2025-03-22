@@ -89,10 +89,14 @@ export const ContextProvider = ({ children }) => {
 export const Sidebar = () => {
   const data = useStaticQuery(graphql`
     query {
-      allMdx (sort: {frontmatter: {slug: ASC}}) {
+      allMdx (
+        filter: {frontmatter: {status: {ne: "secret"}}}
+        sort: {frontmatter: {slug: ASC}}
+      ) {
         nodes {
           frontmatter {
             slug
+            status
             title
           }
         }
@@ -138,7 +142,7 @@ export const Sidebar = () => {
     <List id='navList' sx={{ mt: { xs: 8, sm: 6 }, py: 2 }}>
       <StyledListItem component={Link} disablePadding to={topNode.frontmatter.slug}>
         <ListItemButton>
-          <ListItemText primary={topNode.frontmatter.title}/>
+          <ListItemText primary={topNode.frontmatter.title} sx={{ color: topNode.frontmatter.status === 'in progress' ? '#afafaf' : '' }}/>
         </ListItemButton>
       </StyledListItem>
       <StyledListItemParent component={Box} disablePadding>
@@ -152,7 +156,7 @@ export const Sidebar = () => {
           {logicNodes.map((node, index) => (
             <StyledListItem component={Link} disablePadding key={index} to={node.frontmatter.slug}>
               <ListItemButton>
-                <ListItemText primary={node.frontmatter.title} sx={{ pl: 1 }}/>
+                <ListItemText primary={node.frontmatter.title} sx={{ pl: 1, color: node.frontmatter.status === 'in progress' ? '#afafaf' : '' }}/>
               </ListItemButton>
             </StyledListItem>
           ))}
@@ -169,7 +173,7 @@ export const Sidebar = () => {
           {dataNodes.map((node, index) => (
             <StyledListItem component={Link} disablePadding key={index} to={node.frontmatter.slug}>
               <ListItemButton>
-                <ListItemText primary={node.frontmatter.title} sx={{ pl: 1 }}/>
+                <ListItemText primary={node.frontmatter.title} sx={{ pl: 1, color: node.frontmatter.status === 'in progress' ? '#afafaf' : '' }}/>
               </ListItemButton>
             </StyledListItem>
           ))}
