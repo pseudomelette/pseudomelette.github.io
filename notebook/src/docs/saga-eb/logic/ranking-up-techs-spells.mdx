@@ -119,7 +119,7 @@ import {
     </Table>
   </StyledTableContainer>
 
-  達人の王冠を装備すれば、1.5倍の速さで使用回数が増加すると期待できます。
+  達人の王冠を装備すれば、使用回数が1.5倍速く蓄積すると期待できます。
 </Box>
 
 # 使用回数の修正
@@ -129,12 +129,12 @@ import {
   各種ケースと修正対象、修正後の使用回数の関係は下表の通りです。
 
   <StyledTableContainer align='center'>
-    <Table stickyHeader sx={{ width: `calc(160px + 152px * 2 + 192px)` }}>
+    <Table stickyHeader sx={{ width: `calc(160px + 152px * 2 + 184px)` }}>
       <TableHead sx={{ position: 'sticky', top: 0, zIndex: 3 }}>
         <TableRow>
           <StyledTh align='center' rowSpan={2} sx={{ position: 'sticky', left: 0, zIndex: 3, width: '160px' }}>使用回数が<br/>修正されるケース</StyledTh>
           <StyledTh align='center' colSpan={2}>修正対象</StyledTh>
-          <StyledTh align='center' rowSpan={2} sx={{ width: '192px' }}>修正後の使用回数</StyledTh>
+          <StyledTh align='center' rowSpan={2} sx={{ width: '184px' }}>修正後の使用回数</StyledTh>
         </TableRow>
         <TableRow>
           <StyledTh align='center' sx={{ width: '152px' }}>味方キャラクター</StyledTh>
@@ -164,7 +164,7 @@ import {
           <StyledTrh align='left'>技ランクの引き継ぎを<br/>ONにしてゲームを<br/>はじめから開始する</StyledTrh>
           <StyledTd align='center'>全てのキャラクター</StyledTd>
           <StyledTd align='center'>全ての技・術</StyledTd>
-          <StyledTd align='center'>統合クリアデータに<br/>保存されている使用回数<br/>（統合使用回数）</StyledTd>
+          <StyledTd align='center'>統合クリアデータに<br/>保存されている使用回数</StyledTd>
         </StyledTrTwoToneB>
         <StyledTrTwoToneB className='darker-row-w-header' sx={{ height: '74px' }}>
           <StyledTrh align='left'>技ランクの引き継ぎを<br/>OFFにしてゲームを<br/>はじめから開始する</StyledTrh>
@@ -178,13 +178,15 @@ import {
 
   固有技を持つ装備の解除などによって技・術が装備欄から消滅する場合、騎士化などによって技・術が装備不可になる場合でも使用回数は修正されません。
 
-  技・術の引き継ぎがOFFの場合でも、技ランクの引き継ぎがONであれば習得実績のある全ての技・術の統合使用回数が引き継がれます。写し身以外の方法で習得すれば、引き継がれている使用回数に沿ったランクで使用可能です。ひらめき発生のタイミングでも使用回数は加算されるので、ひらめきとランクアップが同時発生する場合もあります。
+  統合クリアデータとは、ゲームをはじめから開始する際に引き継ぐことができる各種情報を保存している内部データです。技ランクの引き継ぎをONにすると、統合クリアデータに保存されている技・術の使用回数（統合使用回数）が参照されます。
 
   統合クリアデータはゲームをクリアすると更新されます。
 
-  新しい統合使用回数は、全ての味方キャラクターの技・術ごとに下式で算出されます。
+  更新後の統合使用回数は、全ての味方キャラクターの技・術ごとに下式で算出されます。
 
   <StyledMathBox className='katex-box'>
     <BlockMath math='\hspace{0.5em}\text{統合使用回数}_{next}=\max(\text{統合使用回数},\hspace{0.5em}\text{クリア時点の使用回数})\hspace{0.5em}'/>
   </StyledMathBox>
+
+  技ランクの引き継ぎがONであれば、技・術の引き継ぎがOFFでも習得実績のある全ての技・術の統合使用回数が引き継がれます。写し身以外の方法で技・術を再習得すると、引き継がれている使用回数に沿ったランクで使用可能になります。ひらめき発生のタイミングでも使用回数は加算されるので、ひらめきとランクアップが同時に発生する場合もあります。
 </Box>
