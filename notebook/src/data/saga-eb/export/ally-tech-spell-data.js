@@ -149,10 +149,10 @@ const UniteIcons = ({left, reserve, right, self, speed, unite}) => {
   return <Box sx={{ paddingLeft: `calc(32px * (((${area.length} - 1) / 2 - ${selfIdx}) - ${speed}))`, paddingRight: `calc(32px * (${speed} - ((${area.length} - 1) / 2 - ${selfIdx})))` }}>{area}</Box>
 }
 
-export const PlayerArtsData = () => {
+export const AllyTechSpellData = () => {
 	const data = useStaticQuery(graphql`
 		query {
-			allSagaebPlayerArtsDataCsv {
+			allSagaebAllyTechSpellDataCsv {
 				nodes {
 					ArtsName
 					OverAttackFirst
@@ -228,7 +228,7 @@ export const PlayerArtsData = () => {
 			}
 		}
 	`)
-  const nodes = data.allSagaebPlayerArtsDataCsv.nodes.filter(node => !['未使用技', '敵専用技'].includes(node['ArtsCategory']))
+  const nodes = data.allSagaebAllyTechSpellDataCsv.nodes.filter(node => !['未使用技', '敵専用技'].includes(node['ArtsCategory']))
 
   const preprocess = (nodes) => {
     const preprocessEffect = (node, effect, param, self) => {
@@ -278,8 +278,8 @@ export const PlayerArtsData = () => {
       for (let i = 1; i <= node.MaxRank; i++) {
         outputNode['Count' + i] = node['Count' + i]
         outputNode['Attack' + i] = node.TargetParty === '敵' || ['パリイ', 'プロテクト'].includes(node.ReserveType) ? node['Attack' + i] : '―'
-        outputNode['BP' + i] = node['BP' + i]
-        outputNode['Turn' + i] = node['Turn' + i] === '0' ? '―' : node['Turn' + i]
+        outputNode['BP' + i] = Number(node['BP' + i])
+        outputNode['Turn' + i] = node['Turn' + i] === '0.0' ? '―' : Number(node['Turn' + i])
       }
       const targetParty = node.TargetType === '自身' ? '' : node.TargetParty 
       const targetType = node.TargetType === '乱撃' ? node.TargetType + '×' + node.AttackCount : node.TargetType
@@ -526,8 +526,8 @@ export const PlayerArtsData = () => {
             <StyledTh align='center' colSpan={2}>連携率上昇量</StyledTh>
           </TableRow>
           <TableRow>
-            <StyledTh align='center'>メイン<FilterModal filter={weaponFilter.current} parent={'メイン'}/></StyledTh>
-            <StyledTh align='center'>サブ<FilterModal filter={weaponsubFilter.current} parent={'サブ'}/></StyledTh>
+            <StyledTh align='center'>メイン<FilterModal filter={weaponFilter.current} parent={'武器カテゴリ（メイン）'}/></StyledTh>
+            <StyledTh align='center'>サブ<FilterModal filter={weaponsubFilter.current} parent={'武器カテゴリ（サブ）'}/></StyledTh>
             <StyledTh align='center'>自身</StyledTh>
             <StyledTh align='center'>対象</StyledTh>
             <StyledTh align='center'>自身</StyledTh>
