@@ -35,10 +35,10 @@ export const BattleRankData = () => {
 
   return(
     <StyledTableContainer align='center'>
-      <Table stickyHeader sx={{ width: `calc(80px * 7)`, tableLayout: 'fixed' }}>
+      <Table stickyHeader sx={{ width: `calc(56px + 68px * 6)`, tableLayout: 'fixed' }}>
         <TableHead>
           <TableRow>
-            <StyledTh align='center' sx={{ position: 'sticky', left: 0, zIndex: 3 }}>バトル<br/>ランク</StyledTh>
+            <StyledTh align='center' sx={{ position: 'sticky', left: 0, zIndex: 3, width: '56px' }}>バトル<br/>ランク</StyledTh>
             <StyledTh align='center'>武器威力</StyledTh>
             <StyledTh align='center'>スキル<br/>レベル</StyledTh>
             <StyledTh align='center'>基礎<br/>属性耐性</StyledTh>
