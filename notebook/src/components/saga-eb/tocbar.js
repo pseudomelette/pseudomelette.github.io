@@ -97,7 +97,7 @@ export const Tocbar = ({ slug, items }) => {
       {tocItems.map((item, index) => (
         <StyledAnchorLink disablePadding key={index} stripHash to={slug + '#section-heading-' + index}>
           <ListItemButton>
-            <ListItemText primary={item.title} primaryTypographyProps={{ variant: 'body2' }}/>
+            <ListItemText primary={item.title}/>
           </ListItemButton>
         </StyledAnchorLink>
       ))}
