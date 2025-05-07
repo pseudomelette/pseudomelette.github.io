@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
 import Modal from '@mui/material/Modal'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -20,15 +21,16 @@ import {
 	StyledTableContainer,
 	StyledTd,
 	StyledTh,
-	StyledTrh,
+  StyledTr,
+  StyledTrh,
 	StyledTrTwoToneB,
 } from '../../../components/saga-eb/layout'
+import Unite0Icon from '../../../images/unite-0-icon.svg'
 import Unite0ReserveIcon from '../../../images/unite-0-reserve-icon.svg'
 import Unite0SelfIcon from '../../../images/unite-0-self-icon.svg'
 import Unite1Icon from '../../../images/unite-1-icon.svg'
 import Unite1SelfIcon from '../../../images/unite-1-self-icon.svg'
 import Unite1ReserveIcon from '../../../images/unite-1-reserve-icon.svg'
-import UniteNaIcon from '../../../images/unite-na-icon.svg'
 import UniteNaSelfIcon from '../../../images/unite-na-self-icon.svg'
 
 import 'overlayscrollbars/overlayscrollbars.css'
@@ -55,13 +57,13 @@ const RankRowStack = ({color, max, node}) => {
 
 const UniteIcons = ({left, reserve, right, self, speed, unite}) => {
   const style = {
-    marginTop: '0px',
-    marginBottom: '-5px',
+    marginTop: '-1px',
+    marginBottom: '-4px',
   }
 
   const styleIdx0 = {
-    marginTop: '0px',
-    marginBottom: '-5px',
+    marginTop: '-1px',
+    marginBottom: '-4px',
     background: 'linear-gradient(to top, #ab84c2 0%, #ab84c200 100%)',
   }
 
@@ -74,9 +76,9 @@ const UniteIcons = ({left, reserve, right, self, speed, unite}) => {
   if (speed + left < 0) {
     for (let i = 0; i < -(speed + left); i++) {
       if (area.length === defaultIdx) {
-        area.push(<UniteNaIcon key={'na-left-' + i} style={styleIdx0}/>)
+        area.push(<Unite0Icon key={'na-left-' + i} style={styleIdx0}/>)
       } else {
-        area.push(<UniteNaIcon key={'na-left-' + i} style={style}/>)
+        area.push(<Unite0Icon key={'na-left-' + i} style={style}/>)
       }
     }
   }
@@ -139,9 +141,9 @@ const UniteIcons = ({left, reserve, right, self, speed, unite}) => {
   if (speed - right > 0) {
     for (let i = 0; i < speed - right; i++) {
       if (area.length === defaultIdx) {
-        area.push(<UniteNaIcon key={'na-right-' + i} style={styleIdx0}/>)
+        area.push(<Unite0Icon key={'na-right-' + i} style={styleIdx0}/>)
       } else {
-        area.push(<UniteNaIcon key={'na-right-' + i} style={style}/>)
+        area.push(<Unite0Icon key={'na-right-' + i} style={style}/>)
       }
     }
   }
@@ -282,21 +284,21 @@ export const AllyTechSpellData = () => {
         outputNode['Turn' + i] = node['Turn' + i] === '0.0' ? '―' : Number(node['Turn' + i])
       }
       const targetParty = node.TargetType === '自身' ? '' : node.TargetParty 
-      const targetType = node.TargetType === '乱撃' ? node.TargetType + '×' + node.AttackCount : node.TargetType
-      const targetArea = node.TargetParty === '味方' || (node.HitArea === '―' && node.SureHit === '0') ? '' : (node.SureHit === '0' ? '、' + node.HitArea : node.HitArea === '対地' ? '、地上必中' : '、必中')
-      outputNode.Target = targetParty + targetType + targetArea
-      outputNode.Attribute = [node.Attribute1, node.Attribute2].filter((attr) => attr !== '―').length > 0 ? [node.Attribute1, node.Attribute2].filter((attr) => attr !== '―').join('') : '―'
+      const targetType = node.TargetType === '乱撃' ? node.TargetType + '（' + node.AttackCount + '）' : node.TargetType
+      const targetArea = node.TargetParty === '味方' || (node.HitArea === '―' && node.SureHit === '0') ? '' : (node.SureHit === '0' ? node.HitArea : node.HitArea === '対地' ? '地上必中' : '必中')
+      outputNode.Targets = [targetParty + targetType, targetArea].filter(target => target !== '')
+      outputNode.Attribute = [node.Attribute1, node.Attribute2].filter(attr => attr !== '―').length > 0 ? [node.Attribute1, node.Attribute2].filter(attr => attr !== '―').join('') : '―'
       outputNode.BaseElement = node.BaseElement
       outputNode.Hit = node.Weapon === '術' || node.TargetParty === '味方' || node.Attack1 === '0' || node.SureHit === '1' ? '―' : node.Hit
       outputNode.Random = node.Attack1 === '0' || ['パリイ', 'プロテクト'].includes(node.ReserveType) ? '―' : node.Random === '0' ? '5' : node.Random
       outputNode.Hate = node.TargetParty === '味方' || [node.AddEffect1, node.AddEffect2].includes('即死') ? '―' : node.Hate
-      outputNode.BaseParameter1 = node.BaseParameter1
+      outputNode.BaseParameter1 = node.ArtsCategory === 'メカ技' && node.Attack1 === '0' ? '―' : node.BaseParameter1
       outputNode.BaseParameter2 = node.BaseParameter2
       outputNode.AfterCasterSpeed = [node.AddEffect1, node.AddEffect2].includes('即死') ? '―' : node.AfterCasterSpeed
       outputNode.AfterTargetSpeed = node.Attack1 === '0' || ['パリイ', 'プロテクト'].includes(node.ReserveType) ? '―' : node.AfterTargetSpeed
       const addEffect1 = preprocessEffect(node, node.AddEffect1, node.AddEffectParam1, true)
       const addEffect2 = preprocessEffect(node, node.AddEffect2, node.AddEffectParam2, true)
-      outputNode.SelfEffect = [addEffect1, addEffect2].filter((effect) => effect !== '').length > 0 ? [addEffect1, addEffect2].filter((effect) => effect !== '').join('、') : '―'
+      outputNode.SelfEffects = [addEffect1, addEffect2].filter(effect => effect !== '').length > 0 ? [addEffect1, addEffect2].filter(effect => effect !== '') : ['―']
       const effectType1 = preprocessEffect(node, node.EffectType1, node.EffectParam1, false)
       const effectType2 = preprocessEffect(node, node.EffectType2, node.EffectParam2, false)
       const effectType3 = preprocessEffect(node, node.EffectType3, node.EffectParam3, false)
@@ -305,7 +307,7 @@ export const AllyTechSpellData = () => {
       const effectReserveCancel = node.ReserveCancel === '0' ? '' : 'リザーブ解除'
       const effectPenetration = node.Penetration === '0' ? '' : '防御力無効'
       const effects = [effectType1, effectType2, effectType3, effectType4, effectBump, effectReserveCancel, effectPenetration]
-      outputNode.TargetEffect = effects.filter((effect) => effect !== '').length > 0 ? effects.filter((effect) => effect !== '').join('、') : '―'
+      outputNode.TargetEffects = effects.filter(effect => effect !== '').length > 0 ? effects.filter(effect => effect !== '') : ['―']
       const effectInvalidReserve = [node.EffectType1, node.EffectType2, node.EffectType3, node.EffectType4].includes('リザーブ不可') ? 'リザーブ不可' : ''
       let i = 1
       while ('EffectType' + i in node) {
@@ -316,7 +318,7 @@ export const AllyTechSpellData = () => {
       }
       const effectOverAttackBuff = 'EffectType' + i in node ? '支援（' + Number(node['EffectParam' + i]) + '）' : ''
       const effectDisableSelect = node.TargetParty === '味方' || node.DisableSelect === '0' ? '' : '抽選対象外'
-      outputNode.MiscEffect = [effectInvalidReserve, effectOverAttackBuff, effectDisableSelect].filter((effect) => effect !== '').length > 0 ? [effectInvalidReserve, effectOverAttackBuff, effectDisableSelect].filter((effect) => effect !== '').join('、') : '―'
+      outputNode.MiscEffects = [effectInvalidReserve, effectOverAttackBuff, effectDisableSelect].filter(effect => effect !== '').length > 0 ? [effectInvalidReserve, effectOverAttackBuff, effectDisableSelect].filter(effect => effect !== '') : ['―']
       outputNode.Guard = node.BeforeGuard === '1' ? '行動前' : node.AfterGuard === '1' ? '行動後' : '―'
       outputNode.RaceSlayer = node.RaceSlayer
       outputNode.ReserveType = node.ReserveType
@@ -498,47 +500,47 @@ export const AllyTechSpellData = () => {
 
   return(
     <StyledTableContainer align='center'>
-      <Table stickyHeader sx={{ width: `calc(100px * 32)` }}>
+      <Table stickyHeader sx={{ width: `calc(404px + 164px + 132px * 3 + 124px + 112px + 100px * 2 + 88px + 80px * 2 + 68px * 5 + 56px * 7 + 44px * 6)` }}>
         <TableHead sx={{ position: 'sticky', top: 0, zIndex: 3 }}>
           <TableRow>
-            <StyledTh align='center' rowSpan={2} sx={{ position: 'sticky', left: 0, zIndex: 3 }}>名前</StyledTh>
-            <StyledTh align='center' rowSpan={2}>技・術<br/>カテゴリ<FilterModal filter={categoryFilter.current} parent={'技・術カテゴリ'}/></StyledTh>
-            <StyledTh align='center' colSpan={2}>武器カテゴリ</StyledTh>
-            <StyledTh align='center' rowSpan={2}>ランク</StyledTh>
-            <StyledTh align='center' rowSpan={2}>ランク<br/>アップ<br/>必要回数</StyledTh>
-            <StyledTh align='center' rowSpan={2}>威力</StyledTh>
-            <StyledTh align='center' rowSpan={2}>BP<br/>コスト</StyledTh>
-            <StyledTh align='center' rowSpan={2}>詠唱<br/>ターン数</StyledTh>
-            <StyledTh align='center' rowSpan={2}>対象</StyledTh>
-            <StyledTh align='center' rowSpan={2}>属性</StyledTh>
-            <StyledTh align='center' rowSpan={2}>五行</StyledTh>
-            <StyledTh align='center' rowSpan={2}>基礎<br/>命中率</StyledTh>
-            <StyledTh align='center' rowSpan={2}>ダメージ<br/>ランダム幅</StyledTh>
-            <StyledTh align='center' rowSpan={2}>ヘイト<br/>上昇量</StyledTh>
-            <StyledTh align='center' colSpan={2}>参照能力値</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ position: 'sticky', left: 0, zIndex: 3, width: '164px' }}>名前</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '112px' }}>カテゴリ<FilterModal filter={categoryFilter.current} parent={'カテゴリ'}/></StyledTh>
+            <StyledTh align='center' colSpan={2}>武器タイプ</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '56px' }}>ランク</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '68px' }}>ランク<br/>アップ<br/>必要回数</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '68px' }}>威力</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '68px' }}>BP<br/>コスト</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '68px' }}>詠唱<br/>ターン数</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>五行</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '124px' }}>リザーブタイプ</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '88px' }}>対象</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '56px' }}>基礎<br/>命中率</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>属性</StyledTh>
+            <StyledTh align='center' colSpan={2}>影響能力</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '68px' }}>ダメージ<br/>乱数幅</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '56px' }}>ヘイト<br/>上昇量</StyledTh>
             <StyledTh align='center' colSpan={2}>速度低下量</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '56px' }}>行動<br/>防御</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '56px' }}>種族<br/>特攻</StyledTh>
             <StyledTh align='center' colSpan={3}>効果</StyledTh>
-            <StyledTh align='center' rowSpan={2}>行動防御</StyledTh>
-            <StyledTh align='center' rowSpan={2}>種族特攻</StyledTh>
-            <StyledTh align='center' rowSpan={2}>リザーブタイプ</StyledTh>
             <StyledTh align='center' colSpan={2}>連携名</StyledTh>
-            <StyledTh align='center' rowSpan={2}>連携範囲</StyledTh>
             <StyledTh align='center' colSpan={2}>連携率上昇量</StyledTh>
+            <StyledTh align='center' rowSpan={2} sx={{ width: '404px' }}>連携範囲</StyledTh>
           </TableRow>
           <TableRow>
-            <StyledTh align='center'>メイン<FilterModal filter={weaponFilter.current} parent={'武器カテゴリ（メイン）'}/></StyledTh>
-            <StyledTh align='center'>サブ<FilterModal filter={weaponsubFilter.current} parent={'武器カテゴリ（サブ）'}/></StyledTh>
-            <StyledTh align='center'>自身</StyledTh>
-            <StyledTh align='center'>対象</StyledTh>
-            <StyledTh align='center'>自身</StyledTh>
-            <StyledTh align='center'>対象</StyledTh>
-            <StyledTh align='center'>自身</StyledTh>
-            <StyledTh align='center'>対象</StyledTh>
-            <StyledTh align='center'>その他</StyledTh>
-            <StyledTh align='center'>前</StyledTh>
-            <StyledTh align='center'>後</StyledTh>
-            <StyledTh align='center'>連携</StyledTh>
-            <StyledTh align='center'>独壇場</StyledTh>
+            <StyledTh align='center' sx={{ width: '100px' }}>メイン<FilterModal filter={weaponFilter.current} parent={'武器タイプ（メイン）'}/></StyledTh>
+            <StyledTh align='center' sx={{ width: '100px' }}>サブ<FilterModal filter={weaponsubFilter.current} parent={'武器タイプ（サブ）'}/></StyledTh>
+            <StyledTh align='center' sx={{ width: '44px' }}>自身</StyledTh>
+            <StyledTh align='center' sx={{ width: '44px' }}>対象</StyledTh>
+            <StyledTh align='center' sx={{ width: '44px' }}>自身</StyledTh>
+            <StyledTh align='center' sx={{ width: '44px' }}>対象</StyledTh>
+            <StyledTh align='center' sx={{ width: '132px' }}>自身</StyledTh>
+            <StyledTh align='center' sx={{ width: '132px' }}>対象</StyledTh>
+            <StyledTh align='center' sx={{ width: '132px' }}>その他</StyledTh>
+            <StyledTh align='center' sx={{ width: '80px' }}>前</StyledTh>
+            <StyledTh align='center' sx={{ width: '80px' }}>後</StyledTh>
+            <StyledTh align='center' sx={{ width: '56px' }}>連携</StyledTh>
+            <StyledTh align='center' sx={{ width: '56px' }}>独壇場</StyledTh>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -555,32 +557,88 @@ export const AllyTechSpellData = () => {
                   <StyledTd align='center'>{node.Attack1}</StyledTd>
                   <StyledTd align='center'>{node.BP1}</StyledTd>
                   <StyledTd align='center'>{node.Turn1}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Target}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Attribute}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.BaseElement}</StyledTd>
+                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Reserve}</StyledTd>
+                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Targets.map((target, subindex) => <React.Fragment key={subindex}>{target}<br/></React.Fragment>)}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.Hit}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Random}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Hate}</StyledTd>
+                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Attribute}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.BaseParameter1}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.BaseParameter2}</StyledTd>
+                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Random}</StyledTd>
+                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Hate}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.AfterCasterSpeed}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.AfterTargetSpeed}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.SelfEffect}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.TargetEffect}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.MiscEffect}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.Guard}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.RaceSlayer}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}>{node.Reserve}</StyledTd>
+                  <StyledTd align='left' rowSpan={node.MaxRank}>{node.SelfEffects.map((effect, subindex) => <React.Fragment key={subindex}>{effect}<br/></React.Fragment>)}</StyledTd>
+                  <StyledTd align='left' rowSpan={node.MaxRank}>{node.TargetEffects.map((effect, subindex) => <React.Fragment key={subindex}>{effect}<br/></React.Fragment>)}</StyledTd>
+                  <StyledTd align='left' rowSpan={node.MaxRank}>{node.MiscEffects.map((effect, subindex) => <React.Fragment key={subindex}>{effect}<br/></React.Fragment>)}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.OverAttackFirst}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.OverAttackLast}</StyledTd>
-                  <StyledTd align='center' rowSpan={node.MaxRank}><UniteIcons left={parseInt(node.OverAttackLeft)} reserve={node.ReserveType} right={parseInt(node.OverAttackRight)} self={node.OverAttackSelf} speed={parseInt(node.Speed)} unite={node.OverAttack}/></StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.AddOverAttackDamage}</StyledTd>
                   <StyledTd align='center' rowSpan={node.MaxRank}>{node.AddSingleStageDamage}</StyledTd>
+                  <StyledTd align='center' rowSpan={node.MaxRank}><UniteIcons left={parseInt(node.OverAttackLeft)} reserve={node.ReserveType} right={parseInt(node.OverAttackRight)} self={node.OverAttackSelf} speed={parseInt(node.Speed)} unite={node.OverAttack}/></StyledTd>
                 </StyledTrTwoToneB>
                 <RankRowStack color={index % 2 === 0 ? 'darker-row' : 'lighter-row'} max={node.MaxRank} node={node}/>
               </React.Fragment>
             )
           })}
+        </TableBody>
+      </Table>
+    </StyledTableContainer>
+  )
+}
+
+export const UniteIconLegend = () => {
+  return (
+    <StyledTableContainer align='center'>
+      <Table stickyHeader sx={{ minWidth: `calc(68px + 228px)`, maxWidth: '500px', tableLayout: 'fixed' }}>
+        <TableHead sx={{ position: 'sticky', top: 0 }}>
+          <TableRow>
+            <StyledTh align='center' sx={{ width: '68px' }}>アイコン</StyledTh>
+            <StyledTh align='center'>説明</StyledTh>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <StyledTr>
+            <StyledTd align='center' sx={{ paddingTop: '5px', paddingBottom: '2px' }}><svg width='16' height='20' viewBox='0 0 16 20' xmlns='http://www.w3.org/2000/svg' style={{ background: 'linear-gradient(to top, #ab84c2 0%, #ab84c200 100%)' }}/></StyledTd>
+            <StyledTd align='left'>
+              <List disablePadding sx={{ ml: 2, listStyleType: 'disc' }}>
+                <li style={{ marginBottom: 0 }}>初期キャラクター位置</li>
+              </List>
+            </StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='center' sx={{ paddingTop: '5px', paddingBottom: '2px' }}><Unite0Icon/></StyledTd>
+            <StyledTd align='left'></StyledTd>
+              <List disablePadding sx={{ ml: 2, listStyleType: 'disc' }}>
+                <li style={{ marginBottom: 0 }}>連携範囲外</li>
+              </List>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='center' sx={{ paddingTop: '5px', paddingBottom: '2px' }}><Unite1Icon/></StyledTd>
+            <StyledTd align='left'>連携範囲</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='center' sx={{ paddingTop: '5px', paddingBottom: '2px' }}><Unite1SelfIcon/></StyledTd>
+            <StyledTd align='left'>行動順補正後のキャラクター位置<br/>連携範囲</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='center' sx={{ paddingTop: '5px', paddingBottom: '2px' }}><Unite0SelfIcon/></StyledTd>
+            <StyledTd align='left'>行動順補正後のキャラクター位置<br/>連携範囲すり抜け</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='center' sx={{ paddingTop: '5px', paddingBottom: '2px' }}><UniteNaSelfIcon/></StyledTd>
+            <StyledTd align='left'>行動順補正後のキャラクター位置<br/>連携不可</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='center' sx={{ paddingTop: '5px', paddingBottom: '2px' }}><Unite1ReserveIcon/></StyledTd>
+            <StyledTd align='left'>行動順補正後のキャラクター位置<br/>連携不可、発動時は連携範囲</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='center' sx={{ paddingTop: '5px', paddingBottom: '2px' }}><Unite0ReserveIcon/></StyledTd>
+            <StyledTd align='left'>行動順補正後のキャラクター位置<br/>連携不可、発動時は連携範囲すり抜け</StyledTd>
+          </StyledTr>
         </TableBody>
       </Table>
     </StyledTableContainer>
