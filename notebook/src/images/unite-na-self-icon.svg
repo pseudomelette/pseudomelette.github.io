@@ -1,4 +1,4 @@
 <svg width='16' height='20' viewBox='0 0 16 20' xmlns='http://www.w3.org/2000/svg'>
   <path d='M 1 19 L 13 19 L 15 16 L 3 16 L 1 19 L 2 19' fill='#222222' stroke='#ffffff' stroke-width='1'/>
-  <path d='M 8 6 L 15 10 L 8 14 L 1 10 L 8 6' fill='#222222' stroke='#ffffff' stroke-width='1'/>
+  <path d='M 8 6 L 15 10 L 8 14 L 1 10 L 8 6 L 15 10' fill='#222222' stroke='#ffffff' stroke-width='1'/>
 </svg>
