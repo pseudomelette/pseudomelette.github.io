@@ -117,6 +117,9 @@ export const StyledTrTwoToneR = styled(TableRow)(({ theme }) => ({
 
 export const SagaEBLayout = ({ children }) => {
   const theme = responsiveFontSizes(createTheme({
+    typography: {
+      fontSize: 12,
+    },
     palette: {
       background: {
         default: '#2d2127',
