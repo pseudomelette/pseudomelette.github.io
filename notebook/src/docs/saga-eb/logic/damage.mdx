@@ -1,14 +1,236 @@
 ---
-title: 'ダメージ計算'
+title: 'ダメージ'
 subtitle: 'Damage'
 slug: '/saga-eb/logic/damage/'
-description: 'ダメージ計算にまつわる処理ロジックを記載。'
+description: 'ダメージにまつわる処理ロジックを記載。'
 status: 'in progress'
 ---
 
-import Box from '@mui/material/Box'
+import { Link } from 'gatsby'
 
-# 調査状況
+import Box from '@mui/material/Box'
+import { InlineMath, BlockMath } from 'react-katex'
+
+import {
+  StyledMathBox,
+} from '../../../components/saga-eb/layout'
+
+# ダメージ計算式の種類
 <Box>
-  90%調査済み。
+  以下2種のダメージ計算式が存在します。
+
+  <Box sx={{ ml: 2, my: 3 }}>
+    ## 攻撃ダメージ計算式
+    技・術の使用によって行動キャラクターが対象キャラクターに与えるダメージを計算します。ゲストキャラクターの支援行動によるダメージにも適用されます。
+
+    以下の条件を全て満たすと攻撃ダメージが計算されます。
+    - 対象キャラクターに命中している
+    - 対象キャラクターに回避されていない
+    - 対象キャラクターにパリイ技を発動されていない
+    - 対象キャラクターにカウンター技を発動されていない
+    - 技・術の威力が0でない
+    - 対象キャラクターが石化状態でない
+    - 対象キャラクターがダメージ無効状態でない
+
+    ## 毒ダメージ計算式
+    処理進行中のタイムライン位置にいるキャラクターが毒によって受けるダメージを計算します。
+
+    以下の条件を全て満たすと毒ダメージが計算されます。
+    - キャラクターが毒状態である
+    - キャラクターが同ターン中に毒ダメージをまだ受けていない
+  </Box>
+</Box>
+
+# 攻撃ダメージ計算式の構造
+<Box>
+  攻撃ダメージは下式で算出されます。
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{攻撃ダメージ}=\frac{\text{基本攻撃ダメージ}\times\text{攻撃ダメージ補正}}{\text{攻撃回数}}\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  ここで、攻撃回数は技・術に設定されている内部値です。
+
+  技・術ごとに設定されている攻撃回数については <Link to={'/saga-eb/data/ally-techs-spells/'}>データ ＞ 味方の技・術</Link> を参照してください。
+</Box>
+
+# 基本攻撃ダメージ
+<Box>
+  基本攻撃ダメージは下式で算出されます。
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{基本攻撃ダメージ}=\text{総合威力}\times(1-\text{威力軽減率})-\text{ダメージ軽減量}\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  基本攻撃ダメージの計算結果は小数点以下が切り捨てられます。
+
+  <Box sx={{ ml: 2, my: 3 }}>
+    ## 総合威力
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\hspace{0.5em}\text{総合威力}=\text{基礎威力}\times\text{技・術倍率}\times\text{SLv倍率}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    基礎威力は下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\hspace{0.5em}\text{基礎威力}=20\times(1+\text{武器威力ボーナス}+\text{武器タイプボーナス}+\text{攻撃能力値ボーナス})\hspace{0.5em}'/>
+      <BlockMath
+        math='\small\hspace{0.5em}\begin{aligned}\text{武器威力ボーナス}&=\begin{cases}\text{武器威力}\times0.03&(\text{片手剣、両手剣、片手銃、両手銃})\\
+            0&(\text{体術、術、モンスター、近接メカ、射撃メカ、継承})\end{cases}\\[1.48em]
+            \text{武器タイプボーナス}&=\begin{cases}\text{SLv}\times0.02&(\text{片手剣、両手剣、片手銃、両手銃})\\
+            (\text{SLv}+5)\times0.05&(\text{体術、術、モンスター、近接メカ、射撃メカ})\\
+            0&(\text{継承})\end{cases}\\[2.14em]
+            \text{攻撃能力値ボーナス}&=\text{行動キャラクター自身の影響能力値}\times0.01\end{aligned}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    ここで、武器威力は使用武器に設定されている威力、SLvは使用技・術に対応するスキルレベル、影響能力値<InlineMath math={'\\small _\\text{自身}'}/> は技・術に設定されている行動キャラクター自身の影響能力値です。
+
+    二刀技、二丁拳銃技、剣×銃技の場合は使用武器2種の威力の平均値が適用されます。
+
+    基礎威力の計算結果は小数点以下が切り上げられます。
+
+    技・術倍率は下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\hspace{0.5em}\text{技・術倍率}=\text{技・術基本倍率}\times\text{覚醒補正}\times\text{技・術威力ロール補正}\times0.05\hspace{0.5em}'/>
+      <BlockMath
+        math='\hspace{0.5em}\text{技・術基本倍率}=\begin{cases}技・術威力\times0.05&(\text{解放以外の技・術})\\
+            (技・術威力+10)\times0.05&(\text{解放})\end{cases}\hspace{0.5em}'
+      />
+      <BlockMath math='\hspace{0.5em}\text{覚醒補正}=1+\text{技威力アップ残ターン数}\times0.2\hspace{0.5em}'/>
+      <BlockMath math='\hspace{0.5em}\text{技・術威力ロール補正}=1+\text{技・術威力ロール性能合計値}\times0.01\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    SLv倍率は下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\hspace{0.5em}\text{SLv倍率}=1+\frac{\text{SLv}}{30}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    ## 威力軽減率
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\hspace{0.5em}\text{威力補正}=1-\text{威力軽減率}+\text{五行影響値}\hspace{0.5em}'/>
+      <BlockMath math='\hspace{0.5em}\text{威力軽減率}=\text{属性耐性}\times0.005+\text{防御能力値ボーナス}+\text{五行対抗ボーナス}\hspace{0.5em}'/>
+      <BlockMath math='\hspace{0.5em}\text{五行対抗ボーナス}=\text{防御五行Lv}\times0.01-(\text{攻撃五行Lv}+\text{地相Lv})\times\text{五行Lv差補正}\hspace{0.5em}'/>
+      <BlockMath
+        math='\hspace{0.5em}\text{五行Lv差補正}=\begin{cases}0.01&(\text{攻撃五行Lv}+\text{地相Lv}\geq0)\\
+            0.05&(\text{攻撃五行Lv}+\text{地相Lv}\lt0)\end{cases}\hspace{0.5em}'
+      />
+    </StyledMathBox>
+
+    技・術が複合属性を持つ場合、最小の属性耐性が使用されます。無属性の場合は0が使用されます。
+
+    ## ダメージ軽減量
+    ダメージ軽減量は下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\hspace{0.5em}\text{ダメージ軽減量}=\sqrt{\text{属性耐性}\times3}\hspace{0.5em}'/>
+    </StyledMathBox>
+  </Box>
+</Box>
+
+# 攻撃ダメージ補正
+<Box>
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{攻撃ダメージ補正}=\text{状態補正}\times\text{行動補正}\times\text{特性補正}\times\text{連携率補正}\times\text{技・術乱数補正}\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{状態補正}=\text{バフ・デバフ補正}\times\text{覚醒反動補正}\times\text{怒り補正}\hspace{0.5em}'/>
+    <BlockMath
+      math='\hspace{0.5em}\text{バフ・デバフ補正}=\begin{cases}1+(\text{術力バフ累積値}-\text{防御力バフ累積値})\times0.01&(\text{術攻撃})\\
+          1+(\text{攻撃力バフ累積値}-\text{防御力バフ累積値})\times0.01&(\text{術攻撃以外})\end{cases}\hspace{0.5em}'
+    />
+    <BlockMath
+      math='\hspace{0.5em}\text{覚醒反動補正}=\begin{cases}1.2&(\text{技威力アップ状態あり})\\
+          1&(\text{技威力アップ状態なし})\end{cases}\hspace{0.5em}'
+    />
+    <BlockMath
+      math='\hspace{0.5em}\text{怒り補正}=\begin{cases}1+(\text{怒りロール補正}+20)\times0.01&(\text{怒り状態あり})\\
+          1&(\text{怒り状態なし})\end{cases}\hspace{0.5em}'
+    />
+  </StyledMathBox>
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{行動補正}=\text{防御補正}\times\text{武器ガード補正}\hspace{0.5em}'/>
+    <BlockMath
+      math='\hspace{0.5em}\text{防御補正}=\begin{cases}1&(防御耐性無効)\\
+          0.7-\text{防御耐性}\times0.01&(防御耐性有効)\end{cases}\hspace{0.5em}'
+    />
+    <BlockMath
+      math='\hspace{0.5em}\text{武器ガード補正}=\begin{cases}1-ガード軽減率\times0.01&(プロテクトなし)\\
+          1-\text{プロテクト軽減率}\times0.01&(プロテクトあり)\end{cases}\hspace{0.5em}'
+    />
+  </StyledMathBox>
+
+  武器ガードが発生する場合のみ適用される補正。
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{特性補正}=\text{種族特攻補正}\times\text{陣形補正}\times\text{ロール補正}\hspace{0.5em}'/>
+    <BlockMath
+      math='\hspace{0.5em}\text{種族特攻補正}=\begin{cases}1.2&(\text{種族特効あり})\\
+          1&(\text{種族特効なし})\end{cases}\hspace{0.5em}'
+    />
+    <BlockMath
+      math='\hspace{0.5em}\text{陣形補正}=(1-陣形防御補正\times0.01)\times(1+陣形攻撃補正\times0.01)\hspace{0.5em}'
+    />
+    <BlockMath math='\hspace{0.5em}\text{ロール補正}=\text{ダメージ増加ロール}\times\text{ダメージ軽減ロール}\hspace{0.5em}'/>
+    <BlockMath math='\hspace{0.5em}\text{ダメージ増加ロール}=1+(\text{属性攻撃力ロール}+\text{術威力ロール}+\text{詠唱中強化ロール}+\text{即死級ロール}+\text{弱点強化ロール}+\text{しんがりロール}+\text{リザーブ解除ロール})\times0.01\hspace{0.5em}'/>
+    <BlockMath math='\hspace{0.5em}\text{ダメージ軽減ロール}=1-(\text{属性防御力ロール}+\text{術耐性ロール}+\text{全体攻撃耐性ロール}+\text{カウンター耐性ロール})\times0.01\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  ゲストキャラクターには陣形の1番目の補正が適用されます。
+
+  技・術乱数補正は下式を満たす乱数値です。
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}1-\text{技・術ダメージ乱数幅}\leq\text{技・術乱数補正}\leq1+\text{技・術ダメージ乱数幅}\hspace{0.5em}'/>
+  </StyledMathBox>
+</Box>
+
+# 毒ダメージ計算式の構造
+<Box>
+  毒ダメージは下式で算出されます。
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{毒ダメージ}=\text{基本毒ダメージ}\times\text{毒ダメージ補正}\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  毒ダメージの計算結果は小数点以下が切り上げられます。
+</Box>
+
+# 基本毒ダメージ
+<Box>
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{基本毒ダメージ}=\text{最大HP}\times\text{基本HP補正}\times0.3\hspace{0.5em}'/>
+  </StyledMathBox>
+</Box>
+
+# 毒ダメージ補正
+<Box>
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}\text{毒ダメージ補正}=\text{行動補正}\times\text{乱数補正}\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  行動補正
+    - 行動なし状態は0.5、それ以外は1
+
+  毒乱数補正は下式を満たす乱数値です。
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\hspace{0.5em}0.95\leq\text{毒乱数補正}\leq1.05\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  - 基本HP補正
+    - 味方は1、敵は100.0 / 基本HP
+</Box>
+
+# 行動選択時の表示威力
+<Box>
+</Box>
+
+# 表示ダメージと実ダメージ
+<Box sx={{ minHeight: { xs: `calc(100dvh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100dvh - 48px - 8px - 54px - 24px - 80px)` } }}>
+  ゲストキャラクターの支援行動ではHPが0にはなりません。プロテクト技の使用キャラクターはダメージを受けずに対象キャラクターがダメージを受けるバグが存在します。
+  最小HPが設定されている場合、それ以下にはなりません。
+
+  攻撃ダメージがミッションで判定される。
 </Box>
