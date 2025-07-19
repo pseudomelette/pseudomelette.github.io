@@ -1,26 +1,28 @@
 import * as React from 'react'
 import { graphql, Link, useStaticQuery } from 'gatsby'
 
-import { useMediaQuery } from '@mui/material'
-import Box from '@mui/material/Box'
 import CloseIcon from '@mui/icons-material/Close';
-import Collapse from '@mui/material/Collapse'
-import Drawer from '@mui/material/Drawer'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
+import MenuIcon from '@mui/icons-material/Menu'
+import { useMediaQuery } from '@mui/material'
+import Box from '@mui/material/Box'
+import Collapse from '@mui/material/Collapse'
+import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import MenuIcon from '@mui/icons-material/Menu'
 import { styled, useTheme } from '@mui/material/styles'
 import { OverlayScrollbars } from 'overlayscrollbars'
 
 import 'overlayscrollbars/overlayscrollbars.css'
 
+const Context = React.createContext()
+
 const StyledListItem = styled(ListItem)(({ theme }) => ({
-  height: '40px',
+  height: '36px',
   margin: '2px 0',
   background: 'linear-gradient(to right, #1f3b533f 0%, #1f3b53 15%, #1f3b53 20%, #1f3b5300 97%)',
   color: '#ffffff',
@@ -44,8 +46,8 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
 }))
 
 const StyledListItemParent = styled(ListItem)(({ theme }) => ({
-  height: '40px',
-  marginTop: 16,
+  height: '36px',
+  marginTop: 8,
   borderBottom: '2px solid',
   borderColor: '#ffffff',
   borderImageSource: 'linear-gradient(to right, #ffffff3f 0%, #ffffff 15%, #ffffff 20%, #ffffff00 95%)',
@@ -61,8 +63,6 @@ const stateActions = Object.freeze({
   toggleLogic: 'toggleLogic',
   toggleData: 'toggleData',
 })
-
-const Context = React.createContext()
 
 export const ContextProvider = ({ children }) => {
   const initState = {
@@ -184,25 +184,32 @@ export const Sidebar = () => {
 
   return (
     <>
-      <IconButton
-        onClick={handleDrawerToggle}
+      <Box
         sx={{
-          display: { lg: 'none' },
+          display: { xs: 'flex', lg: 'none' },
+          alignItems: 'center',
           position: 'fixed',
           zIndex: theme.zIndex.drawer + 100,
-          mt: { xs: 3, sm: 1 },
-          ml: 1,
-          border: '1px solid',
-          borderColor: '#f8d36f',
-          boxShadow: 8,
-          background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
-          '&:hover': {
-            background: 'linear-gradient(to bottom, #805f92 0%, #ab84c2 100%)',
-          },
+          minHeight: { xs: 64, sm: 48 },
+          maxHeight: 64,
         }}
       >
-        {drawerOpen ? <CloseIcon sx={{ color: '#ffffff', fontSize: 32 }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: 32 }}/>}
-      </IconButton>
+        <IconButton
+          onClick={handleDrawerToggle}
+          sx={{
+            ml: 1,
+            border: '1px solid',
+            borderColor: '#f8d36f',
+            boxShadow: 8,
+            background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
+            '&:hover': {
+              background: 'linear-gradient(to bottom, #805f92 0%, #ab84c2 100%)',
+            },
+          }}
+        >
+          {drawerOpen ? <CloseIcon sx={{ color: '#ffffff', fontSize: { xs: 28, sm: 20 } }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: { xs: 28, sm: 20 } }}/>}
+        </IconButton>
+      </Box>
       <Drawer
         onClose={handleDrawerToggle}
         open={isDownLg ? drawerOpen : true}

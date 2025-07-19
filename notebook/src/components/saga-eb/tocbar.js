@@ -18,7 +18,7 @@ const rootMarginBottom = () => document.documentElement.clientHeight - 216
 
 const StyledAnchorLink = styled(AnchorLink)(({ theme }) => ({
   display: 'flex',
-  height: '40px',
+  height: '36px',
   margin: '2px 0',
   color: '#ffffff',
   textDecoration: 'none',
@@ -34,7 +34,7 @@ const StyledAnchorLink = styled(AnchorLink)(({ theme }) => ({
 }))
 
 const StyledList = styled(List)(({ theme }) => ({
-  padding: '16px 0',
+  padding: '8px 0',
   background: '#2b4a66',
 }))
 

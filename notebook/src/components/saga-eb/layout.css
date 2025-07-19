@@ -23,68 +23,18 @@
   --os-handle-perpendicular-size-active: 100%;
   --os-handle-interactive-area-offset: 0px;
 }
-.os-theme-sidebar {
-  --os-size: 8px;
-  --os-padding-perpendicular: 0px;
-  --os-padding-axis: 8px;
-  --os-track-border-radius: 4px;
-  --os-track-bg: #0c2436bf;
-  --os-track-bg-hover: #0c2436bf;
-  --os-track-bg-active: #0c2436bf;
-  --os-track-border: none;
-  --os-track-border-hover: none;
-  --os-track-border-active: none;
-  --os-handle-border-radius: 4px;
-  --os-handle-bg: #4eb89a;
-  --os-handle-bg-hover: #4eb89a;
-  --os-handle-bg-active: #4eb89a;
-  --os-handle-border: none;
-  --os-handle-border-hover: none;
-  --os-handle-border-active: none;
-  --os-handle-min-size: 24px;
-  --os-handle-max-size: none;
-  --os-handle-perpendicular-size: 100%;
-  --os-handle-perpendicular-size-hover: 100%;
-  --os-handle-perpendicular-size-active: 100%;
-  --os-handle-interactive-area-offset: 0px;
-}
-.os-theme-tocbar {
-  --os-size: 10px;
-  --os-padding-perpendicular: 1px;
-  --os-padding-axis: 8px;
-  --os-track-border-radius: 4px;
-  --os-track-bg: #0c2436bf;
-  --os-track-bg-hover: #0c2436bf;
-  --os-track-bg-active: #0c2436bf;
-  --os-track-border: none;
-  --os-track-border-hover: none;
-  --os-track-border-active: none;
-  --os-handle-border-radius: 4px;
-  --os-handle-bg: #4eb89a;
-  --os-handle-bg-hover: #4eb89a;
-  --os-handle-bg-active: #4eb89a;
-  --os-handle-border: none;
-  --os-handle-border-hover: none;
-  --os-handle-border-active: none;
-  --os-handle-min-size: 24px;
-  --os-handle-max-size: none;
-  --os-handle-perpendicular-size: 100%;
-  --os-handle-perpendicular-size-hover: 100%;
-  --os-handle-perpendicular-size-active: 100%;
-  --os-handle-interactive-area-offset: 0px;
-}
 .os-theme-math {
   --os-size: 4px;
   --os-padding-perpendicular: 0px;
   --os-padding-axis: 0px;
-  --os-track-border-radius: 4px;
+  --os-track-border-radius: 2px;
   --os-track-bg: #0c2436bf;
   --os-track-bg-hover: #0c2436bf;
   --os-track-bg-active: #0c2436bf;
   --os-track-border: none;
   --os-track-border-hover: none;
   --os-track-border-active: none;
-  --os-handle-border-radius: 4px;
+  --os-handle-border-radius: 2px;
   --os-handle-bg: #4eb89a;
   --os-handle-bg-hover: #4eb89a;
   --os-handle-bg-active: #4eb89a;
@@ -101,15 +51,15 @@
 .os-theme-modal {
   --os-size: 4px;
   --os-padding-perpendicular: 0px;
-  --os-padding-axis: 0px;
-  --os-track-border-radius: 4px;
+  --os-padding-axis: 4px;
+  --os-track-border-radius: 2px;
   --os-track-bg: #0c2436bf;
   --os-track-bg-hover: #0c2436bf;
   --os-track-bg-active: #0c2436bf;
   --os-track-border: none;
   --os-track-border-hover: none;
   --os-track-border-active: none;
-  --os-handle-border-radius: 4px;
+  --os-handle-border-radius: 2px;
   --os-handle-bg: #4eb89a;
   --os-handle-bg-hover: #4eb89a;
   --os-handle-bg-active: #4eb89a;
@@ -123,18 +73,43 @@
   --os-handle-perpendicular-size-active: 100%;
   --os-handle-interactive-area-offset: 4px;
 }
-.os-theme-table {
-  --os-size: 4px;
+.os-theme-sidebar {
+  --os-size: 6px;
   --os-padding-perpendicular: 0px;
-  --os-padding-axis: 4px;
-  --os-track-border-radius: 4px;
+  --os-padding-axis: 6px;
+  --os-track-border-radius: 3px;
   --os-track-bg: #0c2436bf;
   --os-track-bg-hover: #0c2436bf;
   --os-track-bg-active: #0c2436bf;
   --os-track-border: none;
   --os-track-border-hover: none;
   --os-track-border-active: none;
-  --os-handle-border-radius: 4px;
+  --os-handle-border-radius: 3px;
+  --os-handle-bg: #4eb89a;
+  --os-handle-bg-hover: #4eb89a;
+  --os-handle-bg-active: #4eb89a;
+  --os-handle-border: none;
+  --os-handle-border-hover: none;
+  --os-handle-border-active: none;
+  --os-handle-min-size: 24px;
+  --os-handle-max-size: none;
+  --os-handle-perpendicular-size: 100%;
+  --os-handle-perpendicular-size-hover: 100%;
+  --os-handle-perpendicular-size-active: 100%;
+  --os-handle-interactive-area-offset: 0px;
+}
+.os-theme-table {
+  --os-size: 4px;
+  --os-padding-perpendicular: 0px;
+  --os-padding-axis: 2px;
+  --os-track-border-radius: 2px;
+  --os-track-bg: #0c2436bf;
+  --os-track-bg-hover: #0c2436bf;
+  --os-track-bg-active: #0c2436bf;
+  --os-track-border: none;
+  --os-track-border-hover: none;
+  --os-track-border-active: none;
+  --os-handle-border-radius: 2px;
   --os-handle-bg: #4eb89a;
   --os-handle-bg-hover: #4eb89a;
   --os-handle-bg-active: #4eb89a;
@@ -147,6 +122,31 @@
   --os-handle-perpendicular-size-hover: 100%;
   --os-handle-perpendicular-size-active: 100%;
   --os-handle-interactive-area-offset: 4px;
+}
+.os-theme-tocbar {
+  --os-size: 8px;
+  --os-padding-perpendicular: 1px;
+  --os-padding-axis: 6px;
+  --os-track-border-radius: 3px;
+  --os-track-bg: #0c2436bf;
+  --os-track-bg-hover: #0c2436bf;
+  --os-track-bg-active: #0c2436bf;
+  --os-track-border: none;
+  --os-track-border-hover: none;
+  --os-track-border-active: none;
+  --os-handle-border-radius: 3px;
+  --os-handle-bg: #4eb89a;
+  --os-handle-bg-hover: #4eb89a;
+  --os-handle-bg-active: #4eb89a;
+  --os-handle-border: none;
+  --os-handle-border-hover: none;
+  --os-handle-border-active: none;
+  --os-handle-min-size: 24px;
+  --os-handle-max-size: none;
+  --os-handle-perpendicular-size: 100%;
+  --os-handle-perpendicular-size-hover: 100%;
+  --os-handle-perpendicular-size-active: 100%;
+  --os-handle-interactive-area-offset: 0px;
 }
 
 .cjk_fallback {

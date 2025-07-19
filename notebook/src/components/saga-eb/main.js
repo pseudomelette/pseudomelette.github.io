@@ -100,9 +100,8 @@ export const SagaEbTemplate = ({ data, children }) => {
 }
 
 export const SagaEbHead = ({ data }) => {
-  const category = data.mdx.frontmatter.slug.includes('/saga-eb/logic/') ? 'ロジック ＞ '
-      : data.mdx.frontmatter.slug.includes('/saga-eb/data/') ? 'データ ＞ '
-      : ''
+  const category = data.mdx.frontmatter.slug.includes('/saga-eb/logic/') ? 'ロジック ＞ ' :
+    data.mdx.frontmatter.slug.includes('/saga-eb/data/') ? 'データ ＞ ' : ''
   const title = category + data.mdx.frontmatter.title + ' — サガ エメラルド ビヨンド システム解説'
   const description = 'サガ エメラルド ビヨンド（サガエメ）のシステム解説サイト。' + data.mdx.frontmatter.description
   return <Seo title={title} description={description}/>
