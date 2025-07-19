@@ -32,21 +32,21 @@ import {
   <Box sx={{ ml: 2, my: 3 }}>
     ## 現在バトルランク
     味方の強さをバトル実績に基づいて数値化したもので、以下の特徴があります。
-    - 敵バトルランク、バトルの敵編成、イベント・バトルの獲得アイテム、バトル勝利以外でのステータス成長に影響する。
-    - 条件を満たすとバトル勝利後に上昇する。
-    - 初期値は1、最大値は200。
+    - 敵バトルランク、バトルの敵編成、イベント・バトルの獲得アイテム、バトル勝利以外でのステータス成長に影響する
+    - 条件を満たすとバトル勝利後に上昇する
+    - 初期値は1、最大値は200
 
     ## 潜在バトルランク
     味方の強さをステータスに基づいて数値化したもので、以下の特徴があります。
-    - 現在バトルランクの上昇量、敵バトルランクに影響する。
-    - バトルパーティ（バトル参加メンバー）のステータスによって変動する。
-    - 理論最大値は176.625。
+    - 現在バトルランクの上昇量、敵バトルランクに影響する
+    - バトルパーティ（バトル参加メンバー）のステータスによって変動する
+    - 理論最大値は176.625
 
     ## 敵バトルランク
     敵キャラクターの強さを数値化したもので、以下の特徴があります。
-    - 敵のステータス、ひらめき、バトル勝利でのステータス成長に影響する。
-    - 現在・潜在バトルランク、バトル難易度に基づいて決定される。
-    - 現在バトルランクを下回ることはなく、最大値は250。
+    - 敵のステータス、ひらめき、バトル勝利でのステータス成長に影響する
+    - 現在・潜在バトルランク、バトル難易度に基づいて決定される
+    - 現在バトルランクを下回ることはなく、最大値は250
   </Box>
 
   バトルランクに紐づく各種内部値については <Link to={'/saga-eb/data/battle-ranks/'}>データ ＞ バトルランク</Link> を参照してください。
@@ -125,7 +125,7 @@ import {
 
   <StyledMathBox className='katex-box'>
     <BlockMath math='\hspace{0.5em}\text{ランク差ボーナス}=\min(\text{ランク差評価値},\hspace{0.5em}\text{潜在BR}-\text{現在BR})\hspace{0.5em}'/>
-    <BlockMath math='\hspace{0.5em}\text{ランク差評価値}=\text{潜在BR}\times \frac{\text{潜在BR}\times 1.5-\text{現在BR}}{\text{潜在BR}\times 10+\text{現在BR}\times 1.5}+1\hspace{0.5em}'/>
+    <BlockMath math='\hspace{0.5em}\text{ランク差評価値}=1+\text{潜在BR}\times \frac{\text{潜在BR}\times 1.5-\text{現在BR}}{\text{潜在BR}\times 10+\text{現在BR}\times 1.5}\hspace{0.5em}'/>
   </StyledMathBox>
 
   ランク差評価値とランク差ボーナスの計算結果は小数点以下が切り捨てられます。
@@ -151,7 +151,7 @@ import {
 
   <StyledMathBox className='katex-box'>
     <BlockMath
-      math='\hspace{0.5em}\text{BR上限}=\begin{cases}\text{現在BR}+10+\text{ランク差ボーナス}&(\text{1.})\\
+      math='\small\hspace{0.5em}\text{BR上限}=\begin{cases}\text{現在BR}+10+\text{ランク差ボーナス}&(\text{1.})\\
           \text{現在BR}+10&(\text{2.})\end{cases}\hspace{0.5em}'
     />
   </StyledMathBox>
@@ -167,15 +167,15 @@ import {
     <BlockMath math='\hspace{0.5em}\text{潜在BR}=\sum_{m\in BP} \text{メンバー}m\text{の強さ}\hspace{0.5em}'/>
   </StyledMathBox>
 
-  ここで、<InlineMath math='BP'/> はバトルパーティを意味し、サポートメンバーや控えメンバーを含みません。
+  ここで、<InlineMath math={'\\small BP'}/> はバトルパーティを意味し、サポートメンバーや控えメンバーを含みません。
 
   メンバーの強さは下式で算出されます。
 
   <StyledMathBox className='katex-box'>
     <BlockMath math='\hspace{0.5em}\text{メンバーの強さ}=\text{HP評価値}+\text{能力値評価値}+\text{スキル評価値}\hspace{0.5em}'/>
-    <BlockMath math='\hspace{0.5em}\text{HP評価値}=\frac{(HP-140)\times 18}{1000}\hspace{0.5em}'/>
-    <BlockMath math='\hspace{0.5em}\text{能力値評価値}=\frac{(\max Stat-20)\times 72}{1000}\hspace{0.5em}'/>
-    <BlockMath math='\hspace{0.5em}\text{スキル評価値}=\frac{(\max SLv-5)\times 315}{1000}\hspace{0.5em}'/>
+    <BlockMath math='\hspace{0.5em}\begin{aligned}\text{HP評価値}&=\frac{(HP-140)\times 18}{1000}\hspace{0.5em}\\[0.89em]
+        \hspace{0.5em}\text{能力値評価値}&=\frac{(\max Stat-20)\times 72}{1000}\hspace{0.5em}\\[0.89em]
+        \hspace{0.5em}\text{スキル評価値}&=\frac{(\max SLv-5)\times 315}{1000}\end{aligned}\hspace{0.5em}'/>
   </StyledMathBox>
 
   ここで、<InlineMath math='\max Stat'/> は能力値6種の中で装備補正込みで最も高い値、<InlineMath math='\max SLv'/> は所持スキルのレベルの中で最も高い値を意味します。
