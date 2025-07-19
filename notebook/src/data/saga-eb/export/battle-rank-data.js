@@ -54,7 +54,7 @@ export const BattleRankData = () => {
                 <StyledTrTwoToneR className={index % 2 === 0 ? 'darker-row-w-header' : 'lighter-row-w-header'} key={index}>
                   <StyledTrh align='center' scope='row'>{Number(node.label.split('_')[1])}</StyledTrh>
                   <StyledTd align='center'>{node.Attack}</StyledTd>
-                  <StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>
+                  <StyledTd align='center'>{node.SkillLv}</StyledTd>
                   <StyledTd align='center'>{node.Defense}</StyledTd>
                   <StyledTd align='center'>{node.HP}</StyledTd>
                   <StyledTd align='center'>{node.Parameter}</StyledTd>
@@ -66,7 +66,7 @@ export const BattleRankData = () => {
                 <StyledTrTwoToneB className={index % 2 === 0 ? 'darker-row-w-header' : 'lighter-row-w-header'} key={index}>
                   <StyledTrh align='center' scope='row'>{Number(node.label.split('_')[1])}</StyledTrh>
                   <StyledTd align='center'>{node.Attack}</StyledTd>
-                  <StyledTd align='center'>{Number(node.SkillLv)}</StyledTd>
+                  <StyledTd align='center'>{node.SkillLv}</StyledTd>
                   <StyledTd align='center'>{node.Defense}</StyledTd>
                   <StyledTd align='center'>{node.HP}</StyledTd>
                   <StyledTd align='center'>{node.Parameter}</StyledTd>
