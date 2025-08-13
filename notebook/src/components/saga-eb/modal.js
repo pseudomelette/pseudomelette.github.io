@@ -7,7 +7,17 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import Modal from '@mui/material/Modal'
 import { styled } from '@mui/material/styles'
+import TableContainer from '@mui/material/TableContainer'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 import { ClickScrollPlugin, OverlayScrollbars } from 'overlayscrollbars'
+
+import {
+	StyledTd,
+	StyledTh,
+} from './layout'
 
 import 'overlayscrollbars/overlayscrollbars.css'
 
@@ -17,30 +27,53 @@ const StyledBox = styled(Box)(({ theme }) => ({
   position: 'absolute',
   top: '50%',
   left: '50%',
-  minWidth: '212px',
-  translate: '-50% -50%',
-  overflow: 'hidden',
-  overscrollBehavior: 'none',
+  transform: 'translate(-50%, -50%)',
+  border: '1px solid',
+  borderColor: '#1f3b53',
   color: '#ffffff',
   background: '#526f92',
-  boxShadow: 24,
 }))
 
-export const FilterModal = ({column, label, onApply, onClose, selectedValues, valueGroups}) => {
-  const [localSelectedValues, setLocalSelectedValues] = React.useState(selectedValues)
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  maxWidth: '80vw',
+  maxHeight: `calc(80vh - 59px)`,
+  color: '#ffffff',
+  background: '#526f92',
+}))
+
+export const FilterModal = ({columns, filterValues, filterState, onApply, onClose, open}) => {
+  const leafColumns = columns.flatMap(parent => parent.children.length === 0 ? [parent] : parent.children)
+
+  const [localFilterState, setLocalFilterState] = React.useState(filterState)
   const [observed, setObserved] = React.useState(false)
   const [initialized, setInitialized] = React.useState(false)
 
-  const allSelected = localSelectedValues.length === valueGroups[column].length
-  const noneSelected = localSelectedValues.length === 0
-  const indeterminate = !allSelected && !noneSelected
-
-  const handleToggle = (selectedValue) => {
-    setLocalSelectedValues(prev => prev.includes(selectedValue) ? prev.filter(value => value !== selectedValue) : [...prev, selectedValue])
+  const allSelected = (column) => {
+    return localFilterState[column].length === filterValues[column].length
+  }
+  const noneSelected = (column) => {
+    return localFilterState[column].length === 0
+  }
+  const indeterminate = (column) => {
+    return !allSelected(column) && !noneSelected(column)
   }
 
-  const handleToggleAll = () => {
-    setLocalSelectedValues(allSelected ? [] : valueGroups[column])
+  const handleToggle = (column, value) => {
+    setLocalFilterState(prev => ({
+      ...prev,
+      [column]: prev[column].includes(value) ? prev[column].filter(v => v !== value) : [...prev[column], value]
+    }))
+  }
+  const handleToggleAll = (column) => {
+    setLocalFilterState(prev => ({
+      ...prev,
+      [column]: allSelected(column) ? [] : filterValues[column]
+    }))
+  }
+
+  const handleApply = () => {
+    onApply(localFilterState)
+    onClose()
   }
 
   React.useEffect(() => {
@@ -59,60 +92,118 @@ export const FilterModal = ({column, label, onApply, onClose, selectedValues, va
   }, [initialized, observed])
 
   return (
-    <Modal open onClose={onClose}>
+    <Modal open={open} onClose={onClose} slotProps={{ backdrop: { sx: { backgroundColor: '#0000009f' } } }}>
       <StyledBox>
-        <FormGroup
-          sx={{
-            py: 1,
-            pl: 2,
-            borderWidth: '2px 2px 0px 2px',
-            borderStyle: 'solid',
-            borderColor: '#2b4a66',
-            background: '#cccccc',
-            color: '#163148',
-          }}
-        >
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={allSelected}
-                indeterminate={indeterminate}
-                onChange={handleToggleAll}
-                sx={{color: '#163148', '&.Mui-checked': { color: '#163148' }, '&.MuiCheckbox-indeterminate': { color: '#163148'} }}
-              />
-            }
-            label={label}
-          />
-        </FormGroup>
-        <Box className='modal-form' sx={{ overflow: 'scroll', overscrollBehavior: 'none', border: '2px solid', borderColor: '#2b4a66' }}>
-          <FormGroup
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              flexWrap: 'nowrap',
-              px: 2,
-              py: 1,
-              height: '50vh'
-            }}
-          >
-            {valueGroups[column].map((value, index) => (
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={localSelectedValues.includes(value)}
-                    id={value}
-                    onChange={() => handleToggle(value)}
-                    sx={{ py: 1, color: '#ffffff', '&.Mui-checked': { color: '#ffffff' } }}
-                  />
+        <StyledTableContainer className='modal-form' sx={{ width: `calc(${leafColumns.map(Column => Column.width).join(' + ')})`, minWidth: `min(300px, calc(${leafColumns.map(Column => Column.width).join(' + ')}))` }}>
+          <Table stickyHeader sx={{ width: `calc(${leafColumns.map(Column => Column.width).join(' + ')})` }}>
+            <TableHead
+              sx={{
+                position: 'sticky',
+                top: 0,
+                zIndex: 3,
+                '&::before': {
+                  position: 'absolute',
+                  top: '-1px',
+                  width: '100%',
+                  height: '1px',
+                  background: '#1f3b53',
+                  content: '""',
                 }
-                key={index}
-                label={value}
-                sx={{ pr: 2 }}
-              />
-            ))}
-          </FormGroup>
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'space-around', py: 1, background: '#1f3b53' }}>
+              }}
+            >
+              <TableRow>
+                {columns.map((parent, index) => {
+                  if (parent.children.length === 0) {
+                    return (
+                      <StyledTh key={index} rowSpan={2} sx={{ width: parent.width }}>
+                        <FormGroup sx={{ background: '#cccccc', color: '#163148' }}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={allSelected(parent.key)}
+                                indeterminate={indeterminate(parent.key)}
+                                onChange={() => handleToggleAll(parent.key)}
+                                sx={{
+                                  color: '#163148',
+                                  '&.Mui-checked': { color: '#163148' },
+                                  '&.MuiCheckbox-indeterminate': { color: '#163148'},
+                                }}
+                              />
+                            }
+                            label={parent.label}
+                          />
+                        </FormGroup>
+                      </StyledTh>                  
+                    )
+                  } else {
+                    return (
+                      <StyledTh align='center' key={index} colSpan={parent.children.length} sx={{ fontSize: '0.8rem' }}>
+                        {parent.label}
+                      </StyledTh>
+                    )
+                  }
+                })}
+              </TableRow>
+              <TableRow>
+                {columns.flatMap(parent => {
+                  if (parent.children.length === 0) {
+                    return []
+                  } else {
+                    return (
+                      parent.children.map((child, index) => (
+                        <StyledTh key={index} sx={{ width: child.width }}>
+                          <FormGroup sx={{ background: '#cccccc', color: '#163148' }}>
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={allSelected(child.key)}
+                                  indeterminate={indeterminate(child.key)}
+                                  onChange={() => handleToggleAll(child.key)}
+                                  sx={{
+                                    color: '#163148',
+                                    '&.Mui-checked': { color: '#163148' },
+                                    '&.MuiCheckbox-indeterminate': { color: '#163148'},
+                                  }}
+                                />
+                              }
+                              label={child.label}
+                            />
+                          </FormGroup>
+                        </StyledTh>
+                      ))
+                    )
+                  }
+                })}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                {leafColumns.map(column => (
+                  <StyledTd key={column.key} sx={{ overflow: 'scroll', overscrollBehavior: 'none', verticalAlign: 'top' }}>
+                    <FormGroup>
+                      {filterValues[column.key].map((value, index) => (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={localFilterState[column.key].includes(value)}
+                              id={value}
+                              onChange={() => handleToggle(column.key, value)}
+                              sx={{ color: '#ffffff', '&.Mui-checked': { color: '#ffffff' } }}
+                            />
+                          }
+                          key={index}
+                          label={value}
+                          sx={{ marginY: '4px', paddingY: '2px' }}
+                        />
+                      ))}
+                    </FormGroup>
+                  </StyledTd>
+                ))}
+              </TableRow>
+            </TableBody>
+          </Table>
+        </StyledTableContainer>
+        <Box sx={{ display: 'flex', justifyContent: 'space-around', paddingY: '12px', background: '#1f3b53' }}>
           <Button
             onClick={onClose}
             sx={{
@@ -120,8 +211,8 @@ export const FilterModal = ({column, label, onApply, onClose, selectedValues, va
               border: '1px solid',
               borderColor: '#f8d36f',
               boxShadow: 8,
-              color: '#ffffff',
               background: 'linear-gradient(to bottom, #805f9200 0%, #ab84c200 100%)',
+              color: '#ffffff',
               '&:hover': {
                 background: 'linear-gradient(to bottom, #805f924f 0%, #ab84c24f 100%)',
               },
@@ -130,14 +221,14 @@ export const FilterModal = ({column, label, onApply, onClose, selectedValues, va
             キャンセル
           </Button>
           <Button
-            onClick={() => onApply(column, localSelectedValues)}
+            onClick={handleApply}
             sx={{
               width: 90,
               border: '1px solid',
               borderColor: '#f8d36f',
               boxShadow: 8,
-              color: '#ffffff',
               background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
+              color: '#ffffff',
               '&:hover': {
                 background: 'linear-gradient(to bottom, #805f92 0%, #ab84c2 100%)',
               },
