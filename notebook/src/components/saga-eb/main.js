@@ -69,7 +69,7 @@ export const SagaEbTemplate = ({ data, children }) => {
             background: '#2b4a66',
           }}
         >
-          <Box id='doc' sx={{ maxWidth: `calc(680px + 24px * 2)`, mx: 'auto', p: 3 }}>
+          <Box id='doc' sx={{ maxWidth: `calc(680px + 24px * 2)`, mx: 'auto', p: { xs: 2, sm: 3 } }}>
             <Typography align='center' variant='h5'>
               {data.mdx.frontmatter.title}
             </Typography>

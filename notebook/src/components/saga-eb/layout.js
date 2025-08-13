@@ -9,6 +9,8 @@ import TableContainer from '@mui/material/TableContainer'
 import TableRow from '@mui/material/TableRow'
 import { ClickScrollPlugin, OverlayScrollbars } from 'overlayscrollbars'
 
+import RankSprite from '../../images/rank-sprite.svg'
+import UniteSprite from '../../images/unite-sprite.svg'
 import { Sidebar, ContextProvider } from './sidebar'
 import { Titlebar } from './titlebar'
 
@@ -31,7 +33,7 @@ export const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   maxHeight: `calc(100dvh - 256px)`,
   margin: '24px auto',
   boxShadow: '0px 3px 6px -2px #0000007f',
-  background: '#36536d',
+  background: '#2b4a66',
   [theme.breakpoints.up('sm')]: {
     maxHeight: `calc(100dvh - 192px)`,
   },
@@ -42,6 +44,7 @@ export const StyledTd = styled(TableCell)(({ theme }) => ({
   border: '1px solid',
   borderColor: '#2b4a66',
   color: '#ffffff',
+  lineHeight: 1.5,
 }))
 
 export const StyledTh = styled(TableCell)(({ theme }) => ({
@@ -50,12 +53,12 @@ export const StyledTh = styled(TableCell)(({ theme }) => ({
   borderColor: '#2b4a66',
   background: '#cccccc',
   color: '#163148',
-  lineHeight: '20px',
+  lineHeight: 1.5,
   wordBreak: 'keep-all',
 }))
 
 export const StyledTr = styled(TableRow)(({ theme }) => ({
-    background: '#163148',
+  background: '#163148',
 }))
 
 export const StyledTrh = styled(TableCell)(({ theme }) => ({
@@ -66,7 +69,7 @@ export const StyledTrh = styled(TableCell)(({ theme }) => ({
   borderColor: '#2b4a66',
   background: '#cccccc',
   color: '#ffffff',
-  lineHeight: '20px',
+  lineHeight: 1.5,
   wordBreak: 'keep-all',
 }))
 
@@ -117,36 +120,60 @@ export const StyledTrTwoToneR = styled(TableRow)(({ theme }) => ({
 
 export const SagaEBLayout = ({ children }) => {
   const theme = responsiveFontSizes(createTheme({
-    typography: {
-      fontSize: 12,
+    components: {
+      MuiCheckbox: {
+        styleOverrides: {
+          root: {
+            padding: '0 6px 0 0',
+            "& .MuiSvgIcon-root": { fontSize: 20 },
+          },
+        },
+      },
+      MuiFormControlLabel: {
+        styleOverrides: {
+          label: {
+            fontSize: '0.8rem',
+          },
+          root: {
+            margin: 0,
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            fontSize: '0.7rem',
+          },
+        },
+      },
     },
     palette: {
       background: {
         default: '#2d2127',
       },
     },
-  }))
-
-  if (typeof document !== 'undefined') {
-    OverlayScrollbars({
-      target: document.querySelector('body'),
-      cancel: {
-        nativeScrollbarsOverlaid: true,
-      },
+    typography: {
+      fontSize: 12,
     },
-    {
-      paddingAbsolute: true,
-      scrollbars: {
-        theme: 'os-theme-dark os-theme-body',
-        autoHide: 'move',
-        autoHideDelay: 750,
-        clickScroll: true,
-      }
-    })
-  }
+  }))
 
   React.useEffect(() => {
     if (typeof document !== 'undefined') {
+      OverlayScrollbars({
+        target: document.querySelector('body'),
+        cancel: {
+          nativeScrollbarsOverlaid: true,
+        },
+      },
+      {
+        paddingAbsolute: true,
+        scrollbars: {
+          theme: 'os-theme-dark os-theme-body',
+          autoHide: 'move',
+          autoHideDelay: 750,
+          clickScroll: true,
+        }
+      })
       document.querySelectorAll('.katex-box').forEach((elm) => {
         OverlayScrollbars(elm, {
           scrollbars: {
@@ -169,6 +196,10 @@ export const SagaEBLayout = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline/>
+      <Box sx={{ display: 'none' }}>
+        <RankSprite/>
+        <UniteSprite/>
+      </Box>
       <Box sx={{
         display: 'flex',
         minWidth: '300px',

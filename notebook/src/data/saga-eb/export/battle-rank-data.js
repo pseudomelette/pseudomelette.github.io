@@ -33,7 +33,7 @@ export const BattleRankData = () => {
   `)
   const nodes = data.allSagaebEnemyRankDataCsv.nodes
 
-  return(
+  return (
     <StyledTableContainer align='center'>
       <Table stickyHeader sx={{ width: `calc(56px + 68px * 6)`, tableLayout: 'fixed' }}>
         <TableHead>

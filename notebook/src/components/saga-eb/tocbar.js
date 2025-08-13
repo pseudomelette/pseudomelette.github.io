@@ -132,11 +132,11 @@ export const Tocbar = ({ slug, items }) => {
           height: '40px',
           mt: 2,
           ml: 1,
+          pt: 1,
           borderBottom: '2px solid',
           borderColor: '#98fde5',
           background: 'linear-gradient(to top, #4eb89a 0%, #1f3b53 100%)',        
           color: '#ffffff',
-          lineHeight: '40px',
         }}
       >
         目次

@@ -56,7 +56,7 @@ export const ChangeLogData = () => {
   })
   console.log(outputNodes)
 
-  return(
+  return (
 		<StyledTableContainer align='center'>
 			<Table stickyHeader sx={{ maxWidth: '500px', tableLayout: 'fixed' }}>
         <TableHead sx={{ position: 'sticky', top: 0 }}>
