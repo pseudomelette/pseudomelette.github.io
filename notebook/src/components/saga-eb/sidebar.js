@@ -90,7 +90,7 @@ export const Sidebar = () => {
   const data = useStaticQuery(graphql`
     query {
       allMdx (
-        filter: {frontmatter: {status: {ne: "secret"}}}
+        filter: {frontmatter: {status: {nin: ["rejected", "secret"]}}}
         sort: {frontmatter: {slug: ASC}}
       ) {
         nodes {

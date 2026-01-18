@@ -18,6 +18,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
             title
             slug
             oldSlugs
+            status
           }
           internal {
             contentFilePath
@@ -38,6 +39,10 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   result.data.allMdx.nodes.forEach(node => {
     const slug = node.frontmatter.slug
     const oldSlugs = Array.isArray(node.frontmatter.oldSlugs) ? node.frontmatter.oldSlugs : []
+
+    if (node.frontmatter.status === 'rejected') {
+      return
+    }
 
     createPage({
       path: slug,
