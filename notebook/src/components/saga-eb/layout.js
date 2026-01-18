@@ -20,9 +20,65 @@ import './layout.css'
 
 OverlayScrollbars.plugin(ClickScrollPlugin)
 
+const tableScrollbarMap = new WeakMap()
+const tableScrollbarListeners = new Set();
+const registerTableScrollbar = (elm, instance) => {
+  tableScrollbarMap.set(elm, instance)
+  tableScrollbarListeners.forEach(cb => cb(elm))
+}
+
+export const useHorizontalScroll = (ref) => {
+  const [hasScroll, setHasScroll] = React.useState(false)
+
+  React.useLayoutEffect(() => {
+    const table = ref.current
+    if (table) {
+      const attach = (instance) => {
+        const vp = instance.elements().viewport
+        const check = () => setHasScroll(vp.scrollWidth > vp.clientWidth)
+        check()
+        instance.on('updated', check)
+      }
+
+      const instance = tableScrollbarMap.get(table)
+      if (instance) {
+        attach(instance)
+        return
+      } else {
+        const listener = (elm) => {
+          if (elm === table) {
+            attach(tableScrollbarMap.get(elm))
+            tableScrollbarListeners.delete(listener)
+          }
+        }
+
+        tableScrollbarListeners.add(listener)
+        return () => tableScrollbarListeners.delete(listener)
+      }
+    } else {
+      return
+    }
+  }, [ref])
+
+  return hasScroll
+}
+
+export const StyledTextJoin = ({ words }) => {
+  return (
+    <>
+      {words.map((word, index) => (
+        <React.Fragment key={index}>
+          {word}
+          {index < words.length - 1 && <Box component='span'>，<wbr/></Box>}
+        </React.Fragment>
+      ))}
+    </>
+  )
+}
+
 export const StyledMathBox = styled(Box)(({ theme }) => ({
   margin: '24px 0',
-  padding: '8px 0',
+  padding: '4px 0',
   boxShadow: '0px 3px 6px -2px #0000007f',
   background: '#36536d',
 }))
@@ -125,7 +181,7 @@ export const SagaEBLayout = ({ children }) => {
         styleOverrides: {
           root: {
             padding: '0 6px 0 0',
-            "& .MuiSvgIcon-root": { fontSize: 20 },
+            '& .MuiSvgIcon-root': { fontSize: 20 },
           },
         },
       },
@@ -183,12 +239,14 @@ export const SagaEBLayout = ({ children }) => {
         })
       })
       document.querySelectorAll('table').forEach((elm) => {
-        OverlayScrollbars(elm.parentElement, {
+        const instance = OverlayScrollbars(elm.parentElement, {
           scrollbars: {
             theme: 'os-theme-dark os-theme-table',
             clickScroll: true,
           }
         })
+
+        registerTableScrollbar(elm, instance)
       })
     }
   })
