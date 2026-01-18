@@ -1,0 +1,51 @@
+---
+title: '技・術のランクアップ'
+subtitle: 'Techs & Spells: Ranking Up'
+slug: '/saga-eb/data/techs-spells-ranking-up/'
+description: '技・術のランクアップにまつわるデータ定義を記載。'
+status: 'publishable'
+---
+
+import { Link } from 'gatsby'
+
+import Box from '@mui/material/Box'
+
+import { TechSpellRankData } from '../../../data/saga-eb/export/tech-spell-ranking-up'
+
+# テーブルデータ
+<Box>
+  技・術のランクごとのデータは下表の通りです。
+
+  <TechSpellRankData/>
+</Box>
+
+# データの見方
+<Box sx={{ minHeight: { xs: `calc(100dvh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100dvh - 48px - 8px - 54px - 24px - 80px)` } }}>
+  テーブルを構成するデータ系列について説明します。
+
+  <Box sx={{ ml: 2, my: 3 }}>
+    ## 名称
+    技・術のゲーム内での表示名です。
+
+    同名の技・術が複数存在する場合は名称の最後に連番を付与して区別しています。
+
+    ## ランク
+    技・術のランクです。
+
+    ## ランクアップ必要回数
+    技・術のランクアップ判定に使用される内部値です。
+
+    ランクアップの詳細については <Link to={'/saga-eb/logic/techs-spells-ranking-up/'}>ロジック ＞ 技・術のランクアップ</Link> を参照してください。
+
+    ## 威力
+    技・術の威力です。
+
+    ダメージ計算、命中判定で使用されます。プロテクト技では被ダメージの軽減率として使用されます。
+
+    ## BPコスト
+    技・術のBPコストです。
+
+    ## 詠唱ターン数
+    術の詠唱ターン数です。
+  </Box>
+</Box>
