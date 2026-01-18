@@ -38,9 +38,21 @@ const StyledTypographyH7 = styled(Typography)(({ theme }) => ({
   },
 }))
 
+const StyledTypographyH7Sub = styled(Typography)(({ theme }) => ({
+  margin: '32px 0 16px 0',
+  padding: '4px 8px 2px 8px',
+  borderLeft: '6px solid',
+  borderColor: '#44757e',
+  background: '#44757e5f',
+  [theme.breakpoints.up('sm')]: {
+    background: 'linear-gradient(to right, #44757e5f calc(100% - 480px), #2b4a66 calc(100% - 320px))',
+  },
+}))
+
 const components = {
   h1: props => <StyledTypographyH6 variant='h6' {...props}/>,
   h2: props => <StyledTypographyH7 {...props}/>,
+  h3: props => <StyledTypographyH7Sub {...props}/>,
   p: props => <Typography sx={{ mb: 2 }} {...props}/>,
   ul: props => <List disablePadding sx={{ mb: 2, ml: 3, listStyleType: 'disc' }} {...props}/>,
   ol: props => <List disablePadding sx={{ mb: 2, ml: 3, listStyleType: 'decimal' }} {...props}/>,
