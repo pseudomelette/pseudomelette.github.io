@@ -39,11 +39,11 @@ export const BattleRankData = () => {
         <TableHead>
           <TableRow>
             <StyledTh align='center' sx={{ position: 'sticky', left: 0, zIndex: 3, width: '56px' }}>バトル<br/>ランク</StyledTh>
-            <StyledTh align='center'>武器威力</StyledTh>
-            <StyledTh align='center'>スキル<br/>レベル</StyledTh>
-            <StyledTh align='center'>基礎<br/>属性耐性</StyledTh>
-            <StyledTh align='center'>基礎HP</StyledTh>
-            <StyledTh align='center'>基礎<br/>能力値</StyledTh>
+            <StyledTh align='center'>敵武器<br/>威力</StyledTh>
+            <StyledTh align='center'>敵SLv</StyledTh>
+            <StyledTh align='center'>基本<br/>属性耐性</StyledTh>
+            <StyledTh align='center'>HP補正率</StyledTh>
+            <StyledTh align='center'>基本<br/>能力値</StyledTh>
             <StyledTh align='center'>成長<br/>ランク</StyledTh>
           </TableRow>
         </TableHead>
