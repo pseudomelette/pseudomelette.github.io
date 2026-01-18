@@ -37,16 +37,19 @@ import {
 
   ランクアップは以下2段階の判定において条件を満たすと発生します。
 
-  <Box sx={{ ml: 2, my: 3 }}>
+  <Box sx={{ ml: 1, my: 3 }}>
     ## 使用回数加算判定
-    個々の技・術が発動する直前に使用回数加算判定が行われます。プロテクト、ひらめき、オーバードライブ、独壇場によって1ターンに複数回行動する場合は都度判定されます。
+    使用回数加算判定は以下のタイミングで行われます。
+    - 技・術の発動前
+
+    プロテクト技、ひらめき、オーバードライブ、独壇場によって1ターンに複数回行動する場合は都度判定されます。
 
     以下の条件を満たすと直後に発動する技・術の使用回数が加算されます。
-
     - 行動キャラクターが混乱状態でない
 
     ## ランクアップ判定
-    使用回数加算後にランクアップ判定が行われます。
+    ランクアップ判定は以下のタイミングで行われます。
+    - 使用回数の加算後
 
     下式を満たすとランクアップが発生します。
 
@@ -62,9 +65,8 @@ import {
 
 # ランクアップによるボーナス
 <Box>
-  ランクアップ発生直後に発動する技・術は以下相当の特性を持ちます。
-
-  - 必中
+  ランクアップ発生直後に発動する技・術は以下相当の性能を持ちます。
+  - 命中特性が必中
 
   本来の命中特性が対地であっても飛行敵に命中します。回避率100%の敵（海賊ビビ［2］）にも回避されません。
 
@@ -77,22 +79,21 @@ import {
 
   <StyledMathBox className='katex-box'>
     <BlockMath
-      math='\small\hspace{0.5em}\text{使用回数}_{next}=\text{使用回数}+\text{使用回数加算量}\hspace{0.5em}'
+      math='\small\hspace{0.5em}\text{使用回数}_{next}=\begin{cases}\text{使用回数}+1&\left(\text{技・術成長ボーナスなし}\right)\\
+          \text{使用回数}+2&\left(\text{技・術成長ボーナスあり}\right)\end{cases}\hspace{0.5em}'
     />
   </StyledMathBox>
 
-  使用回数加算量は副防具「達人の王冠」を装備すると変化する可能性があります。
+  副防具「達人の王冠」が持つ特性「技ランク成長アップ」には、使用回数の加算量が増加するボーナス（技・術成長ボーナス）を確率で発生させる効果があります。
 
-  達人の王冠が持つ特性「技ランク成長アップ」には、使用回数加算量が増加するボーナス（成長ボーナス）の発生確率を上昇させる効果があります。技ランク成長アップは術に対しても同様の効果を発揮します。
-
-  技ランク成長アップの有無と成長ボーナス発生確率の関係は下表の通りです。
+  技ランク成長アップの有無と技・術成長ボーナス発生確率の関係は下表の通りです。
 
   <StyledTableContainer align='center'>
-    <Table stickyHeader sx={{ width: `calc(92px * 2)` }}>
+    <Table stickyHeader sx={{ width: `calc(108px * 2)` }}>
       <TableHead>
         <TableRow>
-          <StyledTh align='center'>技ランク成長<br/>アップ</StyledTh>
-          <StyledTh align='center'>成長ボーナス<br/>発生確率</StyledTh>
+          <StyledTh align='center' sx={{ width: '108px' }}>技ランク成長<br/>アップ</StyledTh>
+          <StyledTh align='center' sx={{ width: '108px' }}>技・術成長<br/>ボーナス発生確率</StyledTh>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -108,30 +109,7 @@ import {
     </Table>
   </StyledTableContainer>
 
-  技ランク成長アップは重複しないため、達人の王冠を複数個装備しても成長ボーナス発生確率は変わりません。
-
-  成長ボーナスの有無と使用回数加算量の関係は下表の通りです。
-
-  <StyledTableContainer align='center'>
-    <Table stickyHeader sx={{ width: `calc(92px * 2)` }}>
-      <TableHead>
-        <TableRow>
-          <StyledTh align='center'>成長ボーナス</StyledTh>
-          <StyledTh align='center'>使用回数<br/>加算量</StyledTh>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <StyledTr>
-          <StyledTd align='center'>なし</StyledTd>
-          <StyledTd align='center'>1</StyledTd>
-        </StyledTr>
-        <StyledTr>
-          <StyledTd align='center'>あり</StyledTd>
-          <StyledTd align='center'>2</StyledTd>
-        </StyledTr>
-      </TableBody>
-    </Table>
-  </StyledTableContainer>
+  技ランク成長アップは重複しないため、達人の王冠を複数個装備しても技・術成長ボーナス発生確率は変わりません。
 
   達人の王冠を装備すると50%の確率で加算量が2倍になるため、使用回数が1.5倍速く蓄積すると期待できます。
 </Box>
@@ -143,16 +121,16 @@ import {
   各種ケースと修正対象、修正後の使用回数の関係は下表の通りです。
 
   <StyledTableContainer align='center'>
-    <Table stickyHeader sx={{ width: `calc(140px + 128px * 2 + 160px)` }}>
+    <Table stickyHeader sx={{ width: `calc(132px + 120px * 2 + 148px)` }}>
       <TableHead sx={{ position: 'sticky', top: 0, zIndex: 3 }}>
         <TableRow>
-          <StyledTh align='center' rowSpan={2} sx={{ position: 'sticky', left: 0, zIndex: 3, width: '140px' }}>使用回数が<br/>修正されるケース</StyledTh>
+          <StyledTh align='center' rowSpan={2} sx={{ position: 'sticky', left: 0, zIndex: 3, width: '132px' }}>使用回数が<br/>修正されるケース</StyledTh>
           <StyledTh align='center' colSpan={2}>修正対象</StyledTh>
-          <StyledTh align='center' rowSpan={2} sx={{ width: '160px' }}>修正後の使用回数</StyledTh>
+          <StyledTh align='center' rowSpan={2} sx={{ width: '148px' }}>修正後の使用回数</StyledTh>
         </TableRow>
         <TableRow>
-          <StyledTh align='center' sx={{ width: '128px' }}>味方キャラクター</StyledTh>
-          <StyledTh align='center' sx={{ width: '128px' }}>技・術</StyledTh>
+          <StyledTh align='center' sx={{ width: '120px' }}>味方キャラクター</StyledTh>
+          <StyledTh align='center' sx={{ width: '120px' }}>技・術</StyledTh>
         </TableRow>
       </TableHead>
       <TableBody>

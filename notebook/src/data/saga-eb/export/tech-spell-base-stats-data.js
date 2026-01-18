@@ -481,10 +481,10 @@ export const UniteIconLegend = () => {
 
   return (
     <StyledTableContainer align='center'>
-      <Table stickyHeader sx={{ maxWidth: '548px', tableLayout: 'fixed' }}>
+      <Table stickyHeader sx={{ maxWidth: '508px', tableLayout: 'fixed' }}>
         <TableHead sx={{ position: 'sticky', top: 0 }}>
           <TableRow>
-            <StyledTh align='center' sx={{ width: '68px' }}>アイコン</StyledTh>
+            <StyledTh align='center' sx={{ width: '64px' }}>アイコン</StyledTh>
             <StyledTh align='center'>説明</StyledTh>
           </TableRow>
         </TableHead>

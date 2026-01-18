@@ -61,7 +61,7 @@ export const ChangeLogData = () => {
 			<Table stickyHeader sx={{ maxWidth: '500px', tableLayout: 'fixed' }}>
         <TableHead sx={{ position: 'sticky', top: 0 }}>
 					<TableRow>
-            <StyledTh align='center' sx={{ width: '84px' }}>更新日</StyledTh>
+            <StyledTh align='center' sx={{ width: '80px' }}>更新日</StyledTh>
             <StyledTh align='center'>内容</StyledTh>
 					</TableRow>
         </TableHead>

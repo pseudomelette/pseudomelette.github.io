@@ -29,7 +29,7 @@ import {
 
   以下3種に細分化されます。
 
-  <Box sx={{ ml: 2, my: 3 }}>
+  <Box sx={{ ml: 1, my: 3 }}>
     ## 現在バトルランク
     味方の強さをバトル実績に基づいて数値化したもので、以下の特徴があります。
     - 敵バトルランク、バトルの敵編成、イベント・バトルの獲得アイテム、バトル勝利以外でのステータス成長に影響する
@@ -59,29 +59,29 @@ import {
   各種条件とバトルランク上昇の関係は下表の通りです。
 
   <StyledTableContainer align='center'>
-    <Table stickyHeader sx={{ width: `calc(92px * 4)` }}>
+    <Table stickyHeader sx={{ width: `calc(88px * 4)` }}>
       <TableHead sx={{ position: 'sticky', top: 0 }}>
         <TableRow>
           <StyledTh align='center' colSpan={3}>条件</StyledTh>
-          <StyledTh align='center' rowSpan={2}>バトルランク<br/>上昇</StyledTh>
+          <StyledTh align='center' rowSpan={2} sx={{ width: '88px' }}>バトルランク<br/>上昇</StyledTh>
         </TableRow>
         <TableRow>
-          <StyledTh align='center'>バトル難易度</StyledTh>
-          <StyledTh align='center'>再挑戦</StyledTh>
-          <StyledTh align='center'>戦闘不能者数</StyledTh>
+          <StyledTh align='center' sx={{ width: '88px' }}>バトル難易度</StyledTh>
+          <StyledTh align='center' sx={{ width: '88px' }}>再挑戦</StyledTh>
+          <StyledTh align='center' sx={{ width: '88px' }}>戦闘不能者数</StyledTh>
         </TableRow>
       </TableHead>
       <TableBody>
         <StyledTr>
           <StyledTd align='center'>楽勝</StyledTd>
-          <StyledTd align='center'>\*</StyledTd>
-          <StyledTd align='center'>\*</StyledTd>
+          <StyledTd align='center'>–</StyledTd>
+          <StyledTd align='center'>–</StyledTd>
           <StyledTd align='center' rowSpan={3}>なし</StyledTd>
         </StyledTr>
         <StyledTr>
           <StyledTd align='center' rowSpan={3}>普通</StyledTd>
           <StyledTd align='center'>あり</StyledTd>
-          <StyledTd align='center'>\*</StyledTd>
+          <StyledTd align='center'>–</StyledTd>
         </StyledTr>
         <StyledTr>
           <StyledTd align='center' rowSpan={2}>なし</StyledTd>
@@ -93,20 +93,17 @@ import {
         </StyledTr>
         <StyledTr>
           <StyledTd align='center'>強敵</StyledTd>
-          <StyledTd align='center'>\*</StyledTd>
-          <StyledTd align='center'>\*</StyledTd>
+          <StyledTd align='center'>–</StyledTd>
+          <StyledTd align='center'>–</StyledTd>
         </StyledTr>
         <StyledTr>
           <StyledTd align='center'>最凶</StyledTd>
-          <StyledTd align='center'>\*</StyledTd>
-          <StyledTd align='center'>\*</StyledTd>
+          <StyledTd align='center'>–</StyledTd>
+          <StyledTd align='center'>–</StyledTd>
         </StyledTr>
       </TableBody>
     </Table>
   </StyledTableContainer>
-  <Box sx={{ width: `calc(92px * 4)`, maxWidth: '100%', mt: -2, mx: 'auto', textAlign: 'right'}}>
-  \*：条件なし
-  </Box>
 </Box>
 
 # 現在バトルランクの上昇量
