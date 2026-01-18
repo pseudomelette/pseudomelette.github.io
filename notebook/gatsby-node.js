@@ -8,7 +8,7 @@
  * @type {import('gatsby').GatsbyNode['createPages']}
  */
 exports.createPages = async ({ graphql, actions, reporter }) => {
-  const { createPage } = actions
+  const { createPage, createRedirect } = actions
 
   const result = await graphql(`
     {
@@ -17,6 +17,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
           frontmatter {
             title
             slug
+            oldSlugs
           }
           internal {
             contentFilePath
@@ -35,13 +36,25 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   const template = path.resolve(`src/templates/docs.js`)
 
   result.data.allMdx.nodes.forEach(node => {
+    const slug = node.frontmatter.slug
+    const oldSlugs = Array.isArray(node.frontmatter.oldSlugs) ? node.frontmatter.oldSlugs : []
+
     createPage({
-      path: node.frontmatter.slug,
+      path: slug,
       component: `${template}?__contentFilePath=${node.internal.contentFilePath}`,
       context: {
-        layout: node.frontmatter.slug.split('/')[1],
-        slug: node.frontmatter.slug,
+        layout: slug.split('/')[1],
+        slug,
       }
+    })
+
+    oldSlugs.forEach(oldSlug => {
+      createRedirect({
+        fromPath: oldSlug,
+        toPath: slug,
+        isPermanent: true,
+        redirectInBrowser: true,
+      })
     })
   })
 }
