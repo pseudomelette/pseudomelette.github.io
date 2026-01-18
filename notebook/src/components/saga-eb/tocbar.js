@@ -18,7 +18,7 @@ const rootMarginBottom = () => document.documentElement.clientHeight - 216
 
 const StyledAnchorLink = styled(AnchorLink)(({ theme }) => ({
   display: 'flex',
-  height: '36px',
+  height: '32px',
   margin: '2px 0',
   color: '#ffffff',
   textDecoration: 'none',
@@ -97,7 +97,7 @@ export const Tocbar = ({ slug, items }) => {
       {tocItems.map((item, index) => (
         <StyledAnchorLink disablePadding key={index} stripHash to={slug + '#section-heading-' + index}>
           <ListItemButton>
-            <ListItemText primary={item.title}/>
+            <ListItemText primary={item.title} primaryTypographyProps={{ sx: { fontSize: '0.8rem' } }}/>
           </ListItemButton>
         </StyledAnchorLink>
       ))}

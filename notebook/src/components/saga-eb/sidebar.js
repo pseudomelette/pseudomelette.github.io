@@ -198,8 +198,10 @@ export const Sidebar = () => {
           onClick={handleDrawerToggle}
           sx={{
             ml: 1,
+            padding: '4px',
             border: '1px solid',
             borderColor: '#f8d36f',
+            borderRadius: 1,
             boxShadow: 8,
             background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
             '&:hover': {
@@ -207,7 +209,7 @@ export const Sidebar = () => {
             },
           }}
         >
-          {drawerOpen ? <CloseIcon sx={{ color: '#ffffff', fontSize: { xs: 28, sm: 20 } }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: { xs: 28, sm: 20 } }}/>}
+          {drawerOpen ? <CloseIcon sx={{ color: '#ffffff', fontSize: { xs: 28, sm: 24 } }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: { xs: 28, sm: 24 } }}/>}
         </IconButton>
       </Box>
       <Drawer
