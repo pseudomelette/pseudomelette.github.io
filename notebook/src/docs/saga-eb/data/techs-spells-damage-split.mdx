@@ -1,0 +1,39 @@
+---
+title: '技・術のダメージ分割'
+subtitle: 'Techs & Spells: Damage Split'
+slug: '/saga-eb/data/techs-spells-damage-split/'
+description: '技・術の表示ダメージ分割にまつわるデータ定義を記載。'
+status: 'publishable'
+---
+
+import { Link } from 'gatsby'
+
+import Box from '@mui/material/Box'
+
+import { TechSpellRatioData } from '../../../data/saga-eb/export/tech-spell-damage-split'
+
+# テーブルデータ
+<Box>
+  技・術の表示ダメージ分割比率のデータは下表の通りです。
+
+  <TechSpellRatioData/>
+</Box>
+
+# データの見方
+<Box sx={{ minHeight: { xs: `calc(100dvh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100dvh - 48px - 8px - 54px - 24px - 80px)` } }}>
+  テーブルを構成するデータ系列について説明します。
+
+  <Box sx={{ ml: 2, my: 3 }}>
+    ## 名称
+    技・術のゲーム内での表示名です。
+
+    同名の技・術が複数存在する場合は名称の最後に連番を付与して区別しています。
+
+    ## 表示ダメージ分割比率
+    技・術によるダメージが画面上に複数回に分かれて表示される際のダメージ分割比率です。
+
+    最大で9分割されます。
+
+    表示ダメージの詳細については <Link to={'/saga-eb/logic/damage/'}>ロジック ＞ ダメージ</Link> を参照してください。
+  </Box>
+</Box>

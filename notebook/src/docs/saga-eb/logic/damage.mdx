@@ -2,235 +2,940 @@
 title: 'ダメージ'
 subtitle: 'Damage'
 slug: '/saga-eb/logic/damage/'
-description: 'ダメージにまつわる処理ロジックを記載。'
-status: 'in progress'
+description: 'バトル中のダメージにまつわる処理ロジックを記載。'
+status: 'pablishable'
 ---
 
 import { Link } from 'gatsby'
 
 import Box from '@mui/material/Box'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import { AnchorLink } from 'gatsby-plugin-anchor-links'
 import { InlineMath, BlockMath } from 'react-katex'
 
 import {
+  StyledTextJoin,
   StyledMathBox,
+  StyledTableContainer,
+  StyledTd,
+  StyledTh,
+  StyledTr,
+  StyledTrh,
 } from '../../../components/saga-eb/layout'
 
-# ダメージ計算式の種類
+# HPダメージの種類
 <Box>
-  以下2種のダメージ計算式が存在します。
+  以下3種のHPダメージが存在します。
 
-  <Box sx={{ ml: 2, my: 3 }}>
-    ## 攻撃ダメージ計算式
-    技・術の使用によって行動キャラクターが対象キャラクターに与えるダメージを計算します。ゲストキャラクターの支援行動によるダメージにも適用されます。
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 攻撃ダメージ
+    行動キャラクターが技・術を使用して対象キャラクターに与えるHPダメージです。
 
-    以下の条件を全て満たすと攻撃ダメージが計算されます。
-    - 対象キャラクターに命中している
-    - 対象キャラクターに回避されていない
-    - 対象キャラクターにパリイ技を発動されていない
-    - 対象キャラクターにカウンター技を発動されていない
-    - 技・術の威力が0でない
-    - 対象キャラクターが石化状態でない
-    - 対象キャラクターがダメージ無効状態でない
+    <Box sx={{ ml: 1, my: 3 }}>
+      ### 攻撃ダメージの算出条件
+      以下の全ての条件を満たすと攻撃ダメージが算出されます。
+      - 行動キャラクターの使用技・術の威力が0でない
+      - 行動キャラクターの使用技・術が命中している
+      - 対象キャラクターが回避していない
+      - 対象キャラクターがパリイ技を発動していない
+      - 対象キャラクターがカウンター技を発動していない
+      - 対象キャラクターが石化状態でない
+      - 対象キャラクターがダメージ無効状態でない
 
-    ## 毒ダメージ計算式
-    処理進行中のタイムライン位置にいるキャラクターが毒によって受けるダメージを計算します。
+      ### 攻撃ダメージ計算式の基本構造
+      攻撃ダメージは下式で算出されます。
 
-    以下の条件を全て満たすと毒ダメージが計算されます。
-    - キャラクターが毒状態である
-    - キャラクターが同ターン中に毒ダメージをまだ受けていない
+      <StyledMathBox className='katex-box'>
+        <BlockMath math='\small\hspace{0.5em}\text{攻撃ダメージ}=\max\left\{0,\hspace{0.5em}\min\left\{\left\lfloor\dfrac{\left\lfloor\text{基本攻撃ダメージ}\right\rfloor\times\text{攻撃ダメージ補正}}{\text{攻撃回数}}\right\rfloor,\hspace{0.5em}9999\right\}\right\}\hspace{0.5em}'/>
+      </StyledMathBox>
+
+      ここで、攻撃回数は技・術に設定されている内部値です。
+
+      ゲストキャラクターの支援行動によるダメージも同じ計算式で算出されます。
+
+      対象キャラクターが敵であれば、攻撃ダメージの算出結果は渾身の一撃系のせんせいの試練の達成判定に使用されます。行動キャラクターが味方か敵か、ゲストかどうかは関係ありません。
+
+      技・術ごとに設定されている基本性能については <Link to={'/saga-eb/data/techs-spells-base-stats/'}>データ ＞ 技・術の基本性能</Link> を参照してください。
+    </Box>
+
+    ## 毒ダメージ
+    処理進行中のタイムライン位置にいるキャラクターが毒によって受けるHPダメージです。
+
+    <Box sx={{ ml: 1, my: 3 }}>
+      ### 毒ダメージの発生条件
+      以下の全ての条件を満たすと毒ダメージが発生します。
+      - 行動キャラクターが毒状態である
+      - 行動キャラクターが同ターン中に毒ダメージをまだ受けていない
+
+      ### 毒ダメージ計算式の基本構造
+      毒ダメージは下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath math='\small\hspace{0.5em}\text{毒ダメージ}=\left\lceil\text{基本毒ダメージ}\times\text{毒ダメージ補正}\right\rceil\hspace{0.5em}'/>
+      </StyledMathBox>
+
+      行動キャラクターが敵であれば、毒ダメージの算出結果は渾身の一撃系のせんせいの試練の達成判定に使用されます。
+    </Box>
+
+    ## 解放ダメージ
+    行動「解き放つ」によって行動キャラクター自身が受けるHPダメージです。
+
+    <Box sx={{ ml: 1, my: 3 }}>
+      ### 解放ダメージの発生条件
+      以下の全ての条件を満たすと解放ダメージが発生します。
+      - 行動キャラクターが行動「解き放つ」を使用している
+      - 行動キャラクターがオーバードライブに参加していない
+
+      ### 解放ダメージの算出方法
+      解放ダメージは下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath math='\small\hspace{0.5em}\text{解放ダメージ}=\min\left\{\left\lfloor\text{最大HP}_{self}\times 0.2\right\rfloor,\hspace{0.5em}\text{現在HP}_{self}-1\right\}\hspace{0.5em}'/>
+      </StyledMathBox>
+
+      <InlineMath math={'\\small self'}/>は行動キャラクター自身のステータス値、内部値が参照されることを意味します。
+    </Box>
   </Box>
 </Box>
 
-# 攻撃ダメージ計算式の構造
-<Box>
-  攻撃ダメージは下式で算出されます。
-
-  <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{攻撃ダメージ}=\frac{\text{基本攻撃ダメージ}\times\text{攻撃ダメージ補正}}{\text{攻撃回数}}\hspace{0.5em}'/>
-  </StyledMathBox>
-
-  ここで、攻撃回数は技・術に設定されている内部値です。
-
-  技・術ごとに設定されている攻撃回数については <Link to={'/saga-eb/data/ally-techs-spells/'}>データ ＞ 味方の技・術</Link> を参照してください。
-</Box>
-
-# 基本攻撃ダメージ
+# 攻撃ダメージ：基本攻撃ダメージ
 <Box>
   基本攻撃ダメージは下式で算出されます。
 
   <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{基本攻撃ダメージ}=\text{総合威力}\times(1-\text{威力軽減率})-\text{ダメージ軽減量}\hspace{0.5em}'/>
+    <BlockMath math='\small\hspace{0.5em}\text{基本攻撃ダメージ}=\max\left\{0,\hspace{0.5em}\text{複合威力}\times\text{威力補正}-\text{ダメージ軽減量}\right\}\hspace{0.5em}'/>
   </StyledMathBox>
 
-  基本攻撃ダメージの計算結果は小数点以下が切り捨てられます。
-
-  <Box sx={{ ml: 2, my: 3 }}>
-    ## 総合威力
-    <StyledMathBox className='katex-box'>
-      <BlockMath math='\hspace{0.5em}\text{総合威力}=\text{基礎威力}\times\text{技・術倍率}\times\text{SLv倍率}\hspace{0.5em}'/>
-    </StyledMathBox>
-
-    基礎威力は下式で算出されます。
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 複合威力
+    複合威力は下式で算出されます。
 
     <StyledMathBox className='katex-box'>
-      <BlockMath math='\hspace{0.5em}\text{基礎威力}=20\times(1+\text{武器威力ボーナス}+\text{武器タイプボーナス}+\text{攻撃能力値ボーナス})\hspace{0.5em}'/>
-      <BlockMath
-        math='\small\hspace{0.5em}\begin{aligned}\text{武器威力ボーナス}&=\begin{cases}\text{武器威力}\times0.03&(\text{片手剣、両手剣、片手銃、両手銃})\\
-            0&(\text{体術、術、モンスター、近接メカ、射撃メカ、継承})\end{cases}\\[1.48em]
-            \text{武器タイプボーナス}&=\begin{cases}\text{SLv}\times0.02&(\text{片手剣、両手剣、片手銃、両手銃})\\
-            (\text{SLv}+5)\times0.05&(\text{体術、術、モンスター、近接メカ、射撃メカ})\\
-            0&(\text{継承})\end{cases}\\[2.14em]
-            \text{攻撃能力値ボーナス}&=\text{行動キャラクター自身の影響能力値}\times0.01\end{aligned}\hspace{0.5em}'/>
+      <BlockMath math='\small\hspace{0.5em}\text{複合威力}=\left\lceil\text{基礎威力}\right\rceil\times\text{技・術威力倍率}\times\text{SLv威力倍率}\hspace{0.5em}'/>
     </StyledMathBox>
 
-    ここで、武器威力は使用武器に設定されている威力、SLvは使用技・術に対応するスキルレベル、影響能力値<InlineMath math={'\\small _\\text{自身}'}/> は技・術に設定されている行動キャラクター自身の影響能力値です。
+    <Box sx={{ ml: 1, my: 3 }}>
+      ### 基礎威力
+      基礎威力は下式で算出されます。
 
-    二刀技、二丁拳銃技、剣×銃技の場合は使用武器2種の威力の平均値が適用されます。
+      <StyledMathBox className='katex-box'>
+        <BlockMath math='\small\hspace{0.5em}\text{基礎威力}=20\times\left(1+\text{武器威力ボーナス}+\text{武器タイプボーナス}+\text{威力強化能力ボーナス}\right)\hspace{0.5em}'/>
+        <BlockMath
+          math='\small\hspace{0.5em}\begin{aligned}\text{武器威力ボーナス}&=\begin{cases}\text{武器威力}\times 0.03&\left(\text{片手剣、両手剣、片手銃、両手銃、敵専用}\right)\\
+              0&\left(\text{体術、継承、モンスター、近接メカ、射撃メカ、術}\right)\end{cases}\\[1.13em]
+              \text{武器タイプボーナス}&=\begin{cases}\text{SLv}_{self}\times 0.02&\left(\text{片手剣、両手剣、片手銃、両手銃、敵専用}\right)\\
+              \left(\text{SLv}_{self}+5\right)\times 0.05&\left(\text{体術、モンスター、近接メカ、射撃メカ、術}\right)\\
+              0&\left(\text{継承}\right)\end{cases}\\[1.85em]
+              \text{威力強化能力ボーナス}&=\begin{cases}\text{依存能力値}_{self}\times 0.01&\left(\text{依存能力あり}\right)\\
+              0&\left(\text{依存能力なし}\right)\end{cases}\end{aligned}\hspace{0.5em}'
+        />
+      </StyledMathBox>
 
-    基礎威力の計算結果は小数点以下が切り上げられます。
+      ここで、武器威力は行動キャラクターの装備武器に設定されている威力、SLvは行動キャラクターの使用技・術と対応する武器タイプのスキルのレベル、依存能力値は行動キャラクターの使用技・術のダメージに影響する能力（依存能力）の値です。依存能力は技・術に設定されています。
 
-    技・術倍率は下式で算出されます。
+      二刀技、二丁拳銃技、剣×銃技では装備武器2種の平均威力（小数点以下切り捨て）が武器威力に適用され、剣×銃技では片手剣スキルと片手銃スキルの平均レベルがSLvに適用されます。
+
+      行動キャラクターが敵の場合は、敵バトルランクに応じた敵武器威力と敵スキルレベルが適用されます。一部の敵専用技は追加効果「術扱い」を持ち、武器威力ボーナスと武器タイプボーナスの算出では術として扱われます。
+
+      威力が0でなく、依存能力が存在しない技は敵専用技にのみ存在します。
+
+      バトルランクと紐づけられている内部値については <Link to={'/saga-eb/data/battle-ranks/'}>データ ＞ バトルランク</Link> を参照してください。
+
+      ### 技・術威力倍率
+      技・術威力倍率は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath math='\small\hspace{0.5em}\text{技・術威力倍率}=\text{技・術威力基本倍率}\times\text{覚醒補正}\times\text{技・術威力ロール補正}\hspace{0.5em}'/>
+        <BlockMath
+          math='\small\hspace{0.5em}\begin{aligned}\text{技・術威力基本倍率}&=\begin{cases}\text{技・術威力}\times 0.05&\left(\text{解き放つ以外}\right)\\
+              \left(\text{技・術威力}+10\right)\times 0.05&\left(\text{解き放つ}\right)\end{cases}\\[1.13em]
+              \text{覚醒補正}&=1+\text{技威力効果値}_{self}\times 0.2\\[0.32em]
+              \text{技・術威力ロール補正}&=1+\text{技・術威力特性値}_{self}\times 0.01\end{aligned}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+
+      ここで、技・術威力は行動キャラクターの使用技・術に設定されている威力です。
+
+      効果値、特性値については <AnchorLink stripHash to={'#section-heading-3'}>攻撃ダメージ：効果値・特性値</AnchorLink> で説明します。
+
+      ### SLv威力倍率
+      SLv威力倍率は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath
+          math='\small\hspace{0.5em}\text{SLv威力倍率}=\begin{cases}1+\dfrac{\text{SLv}_{self}}{30}&\left(\text{継承以外}\right)\\
+              1&\left(\text{継承}\right)\end{cases}\hspace{0.5em}'/>
+      </StyledMathBox>
+    </Box>
+
+    ## 威力補正
+    威力補正は下式で算出されます。
 
     <StyledMathBox className='katex-box'>
-      <BlockMath math='\hspace{0.5em}\text{技・術倍率}=\text{技・術基本倍率}\times\text{覚醒補正}\times\text{技・術威力ロール補正}\times0.05\hspace{0.5em}'/>
-      <BlockMath
-        math='\hspace{0.5em}\text{技・術基本倍率}=\begin{cases}技・術威力\times0.05&(\text{解放以外の技・術})\\
-            (技・術威力+10)\times0.05&(\text{解放})\end{cases}\hspace{0.5em}'
-      />
-      <BlockMath math='\hspace{0.5em}\text{覚醒補正}=1+\text{技威力アップ残ターン数}\times0.2\hspace{0.5em}'/>
-      <BlockMath math='\hspace{0.5em}\text{技・術威力ロール補正}=1+\text{技・術威力ロール性能合計値}\times0.01\hspace{0.5em}'/>
+      <BlockMath math='\small\hspace{0.5em}\text{威力補正}=1-\text{威力軽減ボーナス}+\text{五行ボーナス}\hspace{0.5em}'/>
     </StyledMathBox>
 
-    SLv倍率は下式で算出されます。
+    <Box sx={{ ml: 1, my: 3 }}>
+      ### 威力軽減ボーナス
+      威力軽減ボーナスは下式で算出されます。
 
-    <StyledMathBox className='katex-box'>
-      <BlockMath math='\hspace{0.5em}\text{SLv倍率}=1+\frac{\text{SLv}}{30}\hspace{0.5em}'/>
-    </StyledMathBox>
+      <StyledMathBox className='katex-box'>
+        <BlockMath math='\small\hspace{0.5em}\text{威力軽減ボーナス}=\text{属性耐性ボーナス}+\text{耐性強化能力ボーナス}\hspace{0.5em}'/>
+        <BlockMath
+          math='\small\hspace{0.5em}\begin{aligned}\text{属性耐性ボーナス}&=\begin{cases}\text{有効属性耐性}_{target}\times 0.005&\left(\text{属性耐性有効}\right)\\
+              0&\left(\text{属性耐性無効}\right)\end{cases}\\[1.13em]
+              \text{耐性強化能力ボーナス}&=\begin{cases}\text{依存能力値}_{target}\times 0.0025&\left(\text{依存能力あり}\right)\\
+              0&\left(\text{依存能力なし}\right)\end{cases}\end{aligned}\hspace{0.5em}'
+        />
+      </StyledMathBox>
 
-    ## 威力軽減率
-    <StyledMathBox className='katex-box'>
-      <BlockMath math='\hspace{0.5em}\text{威力補正}=1-\text{威力軽減率}+\text{五行影響値}\hspace{0.5em}'/>
-      <BlockMath math='\hspace{0.5em}\text{威力軽減率}=\text{属性耐性}\times0.005+\text{防御能力値ボーナス}+\text{五行対抗ボーナス}\hspace{0.5em}'/>
-      <BlockMath math='\hspace{0.5em}\text{五行対抗ボーナス}=\text{防御五行Lv}\times0.01-(\text{攻撃五行Lv}+\text{地相Lv})\times\text{五行Lv差補正}\hspace{0.5em}'/>
-      <BlockMath
-        math='\hspace{0.5em}\text{五行Lv差補正}=\begin{cases}0.01&(\text{攻撃五行Lv}+\text{地相Lv}\geq0)\\
-            0.05&(\text{攻撃五行Lv}+\text{地相Lv}\lt0)\end{cases}\hspace{0.5em}'
-      />
-    </StyledMathBox>
+      ここで、有効属性耐性は技・術の攻撃属性の中で最も耐性が低い属性（有効属性）の耐性です。<InlineMath math={'\\small target'}/>は対象キャラクターのステータス値、内部値が参照されることを意味します。
 
-    技・術が複合属性を持つ場合、最小の属性耐性が使用されます。無属性の場合は0が使用されます。
+      対象キャラクターの属性耐性は以下のいずれかの条件を満たすと無効になります。
+      - 行動キャラクターの使用技・術の攻撃属性が無属性である
+      - 行動キャラクターの使用技が追加効果「防御力無効」を持つ
+
+      ### 五行ボーナス
+      五行ボーナスは下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath
+          math='\small\hspace{0.5em}\text{五行ボーナス}=\begin{cases}0&\left(\text{五行が設定されていない技}\right)\\
+              \text{五行威力ボーナス}-\text{五行耐性ボーナス}&\left(\text{五行が設定されている技、術}\right)\end{cases}\hspace{0.5em}'
+        />
+        <BlockMath
+          math='\small\hspace{0.5em}\begin{aligned}\text{五行威力ボーナス}&=\begin{cases}\left(\text{五行Lv}_{self}+\text{五行Lv}_{battle}\right)\times 0.01&\left(\text{五行Lv}_{self}+\text{五行Lv}_{battle}\geq 0\right)\\
+              \left(\text{五行Lv}_{self}+\text{五行Lv}_{battle}\right)\times 0.05&\left(\text{五行Lv}_{self}+\text{五行Lv}_{battle}\lt 0\right)\end{cases}\\[1.13em]
+              \text{五行耐性ボーナス}&=\text{五行Lv}_{target}\times 0.01\end{aligned}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+
+      ここで、五行Lvは行動キャラクターの使用技・術と対応する五行のレベルです。五行Lv<InlineMath math={'\\small _{battle}'}/>はバトルに設定される五行レベルを意味します。
+
+      バトルの五行レベルについては <AnchorLink stripHash to={'#section-heading-4'}>攻撃ダメージ：バトルの五行レベル</AnchorLink> で説明します。
+
+      五行が設定されている技は敵専用技にのみ存在します。
+    </Box>
 
     ## ダメージ軽減量
     ダメージ軽減量は下式で算出されます。
 
     <StyledMathBox className='katex-box'>
-      <BlockMath math='\hspace{0.5em}\text{ダメージ軽減量}=\sqrt{\text{属性耐性}\times3}\hspace{0.5em}'/>
+      <BlockMath
+        math='\small\hspace{0.5em}\text{ダメージ軽減量}=\begin{cases}\sqrt{\text{有効属性耐性}_{target}\times 3}&\left(\text{属性耐性有効}\right)\\
+            0&\left(\text{属性耐性無効}\right)\end{cases}\hspace{0.5em}'
+      />
     </StyledMathBox>
   </Box>
 </Box>
 
-# 攻撃ダメージ補正
+# 攻撃ダメージ：攻撃ダメージ補正
 <Box>
-  <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{攻撃ダメージ補正}=\text{状態補正}\times\text{行動補正}\times\text{特性補正}\times\text{連携率補正}\times\text{技・術乱数補正}\hspace{0.5em}'/>
-  </StyledMathBox>
+  攻撃ダメージ補正は下式で算出されます。
 
   <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{状態補正}=\text{バフ・デバフ補正}\times\text{覚醒反動補正}\times\text{怒り補正}\hspace{0.5em}'/>
-    <BlockMath
-      math='\hspace{0.5em}\text{バフ・デバフ補正}=\begin{cases}1+(\text{術力バフ累積値}-\text{防御力バフ累積値})\times0.01&(\text{術攻撃})\\
-          1+(\text{攻撃力バフ累積値}-\text{防御力バフ累積値})\times0.01&(\text{術攻撃以外})\end{cases}\hspace{0.5em}'
-    />
-    <BlockMath
-      math='\hspace{0.5em}\text{覚醒反動補正}=\begin{cases}1.2&(\text{技威力アップ状態あり})\\
-          1&(\text{技威力アップ状態なし})\end{cases}\hspace{0.5em}'
-    />
-    <BlockMath
-      math='\hspace{0.5em}\text{怒り補正}=\begin{cases}1+(\text{怒りロール補正}+20)\times0.01&(\text{怒り状態あり})\\
-          1&(\text{怒り状態なし})\end{cases}\hspace{0.5em}'
-    />
+    <BlockMath math='\small\hspace{0.5em}\text{攻撃ダメージ補正}=\text{状態補正}\times\text{行動補正}\times\text{味方専用補正}\times\text{連携率補正}\times\text{技・術乱数補正}\hspace{0.5em}'/>
   </StyledMathBox>
 
-  <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{行動補正}=\text{防御補正}\times\text{武器ガード補正}\hspace{0.5em}'/>
-    <BlockMath
-      math='\hspace{0.5em}\text{防御補正}=\begin{cases}1&(防御耐性無効)\\
-          0.7-\text{防御耐性}\times0.01&(防御耐性有効)\end{cases}\hspace{0.5em}'
-    />
-    <BlockMath
-      math='\hspace{0.5em}\text{武器ガード補正}=\begin{cases}1-ガード軽減率\times0.01&(プロテクトなし)\\
-          1-\text{プロテクト軽減率}\times0.01&(プロテクトあり)\end{cases}\hspace{0.5em}'
-    />
-  </StyledMathBox>
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 状態補正
+    状態補正は下式で算出されます。
 
-  武器ガードが発生する場合のみ適用される補正。
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{状態補正}=\text{バフ補正}\times\text{怒り補正}\times\text{覚醒反動補正}\hspace{0.5em}'/>
+      <BlockMath
+        math='\small\hspace{0.5em}\begin{aligned}\text{バフ補正}&=\begin{cases}1+\left(\text{攻撃力効果値}_{self}-\text{防御力効果値}_{target}\right)\times 0.01&\left(\text{術以外}\right)\\
+            1+\left(\text{術力効果値}_{self}-\text{防御力効果値}_{target}\right)\times 0.01&\left(\text{術}\right)\end{cases}\\[1.13em]
+            \text{怒り補正}&=\begin{cases}1&\left(\text{行動キャラクターに怒り状態なし}\right)\\
+            1.2+\text{怒り時威力特性値}_{self}\times 0.01&\left(\text{行動キャラクターに怒り状態あり}\right)\end{cases}\\[1.13em]
+            \text{覚醒反動補正}&=\begin{cases}1&\left(\text{対象キャラクターに技威力アップ状態なし}\right)\\
+            1.2&\left(\text{対象キャラクターに技威力アップ状態あり}\right)\end{cases}\end{aligned}\hspace{0.5em}'
+      />
+    </StyledMathBox>
 
-  <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{特性補正}=\text{種族特攻補正}\times\text{陣形補正}\times\text{ロール補正}\hspace{0.5em}'/>
-    <BlockMath
-      math='\hspace{0.5em}\text{種族特攻補正}=\begin{cases}1.2&(\text{種族特効あり})\\
-          1&(\text{種族特効なし})\end{cases}\hspace{0.5em}'
-    />
-    <BlockMath
-      math='\hspace{0.5em}\text{陣形補正}=(1-陣形防御補正\times0.01)\times(1+陣形攻撃補正\times0.01)\hspace{0.5em}'
-    />
-    <BlockMath math='\hspace{0.5em}\text{ロール補正}=\text{ダメージ増加ロール}\times\text{ダメージ軽減ロール}\hspace{0.5em}'/>
-    <BlockMath math='\hspace{0.5em}\text{ダメージ増加ロール}=1+(\text{属性攻撃力ロール}+\text{術威力ロール}+\text{詠唱中強化ロール}+\text{即死級ロール}+\text{弱点強化ロール}+\text{しんがりロール}+\text{リザーブ解除ロール})\times0.01\hspace{0.5em}'/>
-    <BlockMath math='\hspace{0.5em}\text{ダメージ軽減ロール}=1-(\text{属性防御力ロール}+\text{術耐性ロール}+\text{全体攻撃耐性ロール}+\text{カウンター耐性ロール})\times0.01\hspace{0.5em}'/>
-  </StyledMathBox>
+    術扱いの追加効果を持つ技はバフ補正の算出で術として扱われます。
 
-  ゲストキャラクターには陣形の1番目の補正が適用されます。
+    ## 行動補正
+    行動補正は下式で算出されます。
 
-  技・術乱数補正は下式を満たす乱数値です。
-  <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}1-\text{技・術ダメージ乱数幅}\leq\text{技・術乱数補正}\leq1+\text{技・術ダメージ乱数幅}\hspace{0.5em}'/>
-  </StyledMathBox>
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{行動補正}=\text{防御補正}\times\text{ガード補正}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    <Box sx={{ ml: 1, my: 3 }}>
+      ### 防御補正
+      防御補正は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath
+          math='\small\hspace{0.5em}\text{防御補正}=\begin{cases}1&\left(\text{防御耐性無効}\right)\\
+              0.7-\text{防御耐性特性値}_{target}\times 0.01&\left(\text{防御耐性有効}\right)\end{cases}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+
+      対象キャラクターの防御耐性は以下のいずれかの条件を満たすと無効になります。
+      - 対象キャラクターが配置物である
+      - 対象キャラクターの行動が防御でない
+      - 対象キャラクターがスタン、マヒ、石化、メカスタン、メカマヒ状態により行動阻止されている
+      - 対象キャラクターが不意打ち状態である
+      - 行動キャラクターの使用技が追加効果「防御力無効」を持つ
+
+      不意打ちはフトッパラッシーとのバトル限定の効果です。
+
+      ### ガード補正
+      ガード補正は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath
+          math='\small\hspace{0.5em}\text{ガード補正}=\begin{cases}1&\left(\text{ガード発動なし}\right)\\
+              1-\max\left\{0,\hspace{0.5em}\min\left\{\text{ガード率},\hspace{0.5em}100\right\}\right\}\times 0.01&\left(\text{ガード発動あり}\right)\end{cases}\hspace{0.5em}'
+        />
+        <BlockMath
+          math='\small\hspace{0.5em}\text{ガード率}=\begin{cases}\text{自己ガード率}&\left(\text{プロテクト発動なし}\right)\\
+              \text{プロテクト技威力}&\left(\text{プロテクト発動あり}\right)\end{cases}\hspace{0.5em}'
+        />
+        <BlockMath
+          math='\small\hspace{0.5em}\text{自己ガード率}=\begin{cases}\text{武器ガード率}_{target}+\text{特性ガード率}&\left(\text{土行盾状態なし}\right)\\
+              99+\text{特性ガード率}&\left(\text{土行盾状態あり}\right)\end{cases}\hspace{0.5em}'
+        />
+        <BlockMath
+          math='\small\hspace{0.5em}\text{特性ガード率}=\text{ガード率特性値}_{target}+\text{対象ガード率特性値}_{self}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+
+      ここで、プロテクト技威力は対象キャラクターに対して発動するプロテクト技に設定されている威力、武器ガード率は対象キャラクターの使用武器に設定されているガード率です。
+
+      対象キャラクターが敵の場合は、敵キャラクターごとに設定されているガード率（固有ガード率）が武器ガード率に設定されます。
+
+      土行盾の追加効果を持つ技は敵専用技にのみ存在します。
+
+      土行盾状態を表すアイコンは存在しないので、ゲーム内表示からはキャラクターが土行盾状態かどうかを判断できません。
+    </Box>
+
+    ## 味方専用補正
+    味方専用補正は下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{味方専用補正}=\text{種族特攻補正}\times\text{陣形ダメージ補正}\times\text{特性ダメージ補正}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    <Box sx={{ ml: 1, my: 3 }}>
+      ### 種族特攻補正
+      種族特攻補正は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath
+          math='\small\hspace{0.5em}\begin{aligned}\text{種族特攻補正}&=\begin{cases}1&\left(\text{種族特攻なし}\right)\\
+              1.2&\left(\text{種族特攻あり}\right)\end{cases}\end{aligned}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+
+      ### 陣形ダメージ補正
+      陣形ダメージ補正は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath math='\small\hspace{0.5em}\text{陣形ダメージ補正}=\text{陣形攻撃補正}\times\text{陣形防御補正}\hspace{0.5em}'/>
+        <BlockMath
+          math='\small\hspace{0.5em}\begin{aligned}\text{陣形攻撃補正}&=1+\text{陣形攻撃補正率}_{self}\times 0.01\\[0.32em]
+              \text{陣形防御補正}&=1-\text{陣形防御補正率}_{target}\times 0.01\end{aligned}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+
+      ここで、陣形攻撃補正率は行動キャラクターの陣形位置に設定されている攻撃補正率、陣形防御補正率は対象キャラクターの陣形に設定されている防御補正率です。
+
+      味方のゲストキャラクターには陣形の1番目に設定されている補正が適用されます。
+
+      敵パーティは陣形を持たないので、陣形攻撃補正率、陣形防御補正率がともに0です。
+
+      ### 特性ダメージ補正
+      特性ダメージ補正は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath math='\small\hspace{0.5em}\text{特性ダメージ補正}=\text{攻撃力特性補正}\times\text{防御力特性補正}\hspace{0.5em}'/>
+        <BlockMath
+          math='\small\hspace{0.5em}\begin{aligned}\text{攻撃力特性補正}&=\begin{cases}1+\text{攻撃力特性値}_{self}\times 0.01&\left(\text{即死級ダメージ発生なし}\right)\\
+              1+\left(\text{攻撃力特性値}_{self}+300\right)\times 0.01&\left(\text{即死級ダメージ発生あり}\right)\end{cases}\\[1.13em]
+              \text{防御力特性補正}&=1-\text{防御力特性値}_{target}\times 0.01\end{aligned}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+    </Box>
+
+    ## 連携率補正
+    連携率補正は下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath
+        math='\small\hspace{0.5em}\text{連携率補正}=\begin{cases}1&\left(\text{連携なし}\right)\\
+            \text{行動直前連携率}\times 0.01&\left(\text{連携あり}\right)\end{cases}\hspace{0.5em}'
+      />
+    </StyledMathBox>
+
+    ここで、行動直前連携率は技・術が発動する直前に到達している連携率です。
+
+    ## 技・術乱数補正
+    技・術乱数補正は下式を満たす乱数値です。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{技・術乱数補正下限}\leq\text{技・術乱数補正}\leq\text{技・術乱数補正上限}\hspace{0.5em}'/>
+      <BlockMath
+        math='\small\hspace{0.5em}\begin{aligned}\text{技・術乱数補正下限}&=1-\text{技・術ダメージ乱数幅}\times 0.01\\[0.32em]
+            \text{技・術乱数補正上限}&=1+\text{技・術ダメージ乱数幅}\times 0.01\end{aligned}\hspace{0.5em}'
+      />
+    </StyledMathBox>
+
+    ここで、技・術ダメージ乱数幅は行動キャラクターの使用技・術に設定されている内部値です。
+  </Box>
 </Box>
 
-# 毒ダメージ計算式の構造
+# 攻撃ダメージ：効果値・特性値
 <Box>
-  毒ダメージは下式で算出されます。
+  効果値と特性値はキャラクターごとにバトル中にのみ管理される内部値です。
 
-  <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{毒ダメージ}=\text{基本毒ダメージ}\times\text{毒ダメージ補正}\hspace{0.5em}'/>
-  </StyledMathBox>
+  効果値は追加効果の付与によって、特性値は特性が適用条件を満たすかどうかでバトル中に変動する可能性があります。
 
-  毒ダメージの計算結果は小数点以下が切り上げられます。
+  効果値と特性値は技・術が持つ追加効果、装備品とロールが持つ特性によって決定されます。技・術、装備品、ロールには追加効果・特性ごとに性能を表す内部値（性能値）が設定されています。
+
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 攻撃ダメージに影響する効果値
+    効果値と追加効果の関係は下表の通りです。
+
+    <StyledTableContainer align='center'>
+      <Table stickyHeader>
+        <TableHead sx={{ position: 'sticky', top: 0 }}>
+          <TableRow>
+            <StyledTh align='center' sx={{ width: '120px' }}>効果値</StyledTh>
+            <StyledTh align='center'>対応する追加効果</StyledTh>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <StyledTr>
+            <StyledTd align='left'>技威力効果値</StyledTd>
+            <StyledTd align='left'>技威力アップ</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>攻撃力効果値</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>攻撃力アップ、<wbr/>攻撃力ダウン、<wbr/>連携時攻撃力アップ</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>防御力効果値</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>防御力アップ、<wbr/>防御力ダウン</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>術力効果値</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>術力アップ、<wbr/>術力ダウン</StyledTd>
+          </StyledTr>
+        </TableBody>
+      </Table>
+    </StyledTableContainer>
+
+    <Box sx={{ ml: 1, my: 3 }}>
+      ### 技威力効果値
+      技威力効果値は以下のタイミングで更新されます。
+      1. 特殊効果「技威力アップ」の付与後
+      1. ターン経過後
+      1. 追加効果「特殊効果解除」による技威力アップ状態の解除後
+
+      それぞれのタイミングについて、更新後の技威力効果値は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath
+          math='\small\hspace{0.5em}\text{技威力効果値}_{next}=\begin{cases}\text{技威力性能値}&\left(\text{1.}\right)\\
+              \max\left\{0,\hspace{0.5em}\text{技威力効果値}-1\right\}&\left(\text{2.}\right)\\
+              0&\left(\text{3.}\right)\end{cases}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+
+      ここで、技威力性能値は技・術に設定されている技威力アップの追加効果の性能値です。
+
+      ### バフ・デバフ系の効果値
+      攻撃力効果値、防御力効果値、術力効果値は以下のタイミングで更新されます。
+      1. バフ・デバフ効果の付与後
+
+      バフ・デバフ系の追加効果の付与は以下のいずれかの条件を満たすと成功します。
+      - バフ・デバフ効果の付与対象が自パーティのキャラクターである
+      - バフ・デバフ効果を持つ技・術の威力が0である
+      - バフ・デバフ効果を持つ技・術による攻撃ダメージが0でない
+
+      更新後の攻撃力効果値、防御力効果値、術力効果値は下式で算出されます。
+
+      <StyledMathBox className='katex-box'>
+        <BlockMath
+          math='\small\hspace{0.5em}\begin{aligned}\text{攻撃力効果値}_{next}&=\begin{cases}\max\left\{0,\hspace{0.5em}\min\left\{\text{攻撃力効果値}+\text{攻撃力性能値},\hspace{0.5em}30\right\}\right\}&\left(\text{攻撃力効果値}\gt 0\right)\\
+              \max\left\{-30,\hspace{0.5em}\min\left\{\text{攻撃力効果値}+\text{攻撃力性能値},\hspace{0.5em}30\right\}\right\}&\left(\text{攻撃力効果値}=0\right)\\
+              \max\left\{-30,\hspace{0.5em}\min\left\{\text{攻撃力効果値}+\text{攻撃力性能値},\hspace{0.5em}0\right\}\right\}&\left(\text{攻撃力効果値}\lt 0\right)\end{cases}\\[1.85em]
+              \text{防御力効果値}_{next}&=\begin{cases}\max\left\{0,\hspace{0.5em}\min\left\{\text{防御力効果値}+\text{防御力性能値},\hspace{0.5em}30\right\}\right\}&\left(\text{防御力効果値}\gt 0\right)\\
+              \max\left\{-30,\hspace{0.5em}\min\left\{\text{防御力効果値}+\text{防御力性能値},\hspace{0.5em}30\right\}\right\}&\left(\text{防御力効果値}=0\right)\\
+              \max\left\{-30,\hspace{0.5em}\min\left\{\text{防御力効果値}+\text{防御力性能値},\hspace{0.5em}0\right\}\right\}&\left(\text{防御力効果値}\lt 0\right)\end{cases}\\[1.85em]
+              \text{術力効果値}_{next}&=\begin{cases}\max\left\{0,\hspace{0.5em}\min\left\{\text{術力効果値}+\text{術力性能値},\hspace{0.5em}30\right\}\right\}&\left(\text{術力効果値}\gt 0\right)\\
+              \max\left\{-30,\hspace{0.5em}\min\left\{\text{術力効果値}+\text{術力性能値},\hspace{0.5em}30\right\}\right\}&\left(\text{術力効果値}=0\right)\\
+              \max\left\{-30,\hspace{0.5em}\min\left\{\text{術力効果値}+\text{術力性能値},\hspace{0.5em}0\right\}\right\}&\left(\text{術力効果値}\lt 0\right)\end{cases}\end{aligned}\hspace{0.5em}'
+        />
+      </StyledMathBox>
+
+      ここで、攻撃力性能値、防御力性能値、術力性能値は技・術に設定されているバフ・デバフ系の追加効果の性能値です。
+
+      バフ・デバフ効果はアップ状態（効果値 <InlineMath math={'\\small\\gt'}/> 0）とダウン状態（効果値 <InlineMath math={'\\small\\lt'}/> 0）の間を直接遷移できず、必ずバフ・デバフ効果の解除（効果値 <InlineMath math={'\\small ='}/> 0）を経由する必要があります。
+    </Box>
+  </Box>
+
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 攻撃ダメージに影響する特性値
+    特性値と特性の関係は下表の通りです。
+
+    <StyledTableContainer align='center'>
+      <Table stickyHeader>
+        <TableHead sx={{ position: 'sticky', top: 0 }}>
+          <TableRow>
+            <StyledTh align='center' sx={{ width: '120px' }}>特性値</StyledTh>
+            <StyledTh align='center'>対応する特性</StyledTh>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <StyledTr>
+            <StyledTd align='left'>技・術威力特性値</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>片手剣技威力アップ、<wbr/>両手剣技威力アップ、<wbr/>片手銃技威力アップ、<wbr/>両手銃技威力アップ、<wbr/>体術技威力アップ、<wbr/>モンスター技威力アップ、<wbr/>近接メカ技威力アップ、<wbr/>射撃メカ技威力アップ、<wbr/>術威力アップ</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>怒り時威力特性値</StyledTd>
+            <StyledTd align='left'>怒り時威力アップ</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>防御耐性特性値</StyledTd>
+            <StyledTd align='left'>防御耐性アップ</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>ガード率特性値</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>ガード率アップ、<wbr/>瀕死時ガード率アップ、<wbr/>暗闇時ガード率アップ</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>対象ガード率特性値</StyledTd>
+            <StyledTd align='left'>対象ガード率ダウン</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>攻撃力特性値</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>斬威力アップ、<wbr/>打威力アップ、<wbr/>突威力アップ、<wbr/>熱威力アップ、<wbr/>冷威力アップ、<wbr/>雷威力アップ、<wbr/>全威力アップ、<wbr/>全威力ダウン、<wbr/>対象詠唱時威力アップ、<wbr/>弱点攻撃時威力アップ、<wbr/>連携終了時威力アップ、<wbr/>リザーブ解除時威力アップ</StyledTd>
+          </StyledTr>
+          <StyledTr>
+            <StyledTd align='left'>防御力特性値</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>斬耐性アップ、<wbr/>打耐性アップ、<wbr/>突耐性アップ、<wbr/>熱耐性アップ、<wbr/>冷耐性アップ、<wbr/>雷耐性アップ、<wbr/>熱冷雷耐性アップ、<wbr/>全耐性アップ、<wbr/>術耐性アップ、<wbr/>全体攻撃耐性アップ、<wbr/>カウンター耐性アップ</StyledTd>
+          </StyledTr>
+        </TableBody>
+      </Table>
+    </StyledTableContainer>
+
+    それぞれの特性値には、適用条件を満たしている特性の性能値の合計が適用されます。
+
+    剣×銃技では片手剣技威力アップと片手銃技威力アップの両方が適用されます。
+
+    属性威力・耐性系の特性は有効属性と一致する場合にのみ適用されます。技・術の攻撃属性が無属性の場合では全威力アップ、全威力ダウン、全耐性アップのいずれも適用されません。
+
+    術耐性アップは術扱いの追加効果を持つ技の場合にも適用されます。
+
+    敵キャラクターは装備品やロールを持たないので、全ての特性値が0です。
+  </Box>
 </Box>
 
-# 基本毒ダメージ
+# 攻撃ダメージ：バトルの五行レベル
 <Box>
-  <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{基本毒ダメージ}=\text{最大HP}\times\text{基本HP補正}\times0.3\hspace{0.5em}'/>
-  </StyledMathBox>
+  バトルの五行レベルはバトルに設定されている五行（地相）と季節によって決定されます。
+
+  各種条件とバトルの五行レベルの関係は下表の通りです。
+
+  <StyledTableContainer align='center'>
+    <Table stickyHeader sx={{ width: `calc(44px * 3 + 36px * 5)` }}>
+      <TableHead sx={{ position: 'sticky', top: 0 }}>
+        <TableRow>
+          <StyledTh align='center' colSpan={3}>条件</StyledTh>
+          <StyledTh align='center' colSpan={5}>バトルの五行レベル</StyledTh>
+        </TableRow>
+        <TableRow>
+          <StyledTh align='center' sx={{ width: '44px' }}>四季</StyledTh>
+          <StyledTh align='center' sx={{ width: '44px' }}>地相</StyledTh>
+          <StyledTh align='center' sx={{ width: '44px' }}>季節</StyledTh>
+          <StyledTh align='center' sx={{ width: '36px' }}>木</StyledTh>
+          <StyledTh align='center' sx={{ width: '36px' }}>火</StyledTh>
+          <StyledTh align='center' sx={{ width: '36px' }}>土</StyledTh>
+          <StyledTh align='center' sx={{ width: '36px' }}>金</StyledTh>
+          <StyledTh align='center' sx={{ width: '36px' }}>水</StyledTh>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <StyledTr>
+          <StyledTd align='center' rowSpan={5}>なし</StyledTd>
+          <StyledTd align='center'>木</StyledTd>
+          <StyledTd align='center' rowSpan={5}>–</StyledTd>
+          <StyledTd align='center'>5</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>-5</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>火</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>5</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>-5</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>土</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>5</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>-5</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>金</StyledTd>
+          <StyledTd align='center'>-5</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>5</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>水</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>-5</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>5</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center' rowSpan={5}>あり</StyledTd>
+          <StyledTd align='center' rowSpan={5}>–</StyledTd>
+          <StyledTd align='center'>春</StyledTd>
+          <StyledTd align='center'>40</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>-20</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>夏</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>40</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>-20</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>土用</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>40</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>-20</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>秋</StyledTd>
+          <StyledTd align='center'>-20</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>40</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>冬</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>-20</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>0</StyledTd>
+          <StyledTd align='center'>40</StyledTd>
+        </StyledTr>
+      </TableBody>
+    </Table>
+  </StyledTableContainer>
+
+  四季があるバトル（五角堂でのバトル）では、ターン経過で四季が巡ります。
+
+  現在ターンとして表示される数値（表示ターン）と季節の関係は下表の通りです。
+
+  <StyledTableContainer align='center'>
+    <Table stickyHeader sx={{ width: `calc(104px * 2)` }}>
+      <TableHead sx={{ position: 'sticky', top: 0 }}>
+        <TableRow>
+          <StyledTh align='center' sx={{ width: '104px' }}>表示ターン下1桁</StyledTh>
+          <StyledTh align='center' sx={{ width: '104px' }}>季節</StyledTh>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        <StyledTr>
+          <StyledTd align='center'>1、2</StyledTd>
+          <StyledTd align='center'>土用</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>3、4</StyledTd>
+          <StyledTd align='center'>春</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>5、6</StyledTd>
+          <StyledTd align='center'>夏</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>7、8</StyledTd>
+          <StyledTd align='center'>秋</StyledTd>
+        </StyledTr>
+        <StyledTr>
+          <StyledTd align='center'>0、9</StyledTd>
+          <StyledTd align='center'>冬</StyledTd>
+        </StyledTr>
+      </TableBody>
+    </Table>
+  </StyledTableContainer>
+
+  表示ターンの最大値は99です。99ターン目以降は季節が冬に固定され、四季が巡りません。
 </Box>
 
-# 毒ダメージ補正
+# 攻撃ダメージ：技・術の表示威力
 <Box>
+  以下の条件を満たす技・術は行動入力時の技・術リストに威力が表示されます。
+
+  - 行動対象が敵である
+
+  表示威力は下式で算出されます。
+
   <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}\text{毒ダメージ補正}=\text{行動補正}\times\text{乱数補正}\hspace{0.5em}'/>
+    <BlockMath math='\small\hspace{0.5em}\text{表示威力}=\left\lfloor\text{基礎威力}\times\text{技・術威力倍率}\times\text{五行威力補正}\right\rfloor\hspace{0.5em}'/>
+    <BlockMath
+      math='\small\hspace{0.5em}\text{五行威力補正}=\begin{cases}1&\left(\text{五行が影響しない技}\right)\\
+          1+\text{五行威力ボーナス}&\left(\text{五行が影響する技、術}\right)\end{cases}\hspace{0.5em}'
+    />
   </StyledMathBox>
 
-  行動補正
-    - 行動なし状態は0.5、それ以外は1
+  表示威力が999を超えると技・術リストの表示がおかしくなるというバグが存在し、ソフトロックを引き起こす場合があります。
+</Box>
 
-  毒乱数補正は下式を満たす乱数値です。
+# 攻撃ダメージ：ダメージ表示
+<Box>
+  攻撃ダメージの算出結果がそのまま表示されるとは限りません。
+
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 攻撃ダメージの分割表示
+    一部の技・術は演出によって攻撃ダメージが分割表示されます。
+
+    表示ダメージは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{表示ダメージ}_{n}=\left\lfloor\text{攻撃ダメージ}\times\text{表示ダメージ分割比率}_{n}\times 0.01\right\rfloor\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    ここで、表示ダメージ分割比率は技・術に設定されている内部値、<InlineMath math={'\\small n'}/>は表示順を示す通し番号です。
+
+    表示ダメージ分割比率の合計値は100ですが、個々の表示ダメージの算出結果は小数点以下が切り捨てられるので、表示ダメージの合計値は必ずしも攻撃ダメージと一致しません。
+
+    技・術ごとに設定されている表示ダメージ分割比率については <Link to={'/saga-eb/data/techs-spells-damage-split/'}>データ ＞ 技・術のダメージ分割</Link> を参照してください。
+
+    ## 非表示の攻撃ダメージ
+    以下の条件を満たすと攻撃ダメージが表示されません。
+    - 状態異常「即死」の付与に成功している
+
+    状態異常の付与の成否に関わらず、攻撃ダメージ自体は算出されます。
+
+    威力が0の技・術の場合はそもそも攻撃ダメージが算出されませんが、せんせいの試練「2人ノーダメージ」の達成判定では即死の状態異常を付与されるだけでもダメージを受けているとして扱われます。
+  </Box>
+</Box>
+
+# 毒ダメージ：基本毒ダメージ
+<Box>
+  基本毒ダメージは下式で算出されます。
+
   <StyledMathBox className='katex-box'>
-    <BlockMath math='\hspace{0.5em}0.95\leq\text{毒乱数補正}\leq1.05\hspace{0.5em}'/>
+    <BlockMath
+      math='\small\hspace{0.5em}\text{基本毒ダメージ}=\begin{cases}\text{最大HP}_{self}\times 0.3&\left(\text{味方キャラクター}\right)\\
+          \text{最大HP}_{self}\times\dfrac{100}{\text{固有HP}_{self}}\times 0.3&\left(\text{敵キャラクター}\right)\end{cases}\hspace{0.5em}'
+    />
   </StyledMathBox>
 
-  - 基本HP補正
-    - 味方は1、敵は100.0 / 基本HP
+  ここで、固有HPは敵キャラクターに設定されている内部値です。
+
+  敵キャラクターの最大HPの算出方法を踏まえると、敵キャラクターの基本毒ダメージは下式で近似できます。
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\small\hspace{0.5em}\text{基本毒ダメージ}\approx\text{HP補正率}\times 0.3\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  ここで、HP補正率は敵バトルランクによって決定される内部値です。
+
+  敵キャラクターの基本毒ダメージは敵の種類による差がほとんどなく、敵バトルランクに依存すると言えます。
 </Box>
 
-# 行動選択時の表示威力
+# 毒ダメージ：毒ダメージ補正
 <Box>
+  毒ダメージ補正は下式で算出されます。
+
+  <StyledMathBox className='katex-box'>
+    <BlockMath math='\small\hspace{0.5em}\text{毒ダメージ補正}=\text{待機補正}\times\text{毒乱数補正}\hspace{0.5em}'/>
+  </StyledMathBox>
+
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 待機補正
+    待機補正は下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath
+        math='\small\hspace{0.5em}\begin{aligned}\text{待機補正}&=\begin{cases}1&\left(\text{待機状態なし}\right)\\
+            0.5&\left(\text{待機状態あり}\right)\end{cases}\end{aligned}\hspace{0.5em}'
+      />
+    </StyledMathBox>
+
+    キャラクターは以下のいずれかの条件を満たすと待機状態になります。
+    - 行動が防御である
+    - スタン、マヒ、石化状態により行動阻止されている
+    - 不意打ち状態である
+    - リザーブ状態を解除されている
+
+    ## 毒乱数補正
+    毒乱数補正は下式を満たす乱数値です。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}0.95\leq\text{毒乱数補正}\leq1.05\hspace{0.5em}'/>
+    </StyledMathBox>
+  </Box>
 </Box>
 
-# 表示ダメージと実ダメージ
+# 現在HPの変動
+<Box>
+  現在HPは基本的にHPダメージに基づいて変動します。
+
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 攻撃ダメージによる現在HP減少
+    減少後の現在HPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath
+        math='\small\hspace{0.5em}\text{現在HP}_{target, next}=\begin{cases}\max\left\{\text{現在HP}_{target}-\text{攻撃ダメージ},\hspace{0.5em}\text{HP下限}_{target}\right\}&\left(\text{支援行動以外}\right)\\
+            \max\left\{\text{現在HP}_{target}-\text{攻撃ダメージ},\hspace{0.5em}\text{HP下限}_{target},\hspace{0.5em}1\right\}&\left(\text{支援行動}\right)\end{cases}\hspace{0.5em}'
+      />
+      <BlockMath
+        math='\small\hspace{0.5em}\text{HP下限}=\begin{cases}0&\left(\text{味方キャラクター}\right)\\
+            \text{最大HP}\times\text{HP下限率}\times 0.01&\left(\text{敵キャラクター}\right)\end{cases}\hspace{0.5em}'
+      />
+    </StyledMathBox>
+
+    ここで、HP下限率は敵キャラクターに設定されている内部値です。
+
+    支援行動によって対象キャラクターが戦闘不能状態になることはありません。
+
+    プロテクト技の対象キャラクターが支援行動の対象となると、プロテクト技を発動するはずのキャラクターはダメージを受けずにプロテクト技の対象キャラクターがダメージを受けるというバグが存在します。攻撃ダメージの算出でもプロテクト技の対象キャラクターのステータス値、内部値が参照されます。
+
+    ## 毒ダメージによる現在HP減少
+    減少後の現在HPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{現在HP}_{self, next}=\max\left\{\text{現在HP}_{self}-\text{毒ダメージ},\hspace{0.5em}0\right\}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    HP下限が0でない敵キャラクターは毒に対する完全耐性を持ちます。
+
+    ## 解放ダメージによる現在HP減少
+    減少後の現在HPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{現在HP}_{self, next}=\text{現在HP}_{self}-\text{解放ダメージ}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    ## 即死系の追加効果による現在HP減少
+
+    追加効果「即死」「強制即死」は状態異常「即死」を付与する効果があります。
+
+    減少後の現在HPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{現在HP}_{next}=0\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    HP下限が0でない敵キャラクターも即死の状態異常を付与されると現在HPが0になります。
+
+    ## 回復系の追加効果による現在HP回復
+    一部の敵専用技のみが持つ追加効果「吸収回復」「全回復」は、行動キャラクター自身の現在HPを回復する効果があります。
+
+    回復後の現在HPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{現在HP}_{self, next}=\min\left\{\text{現在HP}_{self}+\text{HP回復量},\hspace{0.5em}\text{最大HP}_{self}\right\}\hspace{0.5em}'/>
+      <BlockMath
+        math='\small\hspace{0.5em}\text{HP回復量}=\begin{cases}\text{攻撃ダメージ}&\left(\text{吸収回復}\right)\\
+            \text{最大HP}_{self}&\left(\text{全回復}\right)\end{cases}\hspace{0.5em}'
+      />
+    </StyledMathBox>
+  </Box>
+</Box>
+
+# 現在LPの変動
 <Box sx={{ minHeight: { xs: `calc(100dvh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100dvh - 48px - 8px - 54px - 24px - 80px)` } }}>
-  ゲストキャラクターの支援行動ではHPが0にはなりません。プロテクト技の使用キャラクターはダメージを受けずに対象キャラクターがダメージを受けるバグが存在します。
-  最小HPが設定されている場合、それ以下にはなりません。
+  LPダメージにはHPダメージのような複雑な計算式がないので、バトル参加メンバーの現在LP変動についてのみ説明します。
 
-  攻撃ダメージがミッションで判定される。
+  <Box sx={{ ml: 1, my: 3 }}>
+    ## 戦闘不能による現在LP減少
+    バグによる例外を除き、以下の全ての条件を満たすと現在LPが減少します。
+    - 味方キャラクターのHPが0である
+    - 味方キャラクターが戦闘不能状態である
+
+    減少後の現在LPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{現在LP}_{next}=\text{現在LP}-1\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    石化状態、戦闘不能状態でない味方キャラクターが1人しか存在しない状況では、行動キャラクター自身に対して強制即死の追加効果を持つ技（自爆技）を起点とする独壇場によって味方キャラクターが即死の状態異常を付与されても、戦闘不能状態にならないというバグが存在します。
+
+    バグが発生するとタイムライン処理がそのまま進行します。味方キャラクターは現在HPが0となって行動できなくなりますが、さらにダメージを受けるかターンが終了するまでは戦闘不能状態になりません。ダメージを受けると現在LPが減少しますが、ターンが終了するまでダメージを受けなければ現在LPは減少しません。
+
+    独壇場の起点となれる自爆技は敵専用技「絶叫」だけです。
+
+    ## LPダメージの追加効果による現在LP減少
+    バグによる例外を除き、以下の全ての条件を満たすと現在LPが減少します。
+    - 行動キャラクターが追加効果「LPダメージ」を持つ技を使用している
+    - 行動キャラクターがオーバードライブに参加していない
+
+    ブラッド技のみがLPダメージの追加効果を持ちます。
+
+    減少後の現在LPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{現在LP}_{self, next}=\max\left\{\text{現在LP}_{self}-\text{LPダメージ性能値},\hspace{0.5em}0\right\}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    ここで、LPダメージ性能値は行動キャラクターの使用技に設定されているLPダメージの追加効果の性能値です。
+
+    LPダメージ性能値が現在LP以上のブラッド技は行動入力時に選択できませんが、混乱状態では自動選択される場合があります。ブラッド技の使用によって現在LPが0になると戦闘不能状態になります。
+
+    現在LPが0となるはずのブラッド技の使用によってバトルの勝利条件を満たすと、その行動では現在LPが減少しないというバグが存在します。
+
+    ## 全滅・再挑戦による現在LP減少
+    減少後の現在LPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath
+        math='\small\hspace{0.5em}\text{現在LP}_{next}=\begin{cases}\text{現在LP}-1&\left(\text{戦闘不能状態なし}\right)\\
+            \text{現在LP}&\left(\text{戦闘不能状態あり}\right)\end{cases}\hspace{0.5em}'
+      />
+    </StyledMathBox>
+
+    ## LPダメージ効果値による現在LP回復
+    現在LPは以下のタイミングで回復します。
+    - 全滅・再挑戦による現在LP減少後
+
+    回復後の現在LPは下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{現在LP}_{next}=\text{現在LP}+\text{LPダメージ効果値}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    LPダメージ効果値は以下のタイミングで更新されます。
+    - ブラッド技の使用後
+
+    更新後のLPダメージ効果値は下式で算出されます。
+
+    <StyledMathBox className='katex-box'>
+      <BlockMath math='\small\hspace{0.5em}\text{LPダメージ効果値}_{self, next}=\text{LPダメージ効果値}_{self}+\text{LPダメージ性能値}\hspace{0.5em}'/>
+    </StyledMathBox>
+
+    ブラッド技の使用によって現在LPが0になると、そのブラッド技のLPダメージ性能値はLPダメージ効果値に加算されないというバグが存在します。
+  </Box>
 </Box>

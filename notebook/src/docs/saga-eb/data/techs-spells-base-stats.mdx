@@ -1,8 +1,8 @@
 ---
-title: '味方の技・術'
-subtitle: 'Ally Techs & Spells'
-slug: '/saga-eb/data/ally-techs-spells/'
-description: '味方の技・術にまつわるデータ定義を記載。'
+title: '技・術の基本性能'
+subtitle: 'Techs & Spells: Base Stats'
+slug: '/saga-eb/data/techs-spells-base-stats/'
+description: '技・術の基本性能にまつわるデータ定義を記載。'
 status: 'publishable'
 ---
 
@@ -10,13 +10,13 @@ import { Link } from 'gatsby'
 
 import Box from '@mui/material/Box'
 
-import { AllyTechSpellData, UniteIconLegend } from '../../../data/saga-eb/export/ally-tech-spell-data'
+import { TechSpellBaseStatsData, UniteIconLegend } from '../../../data/saga-eb/export/tech-spell-base-stats-data'
 
 # テーブルデータ
 <Box>
-  味方が使用可能な技・術のデータは下表の通りです。
+  技・術の基本性能のデータは下表の通りです。
 
-  <AllyTechSpellData/>
+  <TechSpellBaseStatsData/>
 </Box>
 
 # データの見方
@@ -24,23 +24,20 @@ import { AllyTechSpellData, UniteIconLegend } from '../../../data/saga-eb/export
   テーブルを構成するデータ系列について説明します。
 
   <Box sx={{ ml: 2, my: 3 }}>
-    ## 名前
+    ## 名称
     技・術のゲーム内での表示名です。
+
+    同名の技・術が複数存在する場合は名称の最後に連番を付与して区別しています。
 
     ## カテゴリ
     技・術のカテゴリです。
 
-    使用・習得条件の違いによって武器技、メカ技、モンスター技、術、我流技、固有技、ソウル技、ブラッド技、継承技の9種に分類しています。
+    使用・習得条件の違いによって武器技、我流技、固有技、ソウル技、ブラッド技、継承技、モンスター技、メカ技、術、敵専用技、支援専用技の11種に分類しています。
 
     ## 武器タイプ
     技・術と紐づけられている武器タイプです。
 
     ひらめき処理、対応するスキルの判定、ダメージ計算、ガード・回避の判定で参照されます。
-
-    ## ランクアップ必要回数
-    技・術のランクアップ判定に使用される内部値です。
-
-    ランクアップの詳細については <Link to={'/saga-eb/logic/ranking-up-techs-spells/'}>ロジック ＞ 技・術のランクアップ</Link> を参照してください。
 
     ## 威力
     技・術の威力です。
@@ -67,6 +64,8 @@ import { AllyTechSpellData, UniteIconLegend } from '../../../data/saga-eb/export
 
     ## 行動対象
     技・術の効果を直接受ける対象です。
+
+    行動対象において味方は自パーティ、敵は相手パーティを意味します。
 
     ## 命中特性
     命中判定に影響する技・術の特性です。
@@ -123,11 +122,6 @@ import { AllyTechSpellData, UniteIconLegend } from '../../../data/saga-eb/export
     タイムラインイメージにおけるアイコンの意味は下表の通りです。
 
     <UniteIconLegend/>
-
-    ## 連携名
-    技・術の連携・独壇場における名称変化です。
-
-    連携・独壇場の最後以外に組み込まれる場合、連携・独壇場の最後に組み込まれる場合の2種です。最後に組み込まれる場合は、その直前の技・術とベース技・術が同じだと名称変化が発生しません。
 
     ## 連携率上昇量
     技・術の発動による連携率上昇量の基準となる内部値です。
