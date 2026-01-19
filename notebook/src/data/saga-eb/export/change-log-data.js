@@ -54,7 +54,6 @@ export const ChangeLogData = () => {
       outputNodes.find(outputNode => outputNode.date === csvNode.date).updates.push({'url': csvNode.slug, 'breadcrumb': text, 'comment': csvNode.comment})
     }
   })
-  console.log(outputNodes)
 
   return (
 		<StyledTableContainer align='center'>

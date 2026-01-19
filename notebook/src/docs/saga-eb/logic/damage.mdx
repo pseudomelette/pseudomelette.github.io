@@ -417,15 +417,15 @@ import {
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>攻撃力効果値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>攻撃力アップ、<wbr/>攻撃力ダウン、<wbr/>連携時攻撃力アップ</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['攻撃力アップ', '攻撃力ダウン', '連携時攻撃力アップ']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>防御力効果値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>防御力アップ、<wbr/>防御力ダウン</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['防御力アップ', '防御力ダウン']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>術力効果値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>術力アップ、<wbr/>術力ダウン</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['術力アップ', '術力ダウン']}/></StyledTd>
           </StyledTr>
         </TableBody>
       </Table>
@@ -496,7 +496,7 @@ import {
         <TableBody>
           <StyledTr>
             <StyledTd align='left'>技・術威力特性値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>片手剣技威力アップ、<wbr/>両手剣技威力アップ、<wbr/>片手銃技威力アップ、<wbr/>両手銃技威力アップ、<wbr/>体術技威力アップ、<wbr/>モンスター技威力アップ、<wbr/>近接メカ技威力アップ、<wbr/>射撃メカ技威力アップ、<wbr/>術威力アップ</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['片手剣技威力アップ', '両手剣技威力アップ', '片手銃技威力アップ', '両手銃技威力アップ', '体術技威力アップ', 'モンスター技威力アップ', '近接メカ技威力アップ', '射撃メカ技威力アップ', '術威力アップ']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>怒り時威力特性値</StyledTd>
@@ -508,7 +508,7 @@ import {
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>ガード率特性値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>ガード率アップ、<wbr/>瀕死時ガード率アップ、<wbr/>暗闇時ガード率アップ</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['ガード率アップ', '瀕死時ガード率アップ', '暗闇時ガード率アップ']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>対象ガード率特性値</StyledTd>
@@ -516,11 +516,11 @@ import {
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>攻撃力特性値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>斬威力アップ、<wbr/>打威力アップ、<wbr/>突威力アップ、<wbr/>熱威力アップ、<wbr/>冷威力アップ、<wbr/>雷威力アップ、<wbr/>全威力アップ、<wbr/>全威力ダウン、<wbr/>対象詠唱時威力アップ、<wbr/>弱点攻撃時威力アップ、<wbr/>連携終了時威力アップ、<wbr/>リザーブ解除時威力アップ</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['斬威力アップ', '打威力アップ', '突威力アップ', '熱威力アップ', '冷威力アップ', '雷威力アップ', '全威力アップ', '全威力ダウン', '対象詠唱時威力アップ', '弱点攻撃時威力アップ', '連携終了時威力アップ', 'リザーブ解除時威力アップ']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>防御力特性値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}>斬耐性アップ、<wbr/>打耐性アップ、<wbr/>突耐性アップ、<wbr/>熱耐性アップ、<wbr/>冷耐性アップ、<wbr/>雷耐性アップ、<wbr/>熱冷雷耐性アップ、<wbr/>全耐性アップ、<wbr/>術耐性アップ、<wbr/>全体攻撃耐性アップ、<wbr/>カウンター耐性アップ</StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['斬耐性アップ', '打耐性アップ', '突耐性アップ', '熱耐性アップ', '冷耐性アップ', '雷耐性アップ', '熱冷雷耐性アップ', '全耐性アップ', '術耐性アップ', '全体攻撃耐性アップ', 'カウンター耐性アップ']}/></StyledTd>
           </StyledTr>
         </TableBody>
       </Table>
@@ -665,23 +665,23 @@ import {
       </TableHead>
       <TableBody>
         <StyledTr>
-          <StyledTd align='center'>1、2</StyledTd>
+          <StyledTd align='center'>1，2</StyledTd>
           <StyledTd align='center'>土用</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd align='center'>3、4</StyledTd>
+          <StyledTd align='center'>3，4</StyledTd>
           <StyledTd align='center'>春</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd align='center'>5、6</StyledTd>
+          <StyledTd align='center'>5，6</StyledTd>
           <StyledTd align='center'>夏</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd align='center'>7、8</StyledTd>
+          <StyledTd align='center'>7，8</StyledTd>
           <StyledTd align='center'>秋</StyledTd>
         </StyledTr>
         <StyledTr>
-          <StyledTd align='center'>0、9</StyledTd>
+          <StyledTd align='center'>0，9</StyledTd>
           <StyledTd align='center'>冬</StyledTd>
         </StyledTr>
       </TableBody>

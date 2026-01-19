@@ -79,21 +79,21 @@ import {
 
   <StyledMathBox className='katex-box'>
     <BlockMath
-      math='\small\hspace{0.5em}\text{使用回数}_{next}=\begin{cases}\text{使用回数}+1&\left(\text{技・術成長ボーナスなし}\right)\\
-          \text{使用回数}+2&\left(\text{技・術成長ボーナスあり}\right)\end{cases}\hspace{0.5em}'
+      math='\small\hspace{0.5em}\text{使用回数}_{next}=\begin{cases}\text{使用回数}+1&\left(\text{技ランク成長ボーナスなし}\right)\\
+          \text{使用回数}+2&\left(\text{技ランク成長ボーナスあり}\right)\end{cases}\hspace{0.5em}'
     />
   </StyledMathBox>
 
-  副防具「達人の王冠」が持つ特性「技ランク成長アップ」には、使用回数の加算量が増加するボーナス（技・術成長ボーナス）を確率で発生させる効果があります。
+  副防具「達人の王冠」が持つ特性「技ランク成長アップ」には、使用回数の加算量が増加するボーナス（技ランク成長ボーナス）を確率で発生させる効果があります。技ランク成長アップは術に対しても同様の効果を発揮します。
 
-  技ランク成長アップの有無と技・術成長ボーナス発生確率の関係は下表の通りです。
+  技ランク成長アップの有無と技ランク成長ボーナス発生確率の関係は下表の通りです。
 
   <StyledTableContainer align='center'>
     <Table stickyHeader sx={{ width: `calc(108px * 2)` }}>
       <TableHead>
         <TableRow>
           <StyledTh align='center' sx={{ width: '108px' }}>技ランク成長<br/>アップ</StyledTh>
-          <StyledTh align='center' sx={{ width: '108px' }}>技・術成長<br/>ボーナス発生確率</StyledTh>
+          <StyledTh align='center' sx={{ width: '108px' }}>技ランク成長<br/>ボーナス発生確率</StyledTh>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -109,7 +109,7 @@ import {
     </Table>
   </StyledTableContainer>
 
-  技ランク成長アップは重複しないため、達人の王冠を複数個装備しても技・術成長ボーナス発生確率は変わりません。
+  技ランク成長アップは重複しないため、達人の王冠を複数個装備しても技ランク成長ボーナス発生確率は変わりません。
 
   達人の王冠を装備すると50%の確率で加算量が2倍になるため、使用回数が1.5倍速く蓄積すると期待できます。
 </Box>
