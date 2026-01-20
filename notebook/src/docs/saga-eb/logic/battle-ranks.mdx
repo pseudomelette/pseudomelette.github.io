@@ -115,7 +115,7 @@ import {
   <StyledMathBox className='katex-box'>
     <BlockMath
       math='\small\hspace{0.5em}\text{BR上昇量}=\begin{cases}1&\left(\text{現在BR}\geq\text{潜在BR}\right)\\
-          1+\text{ランク差ボーナス}&\left(\text{現在BR}\lt\text{潜在BR}\right)\end{cases}\hspace{0.5em}'
+          1+\lfloor\text{ランク差ボーナス}\rfloor&\left(\text{現在BR}\lt\text{潜在BR}\right)\end{cases}\hspace{0.5em}'
     />
   </StyledMathBox>
 
@@ -124,11 +124,9 @@ import {
   ランク差ボーナスは下式で算出されます。
 
   <StyledMathBox className='katex-box'>
-    <BlockMath math='\small\hspace{0.5em}\text{ランク差ボーナス}=\min\left\{\text{ランク差評価値},\hspace{0.5em}\text{潜在BR}-\text{現在BR}\right\}\hspace{0.5em}'/>
+    <BlockMath math='\small\hspace{0.5em}\text{ランク差ボーナス}=\min\left\{\lfloor\text{ランク差評価値}\rfloor,\hspace{0.5em}\text{潜在BR}-\text{現在BR}\right\}\hspace{0.5em}'/>
     <BlockMath math='\small\hspace{0.5em}\text{ランク差評価値}=1+\text{潜在BR}\times \dfrac{\text{潜在BR}\times 1.5-\text{現在BR}}{\text{潜在BR}\times 10+\text{現在BR}\times 1.5}\hspace{0.5em}'/>
   </StyledMathBox>
-
-  ランク差評価値とランク差ボーナスの計算結果は小数点以下が切り捨てられます。
 
   潜在バトルランクと現在バトルランクの間に大きな差分があるうちはランク差評価値をそのままボーナスとして上乗せしますが、それによって逆転が起こる場合は差分が埋まる程度のボーナスに修正します。
 </Box>
@@ -151,7 +149,7 @@ import {
 
   <StyledMathBox className='katex-box'>
     <BlockMath
-      math='\small\hspace{0.5em}\text{BR上限}=\begin{cases}\text{現在BR}+10+\text{ランク差ボーナス}&\left(\text{1.}\right)\\
+      math='\small\hspace{0.5em}\text{BR上限}=\begin{cases}\text{現在BR}+10+\lfloor\text{ランク差ボーナス}\rfloor&\left(\text{1.}\right)\\
           \text{現在BR}+10&\left(\text{2.}\right)\end{cases}\hspace{0.5em}'
     />
   </StyledMathBox>
@@ -188,7 +186,7 @@ import {
   敵バトルランクはそれぞれの敵について下式で算出されます。
 
   <StyledMathBox className='katex-box'>
-    <BlockMath math='\small\hspace{0.5em}\text{敵BR}=\max\left\{\text{BR下限},\hspace{0.5em}\text{基本敵BR}+\text{相対BR}+\text{ひらめきLv}\right\}\hspace{0.5em}'/>
+    <BlockMath math='\small\hspace{0.5em}\text{敵BR}=\max\left\{\text{BR下限},\hspace{0.5em}\lfloor\text{基本敵BR}\rfloor+\text{相対BR}+\text{ひらめきLv}\right\}\hspace{0.5em}'/>
   </StyledMathBox>
 
   ここで、バトルランク下限と相対バトルランクはバトルに設定されている内部値、ひらめきレベルは敵キャラクターに設定されている内部値です。
@@ -202,6 +200,4 @@ import {
           \max\left\{\text{潜在BR},\hspace{0.5em}\text{現在BR}\right\}&\left(\text{最凶}\right)\end{cases}\hspace{0.5em}'
     />
   </StyledMathBox>
-
-  基本敵バトルランクの計算結果は小数点以下が切り捨てられます。
 </Box>

@@ -34,8 +34,8 @@ const columns = [
     label: '武器タイプ',
     colSpan: 2,
     children: [
-      { key: 'Weapon', label: 'メイン', width: '124px' },
-      { key: 'WeaponSub', label: 'サブ', width: '124px' },
+      { key: 'Weapon', label: 'メイン', width: '112px' },
+      { key: 'WeaponSub', label: 'サブ', width: '112px' },
     ],
   },
 ]

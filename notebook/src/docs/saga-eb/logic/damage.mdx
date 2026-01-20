@@ -724,7 +724,7 @@ import {
       <BlockMath math='\small\hspace{0.5em}\text{表示ダメージ}_{n}=\left\lfloor\text{攻撃ダメージ}\times\text{表示ダメージ分割比率}_{n}\times 0.01\right\rfloor\hspace{0.5em}'/>
     </StyledMathBox>
 
-    ここで、表示ダメージ分割比率は技・術に設定されている内部値、<InlineMath math={'\\small n'}/>は表示順を示す通し番号です。
+    ここで、表示ダメージ分割比率は技・術に設定されている内部値、<InlineMath math={'\\small n'}/>は表示順を示す連番です。
 
     表示ダメージ分割比率の合計値は100ですが、個々の表示ダメージの算出結果は小数点以下が切り捨てられるので、表示ダメージの合計値は必ずしも攻撃ダメージと一致しません。
 
@@ -868,7 +868,7 @@ import {
 
 # 現在LPの変動
 <Box sx={{ minHeight: { xs: `calc(100dvh - 64px - 8px - 50px - 24px - 80px)`, sm: `calc(100dvh - 48px - 8px - 54px - 24px - 80px)` } }}>
-  LPダメージにはHPダメージのような複雑な計算式がないので、バトル参加メンバーの現在LP変動についてのみ説明します。
+  LPダメージにはHPダメージほどの複雑な計算式がないので、バトル参加メンバーの現在LP変動についてのみ説明します。
 
   <Box sx={{ ml: 1, my: 3 }}>
     ## 戦闘不能による現在LP減少
