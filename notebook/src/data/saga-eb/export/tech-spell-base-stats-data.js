@@ -5,8 +5,10 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import PushPinIcon from '@mui/icons-material/PushPin'
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
+import { useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
+import { useTheme } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
@@ -321,7 +323,8 @@ export const TechSpellBaseStatsData = () => {
     return map
   }, [nodes])
 
-  const [pinned, setPinned] = React.useState(true)
+  const theme = useTheme()
+  const [pinned, setPinned] = React.useState(useMediaQuery(theme.breakpoints.up('sm')))
   const [filterState, setFilterState] = React.useState(filterValues)
   const [modalOpen, setModalOpen] = React.useState(false)
 
@@ -345,22 +348,25 @@ export const TechSpellBaseStatsData = () => {
           open={modalOpen}
         />
       }
-      <StyledTableContainer align='center'>
-        <Box sx={{ position: 'sticky', top: 0, left: 0, zIndex: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width:'100%' }}>
+        <Box sx={{ width: '100%', maxWidth: `calc(296px + 172px + 148px * 3 + 100px + 88px + 76px * 2 + 64px * 2 + 52px * 6 + 44px * 13)` }}>
           <IconButton
             onClick={() => setModalOpen(true)}
             sx={{
-              position: 'absolute',
-              top: '2px',
-              left: '2px',
-              padding: '3px',
+              zIndex: 4,
+              mt: 1,
+              padding: '4px',
+              transform: 'rotate(45deg)',
               border: '1px solid',
-              borderColor: '#2b4a669f',
-              borderRadius: 1,
+              borderColor: '#f8d36f',
+              borderRadius: 0,
               boxShadow: 4,
-              background: 'linear-gradient(to bottom, #1f3b53af 0%, #4eb89aaf 100%)',
+              background: 'linear-gradient(135deg, #805f92cf 30%, #ab84c2cf 70%)',
               '&:hover': {
-                background: 'linear-gradient(to bottom, #1f3b53df 0%, #4eb89adf 100%)',
+                filter: 'brightness(1.1)',
+              },
+              '& .MuiSvgIcon-root': {
+                transform: 'rotate(-45deg)',
               },
             }}
           >
@@ -370,104 +376,110 @@ export const TechSpellBaseStatsData = () => {
             onClick={() => setPinned(!pinned)}
             sx={{
               display: hasScroll ? 'inline-flex' : 'none',
-              position: 'absolute',
-              top: '32px',
-              left: '2px',
-              padding: '3px',
+              left: '16px',
+              zIndex: 4,
+              mt: 1,
+              padding: '4px',
+              transform: 'rotate(45deg)',
               border: '1px solid',
-              borderColor: '#2b4a669f',
-              borderRadius: 1,
+              borderColor: '#f8d36f',
+              borderRadius: 0,
               boxShadow: 4,
-              background: pinned ? 'linear-gradient(to bottom, #1f3b53af 0%, #4eb89aaf 100%)' : 'linear-gradient(to bottom, #1f3b531f 0%, #4eb89a1f 100%)',
+              background: pinned ? 'linear-gradient(135deg, #805f92cf 30%, #ab84c2cf 70%)' : 'linear-gradient(135deg, #805f922f 30%, #ab84c22f 70%)',
               '&:hover': {
-                background: pinned ? 'linear-gradient(to bottom, #1f3b53df 0%, #4eb89adf 100%)' : 'linear-gradient(to bottom, #1f3b534f 0%, #4eb89a4f 100%)',
+                filter: pinned ? 'brightness(1.1)' : 'brightness(1.2)',
+              },
+              '& .MuiSvgIcon-root': {
+                transform: 'rotate(-45deg)',
               },
             }}
           >
             {pinned ? <PushPinIcon sx={{ color: '#ffffff'}}/> : <PushPinOutlinedIcon sx={{ color: '#ffffff'}}/>}
           </IconButton>
+          <StyledTableContainer align='center' sx={{ mt: 0 }}>
+            <Table ref={ref} stickyHeader sx={{ width: `calc(296px + 172px + 148px * 3 + 100px + 88px + 76px * 2 + 64px * 2 + 52px * 6 + 44px * 13)` }}>
+              <TableHead sx={{ position: 'sticky', top: 0, zIndex: 3 }}>
+                <TableRow>
+                  <StyledTh align='center' rowSpan={2} sx={hasHeaderRow ? { position: 'sticky', left: 0, zIndex: 3, width: '172px' } : { width: '172px' }}>名称</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '88px' }}>カテゴリ</StyledTh>
+                  <StyledTh align='center' colSpan={2}>武器タイプ</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>威力</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '52px' }}>BP<br/>コスト</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '64px' }}>詠唱<br/>ターン数</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>五行</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '100px' }}>リザーブタイプ</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>行動<br/>対象</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>命中<br/>特性</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '52px' }}>基礎<br/>命中率</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>攻撃<br/>回数</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>属性</StyledTh>
+                  <StyledTh align='center' colSpan={2}>依存能力</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '64px' }}>ダメージ<br/>乱数幅</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '52px' }}>ヘイト<br/>上昇量</StyledTh>
+                  <StyledTh align='center' colSpan={2}>速度低下量</StyledTh>
+                  <StyledTh align='center' colSpan={3}>追加効果</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '52px' }}>行動順<br/>補正</StyledTh>
+                  <StyledTh align='center' colSpan={3}>連携範囲</StyledTh>
+                  <StyledTh align='center' rowSpan={2} sx={{ width: '296px' }}>タイムラインイメージ</StyledTh>
+                  <StyledTh align='center' colSpan={2}>連携率上昇量</StyledTh>
+                </TableRow>
+                <TableRow>
+                  <StyledTh align='center' sx={{ width: '76px' }}>メイン</StyledTh>
+                  <StyledTh align='center' sx={{ width: '76px' }}>サブ</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>自身</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>対象</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>自身</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>対象</StyledTh>
+                  <StyledTh align='center' sx={{ width: '148px' }}>自身</StyledTh>
+                  <StyledTh align='center' sx={{ width: '148px' }}>対象</StyledTh>
+                  <StyledTh align='center' sx={{ width: '148px' }}>その他</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>前方</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>自身</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>後方</StyledTh>
+                  <StyledTh align='center' sx={{ width: '52px' }}>連携</StyledTh>
+                  <StyledTh align='center' sx={{ width: '52px' }}>独壇場</StyledTh>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredNodes.map((node, index) => (
+                  <StyledTrTwoToneB className={index % 2 === 0 ? (hasHeaderRow ? 'darker-row-w-header' : 'darker-row') : (hasHeaderRow ? 'lighter-row-w-header' : 'lighter-row')} key={index}>
+                    {hasHeaderRow ? <StyledTrh align='left' scope='row'>{node.ArtsName}</StyledTrh> : <StyledTd align='left'>{node.ArtsName}</StyledTd>}
+                    <StyledTd align='center'>{node.ArtsCategory}</StyledTd>
+                    <StyledTd align='center'>{node.Weapon}</StyledTd>
+                    <StyledTd align='center'>{node.WeaponSub}</StyledTd>
+                    <StyledTd align='center'>{node.Attack}</StyledTd>
+                    <StyledTd align='center'>{node.BP}</StyledTd>
+                    <StyledTd align='center'>{node.Turn}</StyledTd>
+                    <StyledTd align='center'>{node.BaseElement}</StyledTd>
+                    <StyledTd align='center' sx={{ whiteSpace: 'pre-line' }}>{node.Reserve.join('\n')}</StyledTd>
+                    <StyledTd align='center' sx={{ whiteSpace: 'pre-line' }}>{node.Targets.join('\n')}</StyledTd>
+                    <StyledTd align='center' sx={{ whiteSpace: 'pre-line' }}>{node.HitProperties.join('\n')}</StyledTd>
+                    <StyledTd align='center'>{node.Hit}</StyledTd>
+                    <StyledTd align='center'>{node.AttackCount}</StyledTd>
+                    <StyledTd align='center'>{node.Attribute}</StyledTd>
+                    <StyledTd align='center'>{node.BaseParameter1}</StyledTd>
+                    <StyledTd align='center'>{node.BaseParameter2}</StyledTd>
+                    <StyledTd align='center'>{node.Random}</StyledTd>
+                    <StyledTd align='center'>{node.Hate}</StyledTd>
+                    <StyledTd align='center'>{node.AfterCasterSpeed}</StyledTd>
+                    <StyledTd align='center'>{node.AfterTargetSpeed}</StyledTd>
+                    <StyledTd align='left' sx={{ whiteSpace: 'pre-line' }}>{node.SelfEffects}</StyledTd>
+                    <StyledTd align='left' sx={{ whiteSpace: 'pre-line' }}>{node.TargetEffects}</StyledTd>
+                    <StyledTd align='left' sx={{ whiteSpace: 'pre-line' }}>{node.MiscEffects}</StyledTd>
+                    <StyledTd align='center'>{node.Speed}</StyledTd>
+                    <StyledTd align='center'>{node.OverAttackLeft}</StyledTd>
+                    <StyledTd align='center'>{node.OverAttackSelf}</StyledTd>
+                    <StyledTd align='center'>{node.OverAttackRight}</StyledTd>
+                    <StyledTd align='center'>{node.Timeline}</StyledTd>
+                    <StyledTd align='center'>{node.AddOverAttackDamage}</StyledTd>
+                    <StyledTd align='center'>{node.AddSingleStageDamage}</StyledTd>
+                  </StyledTrTwoToneB>
+                ))}
+              </TableBody>
+            </Table>
+          </StyledTableContainer>
         </Box>
-        <Table ref={ref} stickyHeader sx={{ width: `calc(296px + 168px + 148px * 3 + 100px + 88px + 76px * 2 + 64px * 2 + 52px * 6 + 44px * 13)` }}>
-          <TableHead sx={{ position: 'sticky', top: 0, zIndex: 3 }}>
-            <TableRow>
-              <StyledTh align='center' rowSpan={2} sx={hasHeaderRow ? { position: 'sticky', left: 0, zIndex: 3, width: '168px' } : { width: '168px' }}>名称</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '88px' }}>カテゴリ</StyledTh>
-              <StyledTh align='center' colSpan={2}>武器タイプ</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>威力</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '52px' }}>BP<br/>コスト</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '64px' }}>詠唱<br/>ターン数</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>五行</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '100px' }}>リザーブタイプ</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>行動<br/>対象</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>命中<br/>特性</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '52px' }}>基礎<br/>命中率</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>攻撃<br/>回数</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '44px' }}>属性</StyledTh>
-              <StyledTh align='center' colSpan={2}>依存能力</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '64px' }}>ダメージ<br/>乱数幅</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '52px' }}>ヘイト<br/>上昇量</StyledTh>
-              <StyledTh align='center' colSpan={2}>速度低下量</StyledTh>
-              <StyledTh align='center' colSpan={3}>追加効果</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '52px' }}>行動順<br/>補正</StyledTh>
-              <StyledTh align='center' colSpan={3}>連携範囲</StyledTh>
-              <StyledTh align='center' rowSpan={2} sx={{ width: '296px' }}>タイムラインイメージ</StyledTh>
-              <StyledTh align='center' colSpan={2}>連携率上昇量</StyledTh>
-            </TableRow>
-            <TableRow>
-              <StyledTh align='center' sx={{ width: '76px' }}>メイン</StyledTh>
-              <StyledTh align='center' sx={{ width: '76px' }}>サブ</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>自身</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>対象</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>自身</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>対象</StyledTh>
-              <StyledTh align='center' sx={{ width: '148px' }}>自身</StyledTh>
-              <StyledTh align='center' sx={{ width: '148px' }}>対象</StyledTh>
-              <StyledTh align='center' sx={{ width: '148px' }}>その他</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>前方</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>自身</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>後方</StyledTh>
-              <StyledTh align='center' sx={{ width: '52px' }}>連携</StyledTh>
-              <StyledTh align='center' sx={{ width: '52px' }}>独壇場</StyledTh>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredNodes.map((node, index) => (
-              <StyledTrTwoToneB className={index % 2 === 0 ? (hasHeaderRow ? 'darker-row-w-header' : 'darker-row') : (hasHeaderRow ? 'lighter-row-w-header' : 'lighter-row')} key={index}>
-                {hasHeaderRow ? <StyledTrh align='left' scope='row'>{node.ArtsName}</StyledTrh> : <StyledTd align='left'>{node.ArtsName}</StyledTd>}
-                <StyledTd align='center'>{node.ArtsCategory}</StyledTd>
-                <StyledTd align='center'>{node.Weapon}</StyledTd>
-                <StyledTd align='center'>{node.WeaponSub}</StyledTd>
-                <StyledTd align='center'>{node.Attack}</StyledTd>
-                <StyledTd align='center'>{node.BP}</StyledTd>
-                <StyledTd align='center'>{node.Turn}</StyledTd>
-                <StyledTd align='center'>{node.BaseElement}</StyledTd>
-                <StyledTd align='center' sx={{ whiteSpace: 'pre-line' }}>{node.Reserve.join('\n')}</StyledTd>
-                <StyledTd align='center' sx={{ whiteSpace: 'pre-line' }}>{node.Targets.join('\n')}</StyledTd>
-                <StyledTd align='center' sx={{ whiteSpace: 'pre-line' }}>{node.HitProperties.join('\n')}</StyledTd>
-                <StyledTd align='center'>{node.Hit}</StyledTd>
-                <StyledTd align='center'>{node.AttackCount}</StyledTd>
-                <StyledTd align='center'>{node.Attribute}</StyledTd>
-                <StyledTd align='center'>{node.BaseParameter1}</StyledTd>
-                <StyledTd align='center'>{node.BaseParameter2}</StyledTd>
-                <StyledTd align='center'>{node.Random}</StyledTd>
-                <StyledTd align='center'>{node.Hate}</StyledTd>
-                <StyledTd align='center'>{node.AfterCasterSpeed}</StyledTd>
-                <StyledTd align='center'>{node.AfterTargetSpeed}</StyledTd>
-                <StyledTd align='left' sx={{ whiteSpace: 'pre-line' }}>{node.SelfEffects}</StyledTd>
-                <StyledTd align='left' sx={{ whiteSpace: 'pre-line' }}>{node.TargetEffects}</StyledTd>
-                <StyledTd align='left' sx={{ whiteSpace: 'pre-line' }}>{node.MiscEffects}</StyledTd>
-                <StyledTd align='center'>{node.Speed}</StyledTd>
-                <StyledTd align='center'>{node.OverAttackLeft}</StyledTd>
-                <StyledTd align='center'>{node.OverAttackSelf}</StyledTd>
-                <StyledTd align='center'>{node.OverAttackRight}</StyledTd>
-                <StyledTd align='center'>{node.Timeline}</StyledTd>
-                <StyledTd align='center'>{node.AddOverAttackDamage}</StyledTd>
-                <StyledTd align='center'>{node.AddSingleStageDamage}</StyledTd>
-              </StyledTrTwoToneB>
-            ))}
-          </TableBody>
-        </Table>
-      </StyledTableContainer>
+      </Box>
     </>
   )
 }
@@ -481,7 +493,7 @@ export const UniteIconLegend = () => {
 
   return (
     <StyledTableContainer align='center'>
-      <Table stickyHeader sx={{ maxWidth: '508px', tableLayout: 'fixed' }}>
+      <Table stickyHeader sx={{ maxWidth: '516px', tableLayout: 'fixed' }}>
         <TableHead sx={{ position: 'sticky', top: 0 }}>
           <TableRow>
             <StyledTh align='center' sx={{ width: '64px' }}>アイコン</StyledTh>

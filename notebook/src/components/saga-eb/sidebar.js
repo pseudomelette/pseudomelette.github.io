@@ -190,26 +190,29 @@ export const Sidebar = () => {
           alignItems: 'center',
           position: 'fixed',
           zIndex: theme.zIndex.drawer + 100,
-          minHeight: { xs: 64, sm: 48 },
-          maxHeight: 64,
+          height: '64px',
         }}
       >
         <IconButton
           onClick={handleDrawerToggle}
           sx={{
-            ml: 1,
+            marginLeft: '12px',
             padding: '4px',
+            transform: 'rotate(45deg)',
             border: '1px solid',
             borderColor: '#f8d36f',
-            borderRadius: 1,
+            borderRadius: 0,
             boxShadow: 8,
-            background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
+            background: 'linear-gradient(135deg, #805f92cf 30%, #ab84c2cf 70%)',
             '&:hover': {
-              background: 'linear-gradient(to bottom, #805f92 0%, #ab84c2 100%)',
+              filter: 'brightness(1.1)',
+            },
+            '& .MuiSvgIcon-root': {
+              transform: 'rotate(-45deg)',
             },
           }}
         >
-          {drawerOpen ? <CloseIcon sx={{ color: '#ffffff', fontSize: { xs: 28, sm: 24 } }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: { xs: 28, sm: 24 } }}/>}
+          {drawerOpen ? <CloseIcon sx={{ color: '#ffffff', fontSize: 28 }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: 28 }}/>}
         </IconButton>
       </Box>
       <Drawer

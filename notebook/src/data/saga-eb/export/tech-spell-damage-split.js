@@ -5,8 +5,10 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import PushPinIcon from '@mui/icons-material/PushPin'
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined'
+import { useMediaQuery } from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
+import { useTheme } from '@mui/material/styles'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
@@ -106,7 +108,8 @@ export const TechSpellRatioData = () => {
     return map
   }, [nodes])
 
-  const [pinned, setPinned] = React.useState(true)
+  const theme = useTheme()
+  const [pinned, setPinned] = React.useState(useMediaQuery(theme.breakpoints.up('sm')))
   const [filterState, setFilterState] = React.useState(filterValues)
   const [modalOpen, setModalOpen] = React.useState(false)
 
@@ -130,22 +133,25 @@ export const TechSpellRatioData = () => {
           open={modalOpen}
         />
       }
-      <StyledTableContainer align='center'>
-        <Box sx={{ position: 'sticky', top: 0, left: 0, zIndex: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width:'100%' }}>
+        <Box sx={{ width: '100%', maxWidth: `calc(172px + 44px * 9)` }}>
           <IconButton
             onClick={() => setModalOpen(true)}
             sx={{
-              position: 'absolute',
-              top: '2px',
-              left: '2px',
-              padding: '3px',
+              zIndex: 4,
+              mt: 1,
+              padding: '4px',
+              transform: 'rotate(45deg)',
               border: '1px solid',
-              borderColor: '#2b4a669f',
-              borderRadius: 1,
+              borderColor: '#f8d36f',
+              borderRadius: 0,
               boxShadow: 4,
-              background: 'linear-gradient(to bottom, #1f3b53af 0%, #4eb89aaf 100%)',
+              background: 'linear-gradient(135deg, #805f92cf 30%, #ab84c2cf 70%)',
               '&:hover': {
-                background: 'linear-gradient(to bottom, #1f3b53df 0%, #4eb89adf 100%)',
+                filter: 'brightness(1.1)',
+              },
+              '& .MuiSvgIcon-root': {
+                transform: 'rotate(-45deg)',
               },
             }}
           >
@@ -155,59 +161,65 @@ export const TechSpellRatioData = () => {
             onClick={() => setPinned(!pinned)}
             sx={{
               display: hasScroll ? 'inline-flex' : 'none',
-              position: 'absolute',
-              top: '32px',
-              left: '2px',
-              padding: '3px',
+              left: '16px',
+              zIndex: 4,
+              mt: 1,
+              padding: '4px',
+              transform: 'rotate(45deg)',
               border: '1px solid',
-              borderColor: '#2b4a669f',
-              borderRadius: 1,
+              borderColor: '#f8d36f',
+              borderRadius: 0,
               boxShadow: 4,
-              background: pinned ? 'linear-gradient(to bottom, #1f3b53af 0%, #4eb89aaf 100%)' : 'linear-gradient(to bottom, #1f3b531f 0%, #4eb89a1f 100%)',
+              background: pinned ? 'linear-gradient(135deg, #805f92cf 30%, #ab84c2cf 70%)' : 'linear-gradient(135deg, #805f922f 30%, #ab84c22f 70%)',
               '&:hover': {
-                background: pinned ? 'linear-gradient(to bottom, #1f3b53df 0%, #4eb89adf 100%)' : 'linear-gradient(to bottom, #1f3b534f 0%, #4eb89a4f 100%)',
+                filter: pinned ? 'brightness(1.1)' : 'brightness(1.2)',
+              },
+              '& .MuiSvgIcon-root': {
+                transform: 'rotate(-45deg)',
               },
             }}
           >
             {pinned ? <PushPinIcon sx={{ color: '#ffffff'}}/> : <PushPinOutlinedIcon sx={{ color: '#ffffff'}}/>}
           </IconButton>
+          <StyledTableContainer align='center' sx={{ mt: 0 }}>
+            <Table ref={ref} stickyHeader sx={{ width: `calc(172px + 44px * 9)` }}>
+              <TableHead sx={{ position: 'sticky', top: 0, zIndex: 3 }}>
+                <TableRow>
+                  <StyledTh align='center' rowSpan={2} sx={hasHeaderRow ? { position: 'sticky', left: 0, zIndex: 3, width: '172px' } : { width: '172px' }}>名称</StyledTh>
+                  <StyledTh align='center' colSpan={9}>表示ダメージ分割比率</StyledTh>
+                </TableRow>
+                <TableRow>
+                  <StyledTh align='center' sx={{ width: '44px' }}>1</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>2</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>3</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>4</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>5</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>6</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>7</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>8</StyledTh>
+                  <StyledTh align='center' sx={{ width: '44px' }}>9</StyledTh>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredNodes.map((node, index) => (
+                  <StyledTrTwoToneB className={index % 2 === 0 ? (hasHeaderRow ? 'darker-row-w-header' : 'darker-row') : (hasHeaderRow ? 'lighter-row-w-header' : 'lighter-row')} key={index}>
+                    {hasHeaderRow ? <StyledTrh align='left' rowSpan={node.MaxRank} scope='row'>{node.ArtsName}</StyledTrh> : <StyledTd align='left' rowSpan={node.MaxRank}>{node.ArtsName}</StyledTd>}
+                    <StyledTd align='center'>{node.Ratio[0]}</StyledTd>
+                    <StyledTd align='center'>{node.Ratio[1]}</StyledTd>
+                    <StyledTd align='center'>{node.Ratio[2]}</StyledTd>
+                    <StyledTd align='center'>{node.Ratio[3]}</StyledTd>
+                    <StyledTd align='center'>{node.Ratio[4]}</StyledTd>
+                    <StyledTd align='center'>{node.Ratio[5]}</StyledTd>
+                    <StyledTd align='center'>{node.Ratio[6]}</StyledTd>
+                    <StyledTd align='center'>{node.Ratio[7]}</StyledTd>
+                    <StyledTd align='center'>{node.Ratio[8]}</StyledTd>
+                  </StyledTrTwoToneB>
+                ))}
+              </TableBody>
+            </Table>
+          </StyledTableContainer>
         </Box>
-        <Table ref={ref} stickyHeader sx={{ width: `calc(168px + 44px * 9)` }}>
-          <TableHead sx={{ position: 'sticky', top: 0, zIndex: 3 }}>
-            <TableRow>
-              <StyledTh align='center' rowSpan={2} sx={hasHeaderRow ? { position: 'sticky', left: 0, zIndex: 3, width: '168px' } : { width: '168px' }}>名称</StyledTh>
-              <StyledTh align='center' colSpan={9}>表示ダメージ分割比率</StyledTh>
-            </TableRow>
-            <TableRow>
-              <StyledTh align='center' sx={{ width: '44px' }}>1</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>2</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>3</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>4</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>5</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>6</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>7</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>8</StyledTh>
-              <StyledTh align='center' sx={{ width: '44px' }}>9</StyledTh>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredNodes.map((node, index) => (
-              <StyledTrTwoToneB className={index % 2 === 0 ? (hasHeaderRow ? 'darker-row-w-header' : 'darker-row') : (hasHeaderRow ? 'lighter-row-w-header' : 'lighter-row')} key={index}>
-                {hasHeaderRow ? <StyledTrh align='left' rowSpan={node.MaxRank} scope='row'>{node.ArtsName}</StyledTrh> : <StyledTd align='left' rowSpan={node.MaxRank}>{node.ArtsName}</StyledTd>}
-                <StyledTd align='center'>{node.Ratio[0]}</StyledTd>
-                <StyledTd align='center'>{node.Ratio[1]}</StyledTd>
-                <StyledTd align='center'>{node.Ratio[2]}</StyledTd>
-                <StyledTd align='center'>{node.Ratio[3]}</StyledTd>
-                <StyledTd align='center'>{node.Ratio[4]}</StyledTd>
-                <StyledTd align='center'>{node.Ratio[5]}</StyledTd>
-                <StyledTd align='center'>{node.Ratio[6]}</StyledTd>
-                <StyledTd align='center'>{node.Ratio[7]}</StyledTd>
-                <StyledTd align='center'>{node.Ratio[8]}</StyledTd>
-              </StyledTrTwoToneB>
-            ))}
-          </TableBody>
-        </Table>
-      </StyledTableContainer>
+      </Box>
     </>
   )
 }

@@ -23,17 +23,6 @@ import 'overlayscrollbars/overlayscrollbars.css'
 
 OverlayScrollbars.plugin(ClickScrollPlugin)
 
-const StyledBox = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  border: '1px solid',
-  borderColor: '#1f3b53',
-  color: '#ffffff',
-  background: '#526f92',
-}))
-
 const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   maxWidth: '80vw',
   maxHeight: `calc(80vh - 59px)`,
@@ -92,8 +81,16 @@ export const FilterModal = ({columns, filterValues, filterState, onApply, onClos
   }, [initialized, observed])
 
   return (
-    <Modal open={open} onClose={onClose} slotProps={{ backdrop: { sx: { backgroundColor: '#0000009f' } } }}>
-      <StyledBox>
+    <Modal open={open} onClose={onClose} slotProps={{ backdrop: { sx: { backgroundColor: '#000000af' } } }}>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          color: '#ffffff',
+        }}
+      >
         <StyledTableContainer className='modal-form' sx={{ width: `calc(${leafColumns.map(Column => Column.width).join(' + ')})`, minWidth: `min(300px, calc(${leafColumns.map(Column => Column.width).join(' + ')}))` }}>
           <Table stickyHeader sx={{ width: `calc(${leafColumns.map(Column => Column.width).join(' + ')})` }}>
             <TableHead
@@ -203,41 +200,87 @@ export const FilterModal = ({columns, filterValues, filterState, onApply, onClos
             </TableBody>
           </Table>
         </StyledTableContainer>
-        <Box sx={{ display: 'flex', justifyContent: 'space-around', paddingY: '12px', background: '#1f3b53' }}>
-          <Button
-            onClick={onClose}
+        <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2 }}>
+          <Box
             sx={{
-              width: 90,
-              border: '1px solid',
-              borderColor: '#f8d36f',
-              boxShadow: 8,
-              background: 'linear-gradient(to bottom, #805f9200 0%, #ab84c200 100%)',
-              color: '#ffffff',
-              '&:hover': {
-                background: 'linear-gradient(to bottom, #805f924f 0%, #ab84c24f 100%)',
-              },
+              width: '104px',
+              mx: 1,
+              filter: `
+                drop-shadow(0px 5px 5px #00000033)
+                drop-shadow(0px 8px 10px #00000024)
+                drop-shadow(0px 3px 14px #0000001f)
+              `,
             }}
           >
-            キャンセル
-          </Button>
-          <Button
-            onClick={handleApply}
+            <Box
+              sx={{
+                clipPath: 'polygon(18px 0px, 86px 0px, 104px 18px, 86px 36px, 18px 36px, 0px 18px)',
+                height: '36px',
+                padding: '1px',
+                background: '#f8d36f',
+              }}
+            >
+              <Button
+                onClick={onClose}
+                sx={{
+                  clipPath: 'polygon(18px 0px, 84px 0px, 101px 17px, 84px 34px, 18px 34px, 1px 17px)',
+                  width: '100%',
+                  height: '100%',
+                  background: `
+                    linear-gradient(to bottom, #805f922f 30%, #ab84c22f 70%),
+                    linear-gradient(to bottom, #2b4a66)
+                  `,
+                  color: '#ffffff',
+                  '&:hover': {
+                    filter: 'brightness(1.2)',
+                  },
+                }}
+              >
+                キャンセル
+              </Button>
+            </Box>
+          </Box>
+          <Box
             sx={{
-              width: 90,
-              border: '1px solid',
-              borderColor: '#f8d36f',
-              boxShadow: 8,
-              background: 'linear-gradient(to bottom, #805f92cf 0%, #ab84c2cf 100%)',
-              color: '#ffffff',
-              '&:hover': {
-                background: 'linear-gradient(to bottom, #805f92 0%, #ab84c2 100%)',
-              },
+              width: '104px',
+              mx: 1,
+              filter: `
+                drop-shadow(0px 5px 5px #00000033)
+                drop-shadow(0px 8px 10px #00000024)
+                drop-shadow(0px 3px 14px #0000001f)
+              `,
             }}
           >
-            OK
-          </Button>
+            <Box
+              sx={{
+                clipPath: 'polygon(18px 0px, 86px 0px, 104px 18px, 86px 36px, 18px 36px, 0px 18px)',
+                height: '36px',
+                padding: '1px',
+                background: '#f8d36f',
+              }}
+            >
+              <Button
+                onClick={handleApply}
+                sx={{
+                  clipPath: 'polygon(18px 0px, 84px 0px, 101px 17px, 84px 34px, 18px 34px, 1px 17px)',
+                  width: '100%',
+                  height: '100%',
+                  background: `
+                  linear-gradient(to bottom, #805f92cf 30%, #ab84c2cf 70%),
+                  linear-gradient(to bottom, #2b4a66)
+                  `,
+                  color: '#ffffff',
+                  '&:hover': {
+                    filter: 'brightness(1.1)',
+                  },
+                }}
+              >
+                OK
+              </Button>
+            </Box>
+          </Box>
         </Box>
-      </StyledBox>
+      </Box>
     </Modal>
   )
 }
