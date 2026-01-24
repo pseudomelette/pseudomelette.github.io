@@ -159,7 +159,7 @@ import {
 
       ここで、技・術威力は行動キャラクターの使用技・術に設定されている威力です。
 
-      効果値、特性値については <AnchorLink stripHash to={'#section-heading-3'}>攻撃ダメージ：効果値・特性値</AnchorLink> で説明します。
+      効果値、特性値については <AnchorLink stripHash to={'/saga-eb/logic/damage#section-heading-3'}>攻撃ダメージ：効果値・特性値</AnchorLink> で説明します。
 
       ### SLv威力倍率
       SLv威力倍率は下式で算出されます。
@@ -215,7 +215,7 @@ import {
 
       ここで、五行Lvは行動キャラクターの使用技・術と対応する五行のレベルです。五行Lv<InlineMath math={'\\small _{battle}'}/>はバトルに設定される五行レベルを意味します。
 
-      バトルの五行レベルについては <AnchorLink stripHash to={'#section-heading-4'}>攻撃ダメージ：バトルの五行レベル</AnchorLink> で説明します。
+      バトルの五行レベルについては <AnchorLink stripHash to={'/saga-eb/logic/damage#section-heading-4'}>攻撃ダメージ：バトルの五行レベル</AnchorLink> で説明します。
 
       五行が設定されている技は敵専用技にのみ存在します。
     </Box>
@@ -417,15 +417,15 @@ import {
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>攻撃力効果値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['攻撃力アップ', '攻撃力ダウン', '連携時攻撃力アップ']}/></StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'normal', lineBreak: 'strict', wordBreak: 'keep-all', overflowWrap: 'normal' }}><StyledTextJoin words={['攻撃力アップ', '攻撃力ダウン', '連携時攻撃力アップ']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>防御力効果値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['防御力アップ', '防御力ダウン']}/></StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'normal', lineBreak: 'strict', wordBreak: 'keep-all', overflowWrap: 'normal' }}><StyledTextJoin words={['防御力アップ', '防御力ダウン']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>術力効果値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['術力アップ', '術力ダウン']}/></StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'normal', lineBreak: 'strict', wordBreak: 'keep-all', overflowWrap: 'normal' }}><StyledTextJoin words={['術力アップ', '術力ダウン']}/></StyledTd>
           </StyledTr>
         </TableBody>
       </Table>
@@ -496,7 +496,7 @@ import {
         <TableBody>
           <StyledTr>
             <StyledTd align='left'>技・術威力特性値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['片手剣技威力アップ', '両手剣技威力アップ', '片手銃技威力アップ', '両手銃技威力アップ', '体術技威力アップ', 'モンスター技威力アップ', '近接メカ技威力アップ', '射撃メカ技威力アップ', '術威力アップ']}/></StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'normal', lineBreak: 'strict', wordBreak: 'keep-all', overflowWrap: 'normal' }}><StyledTextJoin words={['片手剣技威力アップ', '両手剣技威力アップ', '片手銃技威力アップ', '両手銃技威力アップ', '体術技威力アップ', 'モンスター技威力アップ', '近接メカ技威力アップ', '射撃メカ技威力アップ', '術威力アップ']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>怒り時威力特性値</StyledTd>
@@ -508,7 +508,7 @@ import {
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>ガード率特性値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['ガード率アップ', '瀕死時ガード率アップ', '暗闇時ガード率アップ']}/></StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'normal', lineBreak: 'strict', wordBreak: 'keep-all', overflowWrap: 'normal' }}><StyledTextJoin words={['ガード率アップ', '瀕死時ガード率アップ', '暗闇時ガード率アップ']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>対象ガード率特性値</StyledTd>
@@ -516,11 +516,11 @@ import {
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>攻撃力特性値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['斬威力アップ', '打威力アップ', '突威力アップ', '熱威力アップ', '冷威力アップ', '雷威力アップ', '全威力アップ', '全威力ダウン', '対象詠唱時威力アップ', '弱点攻撃時威力アップ', '連携終了時威力アップ', 'リザーブ解除時威力アップ']}/></StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'normal', lineBreak: 'strict', wordBreak: 'keep-all', overflowWrap: 'normal' }}><StyledTextJoin words={['斬威力アップ', '打威力アップ', '突威力アップ', '熱威力アップ', '冷威力アップ', '雷威力アップ', '全威力アップ', '全威力ダウン', '対象詠唱時威力アップ', '弱点攻撃時威力アップ', '連携終了時威力アップ', 'リザーブ解除時威力アップ']}/></StyledTd>
           </StyledTr>
           <StyledTr>
             <StyledTd align='left'>防御力特性値</StyledTd>
-            <StyledTd align='left' sx={{ whiteSpace: 'nowrap' }}><StyledTextJoin words={['斬耐性アップ', '打耐性アップ', '突耐性アップ', '熱耐性アップ', '冷耐性アップ', '雷耐性アップ', '熱冷雷耐性アップ', '全耐性アップ', '術耐性アップ', '全体攻撃耐性アップ', 'カウンター耐性アップ']}/></StyledTd>
+            <StyledTd align='left' sx={{ whiteSpace: 'normal', lineBreak: 'strict', wordBreak: 'keep-all', overflowWrap: 'normal' }}><StyledTextJoin words={['斬耐性アップ', '打耐性アップ', '突耐性アップ', '熱耐性アップ', '冷耐性アップ', '雷耐性アップ', '熱冷雷耐性アップ', '全耐性アップ', '術耐性アップ', '全体攻撃耐性アップ', 'カウンター耐性アップ']}/></StyledTd>
           </StyledTr>
         </TableBody>
       </Table>

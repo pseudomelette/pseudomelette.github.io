@@ -65,6 +65,11 @@ export const Tocbar = ({ slug, items }) => {
   }
 
   React.useEffect(() => {
+    const headings = Array.from(document.querySelectorAll('div[id=doc] > h6'))
+    const sections = Array.from(document.querySelectorAll('div[id=doc] > div'))
+    headings.forEach((heading, index) => (heading.setAttribute('id', 'section-heading-'+index)))
+    sections.forEach((section, index) => (section.setAttribute('id', 'section-body-'+index)))
+
     if (!isDownMd) {
       OverlayScrollbars(document.querySelector('ul[id=tocList]').parentElement, {
         scrollbars: {
@@ -75,11 +80,7 @@ export const Tocbar = ({ slug, items }) => {
         }
       })
 
-      const headings = Array.from(document.querySelectorAll('div[id=doc] > h6'))
-      const sections = Array.from(document.querySelectorAll('div[id=doc] > div'))
       const sectionTrackers = Array.from(document.querySelectorAll('ul[id=tocList] > a'))
-      headings.forEach((heading, index) => (heading.setAttribute('id', 'section-heading-'+index)))
-      sections.forEach((section, index) => (section.setAttribute('id', 'section-body-'+index)))
       sectionTrackers.forEach((tracker, index) => (tracker.setAttribute('id', 'section-body-'+index)))
 
       const options = {
