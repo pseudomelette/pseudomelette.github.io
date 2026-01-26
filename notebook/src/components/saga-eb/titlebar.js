@@ -11,8 +11,8 @@ export const Titlebar = () => {
       variant='dense'
       sx={{
         justifyContent: 'center',
-        minHeight: { xs: 64, sm: 48 },
-        maxHeight: 64,
+        minHeight: { xs: 56, sm: 48 },
+        maxHeight: 56,
         background: {
           xs: `
             linear-gradient(135deg, #4eb89a5f 32px, #ffffffdf 40%, #ffffff7f calc(100% - 64px), #ffffff 100%),

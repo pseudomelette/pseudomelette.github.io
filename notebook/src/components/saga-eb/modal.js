@@ -6,7 +6,6 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import Modal from '@mui/material/Modal'
-import { styled } from '@mui/material/styles'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -22,13 +21,6 @@ import {
 import 'overlayscrollbars/overlayscrollbars.css'
 
 OverlayScrollbars.plugin(ClickScrollPlugin)
-
-const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
-  maxWidth: '80vw',
-  maxHeight: `calc(80vh - 59px)`,
-  color: '#ffffff',
-  background: '#526f92',
-}))
 
 export const FilterModal = ({columns, filterValues, filterState, onApply, onClose, open}) => {
   const leafColumns = columns.flatMap(parent => parent.children.length === 0 ? [parent] : parent.children)
@@ -65,6 +57,12 @@ export const FilterModal = ({columns, filterValues, filterState, onApply, onClos
     onClose()
   }
 
+  const handleClose = (event, reason) => {
+    if ( reason !== 'backdropClick') {
+      onClose()
+    }
+  }
+
   React.useEffect(() => {
     if (!initialized) {
       setObserved(!observed)
@@ -81,7 +79,7 @@ export const FilterModal = ({columns, filterValues, filterState, onApply, onClos
   }, [initialized, observed])
 
   return (
-    <Modal open={open} onClose={onClose} slotProps={{ backdrop: { sx: { backgroundColor: '#000000af' } } }}>
+    <Modal open={open} onClose={handleClose} slotProps={{ backdrop: { sx: { backgroundColor: '#0000009f' } } }}>
       <Box
         sx={{
           position: 'absolute',
@@ -91,8 +89,17 @@ export const FilterModal = ({columns, filterValues, filterState, onApply, onClos
           color: '#ffffff',
         }}
       >
-        <StyledTableContainer className='modal-form' sx={{ width: `calc(${leafColumns.map(Column => Column.width).join(' + ')})`, minWidth: `min(300px, calc(${leafColumns.map(Column => Column.width).join(' + ')}))` }}>
-          <Table stickyHeader sx={{ width: `calc(${leafColumns.map(Column => Column.width).join(' + ')})` }}>
+        <TableContainer
+          className='modal-form'
+          sx={{
+            width: `calc(${leafColumns.map(Column => Column.width).join(' + ')})`,
+            minWidth: `min(300px, calc(${leafColumns.map(Column => Column.width).join(' + ')}))`,
+            maxWidth: '80vw',
+            maxHeight: `calc(80vh - 59px)`,
+            color: '#ffffff',
+          }}
+        >
+          <Table stickyHeader sx={{ width: `calc(${leafColumns.map(Column => Column.width).join(' + ')})`, background: '#526f92' }}>
             <TableHead
               sx={{
                 position: 'sticky',
@@ -176,7 +183,7 @@ export const FilterModal = ({columns, filterValues, filterState, onApply, onClos
             <TableBody>
               <TableRow>
                 {leafColumns.map(column => (
-                  <StyledTd key={column.key} sx={{ overflow: 'scroll', overscrollBehavior: 'none', verticalAlign: 'top' }}>
+                  <StyledTd key={column.key} sx={{ overflow: 'scroll', verticalAlign: 'top' }}>
                     <FormGroup>
                       {filterValues[column.key].map((value, index) => (
                         <FormControlLabel
@@ -199,7 +206,7 @@ export const FilterModal = ({columns, filterValues, filterState, onApply, onClos
               </TableRow>
             </TableBody>
           </Table>
-        </StyledTableContainer>
+        </TableContainer>
         <Box sx={{ display: 'flex', justifyContent: 'center', pt: 2 }}>
           <Box
             sx={{

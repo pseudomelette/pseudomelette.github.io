@@ -11,7 +11,7 @@ import { ClickScrollPlugin, OverlayScrollbars } from 'overlayscrollbars'
 
 import RankSprite from '../../images/rank-sprite.svg'
 import UniteSprite from '../../images/unite-sprite.svg'
-import { Sidebar, ContextProvider } from './sidebar'
+import { Sidebar, SidebarContextProvider } from './sidebar'
 import { Titlebar } from './titlebar'
 
 import 'overlayscrollbars/overlayscrollbars.css'
@@ -63,6 +63,8 @@ export const useHorizontalScroll = (ref) => {
   return hasScroll
 }
 
+export const DrawerContext = React.createContext()
+
 export const StyledTextJoin = ({ words }) => {
   return (
     <>
@@ -89,7 +91,6 @@ export const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   maxHeight: `calc(100dvh - 256px)`,
   margin: '24px auto',
   boxShadow: '0px 3px 6px -2px #0000007f',
-  background: '#2b4a66',
   [theme.breakpoints.up('sm')]: {
     maxHeight: `calc(100dvh - 192px)`,
   },
@@ -213,6 +214,15 @@ export const SagaEBLayout = ({ children }) => {
     },
   }))
 
+  const DrawerContextProvider = ({ children }) => {
+    const [drawerOpen, setDrawerOpen] = React.useState(null)
+    const openNav = () => setDrawerOpen('nav')
+    const openToc = () => setDrawerOpen('toc')
+    const closeDrawer = () => setDrawerOpen(null)
+
+    return <DrawerContext.Provider value={{ drawerOpen, openNav, openToc, closeDrawer }}>{children}</DrawerContext.Provider>
+  }
+
   React.useEffect(() => {
     if (typeof document !== 'undefined') {
       OverlayScrollbars({
@@ -235,7 +245,7 @@ export const SagaEBLayout = ({ children }) => {
           scrollbars: {
             theme: 'os-theme-dark os-theme-math',
             clickScroll: true,
-          }
+          },
         })
       })
       document.querySelectorAll('table').forEach((elm) => {
@@ -243,7 +253,7 @@ export const SagaEBLayout = ({ children }) => {
           scrollbars: {
             theme: 'os-theme-dark os-theme-table',
             clickScroll: true,
-          }
+          },
         })
 
         registerTableScrollbar(elm, instance)
@@ -258,34 +268,38 @@ export const SagaEBLayout = ({ children }) => {
         <RankSprite/>
         <UniteSprite/>
       </Box>
-      <Box sx={{
-        display: 'flex',
-        minWidth: '300px',
-        height: '100%',
-        minHeight: '100dvh',
-        background: '#2b4a66',
-      }}>
+      <Box
+        sx={{
+          display: 'flex',
+          minWidth: '300px',
+          height: '100%',
+          minHeight: '100dvh',
+          background: '#2b4a66',
+        }}
+      >
         <AppBar sx={{ zIndex: theme.zIndex.drawer + 1 }}>
           <Titlebar/>
         </AppBar>
-        <Box component='nav'>
-          <ContextProvider>
-            <Sidebar/>
-          </ContextProvider>
-        </Box>
-        <Box
-          component='main'
-          sx={{
-            display: 'flex',
-            flexGrow: 1,
-            flexFlow: 'column',
-            width: '100%',
-            height: '100%', 
-            minHeight: '100dvh',
-          }}
-        >
-          {children}
-        </Box>
+        <SidebarContextProvider>
+          <DrawerContextProvider>
+            <Box component='nav'>
+              <Sidebar/>
+            </Box>
+            <Box
+              component='main'
+              sx={{
+                display: 'flex',
+                flexGrow: 1,
+                flexFlow: 'column',
+                width: '100%',
+                height: '100%', 
+                minHeight: '100dvh',
+              }}
+            >
+              {children}
+            </Box>
+          </DrawerContextProvider>
+        </SidebarContextProvider>
       </Box>
     </ThemeProvider>
   )

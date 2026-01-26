@@ -17,9 +17,11 @@ import ListItemText from '@mui/material/ListItemText'
 import { styled, useTheme } from '@mui/material/styles'
 import { OverlayScrollbars } from 'overlayscrollbars'
 
+import { DrawerContext } from './layout'
+
 import 'overlayscrollbars/overlayscrollbars.css'
 
-const Context = React.createContext()
+const SidebarContext = React.createContext()
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   height: '36px',
@@ -64,7 +66,7 @@ const stateActions = Object.freeze({
   toggleData: 'toggleData',
 })
 
-export const ContextProvider = ({ children }) => {
+export const SidebarContextProvider = ({ children }) => {
   const initState = {
     logicOpen: true,
     dataOpen: true,
@@ -83,7 +85,7 @@ export const ContextProvider = ({ children }) => {
 
   const [state, dispach] = React.useReducer(reducer, initState)
 
-  return <Context.Provider value={{ state, dispach }}>{children}</Context.Provider>
+  return <SidebarContext.Provider value={{ state, dispach }}>{children}</SidebarContext.Provider>
 }
 
 export const Sidebar = () => {
@@ -107,8 +109,8 @@ export const Sidebar = () => {
 
   const theme = useTheme()
   const isDownLg = useMediaQuery(theme.breakpoints.down('lg'))
-  const { state, dispach } = React.useContext(Context)
-  const [drawerOpen, setDrawerOpen] = React.useState(false)
+  const { drawerOpen, openNav, closeDrawer } = React.useContext(DrawerContext)
+  const { state, dispach } = React.useContext(SidebarContext)
 
   const initOverlayScrollbars = () => {
     OverlayScrollbars(document.querySelector('ul[id=navList]'), {
@@ -121,27 +123,23 @@ export const Sidebar = () => {
     })
   }
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen)
-  }
-
   React.useEffect(() => {
     if (!isDownLg) {
       initOverlayScrollbars()
-      setDrawerOpen(false)
-    } else if (drawerOpen) {
+      closeDrawer()
+    } else if (drawerOpen === 'nav') {
       initOverlayScrollbars()
     }
-  }, [isDownLg, drawerOpen])
+  }, [isDownLg, closeDrawer, drawerOpen])
 
   const topNode = nodes.find((node) => node.frontmatter.slug === '/saga-eb/')
   const logicNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/logic/'))
   const dataNodes = nodes.filter((node) => node.frontmatter.slug.startsWith('/saga-eb/data/'))
 
   const drawer = (
-    <List id='navList' sx={{ mt: { xs: 8, sm: 6 }, py: 2 }}>
+    <List id='navList' sx={{ mt: { xs: 7, sm: 6 }, py: 2 }}>
       <StyledListItem component={Link} disablePadding to={topNode.frontmatter.slug}>
-        <ListItemButton>
+        <ListItemButton onClick={closeDrawer} tabIndex={-1}>
           <ListItemText primary={topNode.frontmatter.title} sx={{ color: topNode.frontmatter.status === 'in progress' ? '#afafaf' : '' }}/>
         </ListItemButton>
       </StyledListItem>
@@ -155,7 +153,7 @@ export const Sidebar = () => {
         <Collapse in={state.logicOpen} timeout='auto' unmountOnExit>
           {logicNodes.map((node, index) => (
             <StyledListItem component={Link} disablePadding key={index} to={node.frontmatter.slug}>
-              <ListItemButton>
+              <ListItemButton onClick={closeDrawer} tabIndex={-1}>
                 <ListItemText primary={node.frontmatter.title} sx={{ pl: 1, color: node.frontmatter.status === 'in progress' ? '#afafaf' : '' }}/>
               </ListItemButton>
             </StyledListItem>
@@ -172,7 +170,7 @@ export const Sidebar = () => {
         <Collapse in={state.dataOpen} timeout='auto' unmountOnExit>
           {dataNodes.map((node, index) => (
             <StyledListItem component={Link} disablePadding key={index} to={node.frontmatter.slug}>
-              <ListItemButton>
+              <ListItemButton onClick={closeDrawer} tabIndex={-1}>
                 <ListItemText primary={node.frontmatter.title} sx={{ pl: 1, color: node.frontmatter.status === 'in progress' ? '#afafaf' : '' }}/>
               </ListItemButton>
             </StyledListItem>
@@ -184,49 +182,45 @@ export const Sidebar = () => {
 
   return (
     <>
-      <Box
+      <IconButton
+        onClick={drawerOpen === 'nav' ? closeDrawer : openNav}
         sx={{
           display: { xs: 'flex', lg: 'none' },
-          alignItems: 'center',
           position: 'fixed',
-          zIndex: theme.zIndex.drawer + 100,
-          height: '64px',
+          top: '16px',
+          left: '4px',
+          zIndex: theme.zIndex.drawer + 10,
+          marginLeft: '12px',
+          padding: '4px',
+          transform: 'rotate(45deg)',
+          border: '1px solid',
+          borderColor: '#f8d36f',
+          borderRadius: 0,
+          boxShadow: 8,
+          background: 'linear-gradient(135deg, #805f92cf 30%, #ab84c2cf 70%)',
+          '&:hover': {
+            filter: 'brightness(1.1)',
+          },
+          '& .MuiSvgIcon-root': {
+            transform: 'rotate(-45deg)',
+          },
         }}
       >
-        <IconButton
-          onClick={handleDrawerToggle}
-          sx={{
-            marginLeft: '12px',
-            padding: '4px',
-            transform: 'rotate(45deg)',
-            border: '1px solid',
-            borderColor: '#f8d36f',
-            borderRadius: 0,
-            boxShadow: 8,
-            background: 'linear-gradient(135deg, #805f92cf 30%, #ab84c2cf 70%)',
-            '&:hover': {
-              filter: 'brightness(1.1)',
-            },
-            '& .MuiSvgIcon-root': {
-              transform: 'rotate(-45deg)',
-            },
-          }}
-        >
-          {drawerOpen ? <CloseIcon sx={{ color: '#ffffff', fontSize: 28 }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: 28 }}/>}
-        </IconButton>
-      </Box>
+        {drawerOpen === 'nav' ? <CloseIcon sx={{ color: '#ffffff', fontSize: 28 }}/> : <MenuIcon sx={{ color: '#ffffff', fontSize: 28 }}/>}
+      </IconButton>
       <Drawer
-        onClose={handleDrawerToggle}
-        open={isDownLg ? drawerOpen : true}
+        onClose={closeDrawer}
+        open={isDownLg ? drawerOpen === 'nav' : true}
         variant={isDownLg ? 'temporary' : 'permanent'}
         ModalProps={{ keepMounted: true }}
-        PaperProps={{ elevation: 4, sx: { height: '100%' } }}
         sx={{
           flexShrink: 0,
-          width: 256,
+          width: '256px',
           '& .MuiDrawer-paper': {
-            width: 256, 
+            width: '256px',
+            height: '100%',
             boxSizing: 'border-box',
+            boxShadow: 8,
             background: '#163148',
           },
         }}
