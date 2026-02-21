@@ -129,6 +129,24 @@ export const Sidebar = () => {
       closeDrawer()
     } else if (drawerOpen === 'nav') {
       initOverlayScrollbars()
+
+      const stop = (e) => {
+        const modal = document.getElementById('navList')
+        if (!modal || !modal.contains(e.target)) {
+          e.preventDefault()
+        }
+      }
+
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+      document.addEventListener('wheel', stop, { passive: false })
+      document.addEventListener('touchmove', stop, { passive: false })
+      return () => {
+        document.documentElement.style.overflow = ''
+        document.body.style.overflow = ''
+        document.removeEventListener('wheel', stop)
+        document.removeEventListener('touchmove', stop)
+      }
     }
   }, [isDownLg, closeDrawer, drawerOpen])
 

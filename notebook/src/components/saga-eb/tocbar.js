@@ -102,6 +102,24 @@ export const Tocbar = ({ slug, items }) => {
     } else if (drawerOpen === 'toc') {
       initOverlayScrollbars()
       initIntersectionObsever(sections)
+
+      const stop = (e) => {
+        const modal = document.getElementById('tocList')
+        if (!modal || !modal.contains(e.target)) {
+          e.preventDefault()
+        }
+      }
+
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+      document.addEventListener('wheel', stop, { passive: false })
+      document.addEventListener('touchmove', stop, { passive: false })
+      return () => {
+        document.documentElement.style.overflow = ''
+        document.body.style.overflow = ''
+        document.removeEventListener('wheel', stop)
+        document.removeEventListener('touchmove', stop)
+      }
     }
   }, [isDownMd, closeDrawer, drawerOpen])
 
@@ -150,7 +168,7 @@ export const Tocbar = ({ slug, items }) => {
             borderColor: '#98fde5',
             borderTopLeftRadius: 8,
             borderTopRightRadius: 8,
-            background: { xs: 'linear-gradient(to top, #4eb89adf 0%, #4eb89a3f 100%)', sm: 'linear-gradient(to top, #4eb89adf 0%, #4eb89a3f 100%)' },
+            background: 'linear-gradient(to top, #4eb89adf 0%, #4eb89a3f 100%)',
             color: '#ffffff',
             lineHeight: '48px',
           }}
