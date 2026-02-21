@@ -81,6 +81,8 @@ export const StyledTextJoin = ({ words }) => {
 export const StyledMathBox = styled(Box)(({ theme }) => ({
   margin: '24px 0',
   padding: '4px 0',
+  overflow: 'auto',
+  overscrollBehaviorX: 'contain',
   boxShadow: '0px 3px 6px -2px #0000007f',
   background: '#36536d',
 }))
@@ -90,6 +92,8 @@ export const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   maxWidth: '100%',
   maxHeight: `calc(100dvh - 256px)`,
   margin: '24px auto',
+  overflow: 'auto',
+  overscrollBehaviorX: 'contain',
   boxShadow: '0px 3px 6px -2px #0000007f',
   [theme.breakpoints.up('sm')]: {
     maxHeight: `calc(100dvh - 192px)`,
@@ -102,6 +106,9 @@ export const StyledTd = styled(TableCell)(({ theme }) => ({
   borderColor: '#2b4a66',
   color: '#ffffff',
   lineHeight: 1.5,
+  '&.multi-row': {
+    whiteSpace: 'pre-line',
+  },
 }))
 
 export const StyledTh = styled(TableCell)(({ theme }) => ({
@@ -119,15 +126,20 @@ export const StyledTr = styled(TableRow)(({ theme }) => ({
 }))
 
 export const StyledTrh = styled(TableCell)(({ theme }) => ({
-  position: 'sticky',
-  left: 0,
   padding: '6px 8px',
   border: '1px solid',
   borderColor: '#2b4a66',
-  background: '#cccccc',
   color: '#ffffff',
   lineHeight: 1.5,
   wordBreak: 'keep-all',
+  '&.sticky': {
+    position: 'sticky',
+    left: 0,
+    zIndex: 2,
+    background: '#cccccc',
+    contain: 'layout paint style',
+    willChange: 'transform',
+  },
 }))
 
 export const StyledTrStripedR = styled(TableRow)(({ theme }) => ({
@@ -225,21 +237,6 @@ export const SagaEBLayout = ({ children }) => {
 
   React.useEffect(() => {
     if (typeof document !== 'undefined') {
-      OverlayScrollbars({
-        target: document.querySelector('body'),
-        cancel: {
-          nativeScrollbarsOverlaid: true,
-        },
-      },
-      {
-        paddingAbsolute: true,
-        scrollbars: {
-          theme: 'os-theme-dark os-theme-body',
-          autoHide: 'move',
-          autoHideDelay: 750,
-          clickScroll: true,
-        }
-      })
       document.querySelectorAll('.katex-box').forEach((elm) => {
         OverlayScrollbars(elm, {
           scrollbars: {
